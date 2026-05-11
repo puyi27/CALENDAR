@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "NodeNext",           // 👈 Cambia esto
+    "moduleResolution": "NodeNext", // 👈 Cambia esto
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "noEmit": true,
+    "allowJs": true
+  }
+}

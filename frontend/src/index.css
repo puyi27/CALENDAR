@@ -1,0 +1,83 @@
+@import "tailwindcss";
+@plugin "daisyui";
+
+:root, [data-theme="light"] {
+  --p: 55% 0.15 250 !important;
+  --b1: 98% 0.005 260 !important;
+  --b2: 100% 0 0 !important;
+  --b3: 92% 0.01 260 !important;
+  --bc: 25% 0.02 260 !important;
+  color-scheme: light;
+}
+
+[data-theme="dark"] {
+  --p: 60% 0.16 255 !important;
+  --pc: 100% 0 0 !important;
+  --b1: 0% 0 0 !important;
+  --b2: 11% 0 0 !important;
+  --b3: 16% 0 0 !important;
+  --bc: 92% 0 0 !important;
+  --s: 35.6% 0 0 !important;
+  --sc: 100% 0 0 !important;
+  color-scheme: dark;
+}
+
+@theme {
+  --animate-bg-gradient: bg-gradient 3s ease infinite;
+  --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;
+  --animate-grid: grid 15s linear infinite;
+  --animate-background-shine: background-shine 3s linear infinite;
+
+  @keyframes bg-gradient {
+    0%, 100% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+  }
+  @keyframes fade-in-up {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: none; }
+  }
+  @keyframes grid {
+    0% { transform: translateY(-50%); }
+    100% { transform: none; }
+  }
+  @keyframes background-shine {
+    from { background-position: 0 0; }
+    to { background-position: -200% 0; }
+  }
+}
+
+.btn {
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+[data-theme="light"] tr.hover:hover {
+  background-color: #f3f4f6 !important;
+  transition: background-color 0.15s ease;
+}
+
+.stagger-item {
+  opacity: 0;
+  animation: fadeInUpOriginal 0.6s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes fadeInUpOriginal {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.98);
+    filter: blur(4px); 
+  }
+  to {
+    opacity: 1;
+    transform: none;
+    filter: blur(0);
+  }
+}
+
+.modal-smooth {
+  animation: modalScale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+@keyframes modalScale {
+  0% { opacity: 0; transform: scale(0.9) translateY(10px); }
+  100% { opacity: 1; transform: none; }
+}
