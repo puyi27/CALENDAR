@@ -46,20 +46,20 @@ export const getCategoryColorClass = (category: any) => {
   const icon = typeof category === 'string' ? category : category.icon;
   const name = typeof category === 'string' ? '' : (category.name || '').toLowerCase();
   
+  if (icon === 'Sick' || name.includes('enfermedad') || name.includes('malattia') || name.includes('sick') || name.includes('baja') || name.includes('malo')) {
+    return 'text-error';
+  }
   if (icon === 'Home' || icon === 'HomeWork' || name.includes('smart') || name.includes('teletrabajo') || name.includes('casa')) {
     return 'text-success';
-  }
-  if (icon === 'Business' || icon === 'Domain' || name.includes('kilometro rosso') || name.includes('albino')) {
-    return 'text-[#4dabf7]';
   }
   if (icon === 'BeachAccess' || name.includes('vacaciones') || name.includes('ferie') || name.includes('libre')) {
     return 'text-[#15aabf]';
   }
-  if (icon === 'Sick' || name.includes('enfermedad') || name.includes('malattia') || name.includes('sick') || name.includes('baja') || name.includes('malo')) {
-    return 'text-error';
-  }
   if (icon === 'Work' || icon === 'Flight' || name.includes('terreno') || name.includes('on-site')) {
     return 'text-[#fab005]';
+  }
+  if (icon === 'Business' || icon === 'Domain' || name.includes('kilometro rosso') || name.includes('albino')) {
+    return 'text-[#4dabf7]';
   }
   return 'text-primary/80';
 };
