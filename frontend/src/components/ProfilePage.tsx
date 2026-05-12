@@ -269,7 +269,7 @@ export const ProfilePage = (props: any) => {
   const evaluateStatusIndicatorType = (statusString: string) => {
     switch (statusString) {
       case 'Occupato': return <DoNotDisturbOnTotalSilenceIcon fontSize="small" className="text-error" />;
-      case 'Smart Working': return <HomeWorkIcon fontSize="small" className="text-info" />;
+      case 'Smart Working': return <HomeWorkIcon fontSize="small" className="text-success" />;
       case 'In Ferie': return <BeachAccessIcon fontSize="small" className="text-warning" />;
       case 'Disponibile': default: return <OnlinePredictionIcon fontSize="small" className="text-success" />;
     }

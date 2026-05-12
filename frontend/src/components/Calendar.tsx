@@ -33,7 +33,7 @@ type SortingConfiguration = { metric: 'alias' | 'work' | 'department'; orderingD
 const resolveStatusIndicatorIcon = (availabilityStatus?: string) => {
   switch (availabilityStatus) {
     case 'Occupato': return <DoNotDisturbOnTotalSilenceIcon sx={{ fontSize: 14 }} className="text-error" />;
-    case 'Smart Working': return <HomeWorkIcon sx={{ fontSize: 14 }} className="text-info" />;
+    case 'Smart Working': return <HomeWorkIcon sx={{ fontSize: 14 }} className="text-success" />;
     case 'In Ferie': return <BeachAccessIcon sx={{ fontSize: 14 }} className="text-warning" />;
     case 'Disponibile':
     default: return <OnlinePredictionIcon sx={{ fontSize: 14 }} className="text-success" />;
