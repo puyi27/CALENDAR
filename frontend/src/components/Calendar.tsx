@@ -6,6 +6,7 @@ import isoWeek from 'dayjs/plugin/isoWeek';
 import { useTranslation } from 'react-i18next';
 import { DayCell } from './DayCell';
 import { useStore } from '../store/useStore';
+import { API_URL } from '../config';
 
 import SearchIcon from '@mui/icons-material/Search';
 import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
@@ -82,7 +83,7 @@ export const Calendar = () => {
 
   useEffect(() => {
     if (!token) return;
-    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000/api'}/holidays`, { headers: { 'Authorization': `Bearer ${token}` } })
+    fetch(`${API_URL}/holidays`, { headers: { 'Authorization': `Bearer ${token}` } })
       .then(res => res.json())
       .then(data => setHolidays(data || []))
       .catch(() => {});

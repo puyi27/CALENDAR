@@ -6,7 +6,7 @@ import PasswordIcon from '@mui/icons-material/Password';
 import { FaeLogo } from './FaeLogo';
 import { useStore } from '../store/useStore';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+import { API_URL } from '../config';
 
 export const LoginPage = () => {
   const { t } = useTranslation(); 

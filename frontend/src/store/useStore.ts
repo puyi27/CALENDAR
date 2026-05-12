@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { type User, type Category } from '../types';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+import { API_URL } from '../config';
 
 interface AppState {
   token: string | null;

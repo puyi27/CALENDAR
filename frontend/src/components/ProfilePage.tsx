@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import { type User, type Presence, type Category } from '../types';
 import { useStore } from '../store/useStore';
 import { getDynamicCategoryName, getCategoryIcon } from '../utils/categoryUtils';
+import { API_URL } from '../config';
 
 import DoNotDisturbOnTotalSilenceIcon from '@mui/icons-material/DoNotDisturbOnTotalSilence';
 import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
@@ -92,7 +93,7 @@ export const ProfilePage = (props: any) => {
 
   useEffect(() => {
     if (!store.token) return;
-    fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000/api'}/holidays`, { headers: { 'Authorization': `Bearer ${store.token}` } })
+    fetch(`${API_URL}/holidays`, { headers: { 'Authorization': `Bearer ${store.token}` } })
       .then(res => res.json())
       .then(data => setHolidays(data || []))
       .catch(() => {});
@@ -186,7 +187,7 @@ export const ProfilePage = (props: any) => {
       try {
         if (datesToDelete.length > 0) {
           const queries = datesToDelete.map(date => 
-            fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000/api'}/presences`, {
+            fetch(`${API_URL}/presences`, {
               method: 'DELETE',
               headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(store as any).token}` },
               body: JSON.stringify({ id_user: focusedUserProfile.id_user, date: date })
@@ -232,7 +233,7 @@ export const ProfilePage = (props: any) => {
 
     try {
       const queries = datesToDelete.map(date => 
-        fetch(`${import.meta.env.VITE_API_URL || 'http://localhost:4000/api'}/presences`, {
+        fetch(`${API_URL}/presences`, {
           method: 'DELETE',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(store as any).token}` },
           body: JSON.stringify({ id_user: focusedUserProfile.id_user, date: date })

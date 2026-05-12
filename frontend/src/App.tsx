@@ -20,7 +20,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import { getDynamicCategoryName, getCategoryIcon } from './utils/categoryUtils';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+import { API_URL } from './config';
 
 const OledDarkTheme = () => (
   <style>{`

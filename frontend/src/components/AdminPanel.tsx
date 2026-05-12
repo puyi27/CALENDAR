@@ -25,7 +25,7 @@ import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 
 import { getDynamicCategoryName, getCategoryIcon, ALLOWED_ICON_NAMES } from '../utils/categoryUtils';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+import { API_URL } from '../config';
 
 const CustomSelect = ({ value, onChange, options, placeholder, disabled, className = "h-12 text-sm" }: { value: any, onChange: any, options: any[], placeholder?: string, disabled?: boolean, className?: string }) => {
   const [isOpen, setIsOpen] = useState(false);
