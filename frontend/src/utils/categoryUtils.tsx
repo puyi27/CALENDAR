@@ -16,7 +16,7 @@ export const getCategoryIcon = (catOrIcon: any) => {
      const name = catName.toLowerCase();
      if (name.includes('casa') || name.includes('smart') || name.includes('teletrabajo')) iconName = 'Home';
      else if (name.includes('ferie') || name.includes('libre') || name.includes('vacac')) iconName = 'BeachAccess';
-     else if (name.includes('malattia') || name.includes('enferm')) iconName = 'Sick';
+     else if (name.includes('malattia') || name.includes('enferm') || name.includes('sick') || name.includes('baja') || name.includes('malo')) iconName = 'Sick';
      else if (name.includes('travel') || name.includes('viaje') || name.includes('trasferta')) iconName = 'Work';
      else iconName = 'Business';
   }
@@ -55,8 +55,8 @@ export const getCategoryColorClass = (category: any) => {
   if (icon === 'BeachAccess' || name.includes('vacaciones') || name.includes('ferie') || name.includes('libre')) {
     return 'text-[#15aabf]';
   }
-  if (icon === 'Sick' || name.includes('enfermedad') || name.includes('malattia')) {
-    return 'text-[#fa5252]';
+  if (icon === 'Sick' || name.includes('enfermedad') || name.includes('malattia') || name.includes('sick') || name.includes('baja') || name.includes('malo')) {
+    return 'text-error';
   }
   if (icon === 'Work' || icon === 'Flight' || name.includes('terreno') || name.includes('on-site')) {
     return 'text-[#fab005]';
