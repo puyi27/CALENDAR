@@ -23,7 +23,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 
-import { getDynamicCategoryName, getCategoryIcon, ALLOWED_ICON_NAMES } from '../utils/categoryUtils';
+import { getDynamicCategoryName, getCategoryIcon, getCategoryColorClass, ALLOWED_ICON_NAMES } from '../utils/categoryUtils';
 
 import { API_URL } from '../config';
 
@@ -553,7 +553,7 @@ export default function AdminPanel() {
                   <button onClick={() => setTargetedCategoryForEdit(renderedCategory)} className="btn btn-ghost btn-xs btn-circle text-info hover:bg-info/10"><EditIcon fontSize="small" /></button>
                   <button onClick={() => setDeletionConfirmationTarget({ type: 'category', id: renderedCategory.id_category })} className="btn btn-ghost btn-xs btn-circle text-error hover:bg-error/10"><DeleteIcon fontSize="small" /></button>
                 </div>
-                <div className="flex items-start justify-between mb-4 mt-2"><span className="text-4xl text-base-content/80 drop-shadow-sm flex items-center justify-center w-14 h-14 bg-base-200 rounded-2xl border border-base-300">{getCategoryIcon(renderedCategory)}</span></div>
+                <div className="flex items-start justify-between mb-4 mt-2"><span className={`text-4xl drop-shadow-sm flex items-center justify-center w-14 h-14 bg-base-200 rounded-2xl border border-base-300 ${getCategoryColorClass(renderedCategory)}`}>{getCategoryIcon(renderedCategory)}</span></div>
                 <span className="text-sm font-bold truncate text-base-content pr-8">{getDynamicCategoryName(renderedCategory, i18n.language, t)}</span>
               </div>
             ))}

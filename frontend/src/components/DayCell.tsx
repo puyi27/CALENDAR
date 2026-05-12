@@ -4,7 +4,7 @@ import { type Presence, type Category } from '../types';
 import { useTranslation } from 'react-i18next';
 import AddIcon from '@mui/icons-material/Add'; 
 import CelebrationIcon from '@mui/icons-material/Celebration';
-import { getDynamicCategoryName, getCategoryIcon } from '../utils/categoryUtils';
+import { getDynamicCategoryName, getCategoryIcon, getCategoryColorClass } from '../utils/categoryUtils';
 
 interface DayCellConfiguration {
   presence?: Presence;
@@ -38,21 +38,7 @@ export const DayCell = memo(({ presence, defaultCategory, onAddPresence, userId,
   const computedCategoryPayload = validatesActivePresence ? presence.categories : (determinesWeekend ? null : defaultCategory);
   const evaluatesGhostRender = !validatesActivePresence && !determinesWeekend && defaultCategory;
 
-  let runtimeColorTheme = 'text-primary/80';
-  if (computedCategoryPayload) {
-    const icon = computedCategoryPayload.icon || '';
-    if (icon === 'Home' || icon === 'HomeWork') {
-      runtimeColorTheme = 'text-[#40c057]';
-    } else if (icon === 'Business' || icon === 'Domain') {
-      runtimeColorTheme = 'text-[#4dabf7]';
-    } else if (icon === 'BeachAccess') {
-      runtimeColorTheme = 'text-[#15aabf]';
-    } else if (icon === 'Sick') {
-      runtimeColorTheme = 'text-[#fa5252]';
-    } else if (icon === 'Flight' || icon === 'Work') {
-      runtimeColorTheme = 'text-[#fab005]';
-    }
-  }
+  const runtimeColorTheme = getCategoryColorClass(computedCategoryPayload);
 
   return (
     <div

@@ -24,7 +24,7 @@ import OnlinePredictionIcon from '@mui/icons-material/OnlinePrediction';
 import BeachAccessIcon from '@mui/icons-material/BeachAccess';
 import HomeWorkIcon from '@mui/icons-material/HomeWork';
 
-import { getDynamicCategoryName, getCategoryIcon } from '../utils/categoryUtils';
+import { getDynamicCategoryName, getCategoryIcon, getCategoryColorClass } from '../utils/categoryUtils';
 
 dayjs.extend(isoWeek);
 
@@ -313,7 +313,7 @@ export const Calendar = () => {
           <div className="flex flex-wrap items-center justify-center gap-4 bg-base-200/50 py-3 px-4 rounded-[1.25rem] border border-base-300 shadow-inner">
             {headerCounts[activeMobileViewDate].map(item => (
               <div key={item.category.id_category} className="flex items-center gap-1.5" title={getDynamicCategoryName(item.category, i18n.language, t)}>
-                <span className="text-xl flex items-center justify-center drop-shadow-sm">{getCategoryIcon(item.category)}</span>
+                <span className={`text-xl flex items-center justify-center drop-shadow-sm ${getCategoryColorClass(item.category)}`}>{getCategoryIcon(item.category)}</span>
                 <span className="text-sm font-black text-base-content/60">{item.count}</span>
               </div>
             ))}
@@ -438,7 +438,7 @@ export const Calendar = () => {
                           <div className="mt-3 w-full flex flex-wrap justify-center gap-x-2 gap-y-1 text-[10px] font-bold text-base-content/60 px-1 opacity-80">
                             {activeCategories.map(item => (
                               <span key={item.category.id_category} className="flex items-center gap-0.5" title={getDynamicCategoryName(item.category, i18n.language, t)}>
-                                <span className="text-[12px] flex items-center justify-center">{getCategoryIcon(item.category)}</span> {item.count}
+                                <span className={`text-[12px] flex items-center justify-center ${getCategoryColorClass(item.category)}`}>{getCategoryIcon(item.category)}</span> {item.count}
                               </span>
                             ))}
                           </div>

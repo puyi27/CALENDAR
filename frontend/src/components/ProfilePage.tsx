@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import toast from 'react-hot-toast';
 import { type User, type Presence, type Category } from '../types';
 import { useStore } from '../store/useStore';
-import { getDynamicCategoryName, getCategoryIcon } from '../utils/categoryUtils';
+import { getDynamicCategoryName, getCategoryIcon, getCategoryColorClass } from '../utils/categoryUtils';
 import { API_URL } from '../config';
 
 import DoNotDisturbOnTotalSilenceIcon from '@mui/icons-material/DoNotDisturbOnTotalSilence';
@@ -387,15 +387,7 @@ export const ProfilePage = (props: any) => {
               const mappedVisualCategory = validatesActiveDataOverride ? queriedPresenceEntity.categories : (representsWeekendConstraint || targetHoliday ? null : focusedUserProfile.default_category);
               const confirmsGhostEntityRender = !validatesActiveDataOverride && !representsWeekendConstraint && !targetHoliday && focusedUserProfile.default_category;
 
-              let runtimeAppliedColorSyntax = 'text-primary/80';
-              if (mappedVisualCategory) {
-                const parsedCategoryString = (mappedVisualCategory.name || '').toLowerCase();
-                if (parsedCategoryString.includes('kilometro rosso') || parsedCategoryString.includes('albino')) runtimeAppliedColorSyntax = 'text-[#4dabf7]';
-                else if (parsedCategoryString.includes('teletrabajo') || parsedCategoryString.includes('smart working') || parsedCategoryString.includes('smart') || parsedCategoryString.includes('casa')) runtimeAppliedColorSyntax = 'text-[#40c057]';
-                else if (parsedCategoryString.includes('terreno') || parsedCategoryString.includes('on-site')) runtimeAppliedColorSyntax = 'text-[#fab005]';
-                else if (parsedCategoryString.includes('vacaciones') || parsedCategoryString.includes('ferie') || parsedCategoryString.includes('libre')) runtimeAppliedColorSyntax = 'text-[#15aabf]';
-                else if (parsedCategoryString.includes('enfermedad') || parsedCategoryString.includes('malattia') || parsedCategoryString.includes('enfermo')) runtimeAppliedColorSyntax = 'text-[#fa5252]';
-              }
+              const runtimeAppliedColorSyntax = getCategoryColorClass(mappedVisualCategory);
               
               const isClickable = (identifiesAuthorizedSession && !representsWeekendConstraint && !targetHoliday) || (!identifiesAuthorizedSession && mappedVisualCategory && !targetHoliday) || !!targetHoliday;
 

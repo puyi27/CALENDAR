@@ -40,3 +40,26 @@ export const getDynamicCategoryName = (category: any, lang: string, t: any) => {
   
   return translated !== translationKey ? translated : category.name;
 };
+
+export const getCategoryColorClass = (category: any) => {
+  if (!category) return 'text-primary/80';
+  const icon = typeof category === 'string' ? category : category.icon;
+  const name = typeof category === 'string' ? '' : (category.name || '').toLowerCase();
+  
+  if (icon === 'Home' || icon === 'HomeWork' || name.includes('smart') || name.includes('teletrabajo') || name.includes('casa')) {
+    return 'text-success';
+  }
+  if (icon === 'Business' || icon === 'Domain' || name.includes('kilometro rosso') || name.includes('albino')) {
+    return 'text-[#4dabf7]';
+  }
+  if (icon === 'BeachAccess' || name.includes('vacaciones') || name.includes('ferie') || name.includes('libre')) {
+    return 'text-[#15aabf]';
+  }
+  if (icon === 'Sick' || name.includes('enfermedad') || name.includes('malattia')) {
+    return 'text-[#fa5252]';
+  }
+  if (icon === 'Work' || icon === 'Flight' || name.includes('terreno') || name.includes('on-site')) {
+    return 'text-[#fab005]';
+  }
+  return 'text-primary/80';
+};
