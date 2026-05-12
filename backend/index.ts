@@ -376,7 +376,7 @@ async function executeDailyTeamsNotifications() {
   }
 }
 
-app.post('/api/test-webhook', async (req: Request, res: Response) => {
+app.all('/api/test-webhook', async (req: Request, res: Response) => {
   try {
     await executeDailyTeamsNotifications();
     res.json({ success: true, message: "Test completed." });
