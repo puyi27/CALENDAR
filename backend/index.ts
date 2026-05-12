@@ -17,7 +17,7 @@ const SECRET_KEY = process.env.JWT_SECRET;
 if (!SECRET_KEY) throw new Error("JWT_SECRET env variable is required");
 
 const PORT = process.env.PORT || 4000;
-const WEB_URL = process.env.WA_WEB_URL || "http://localhost:3000";
+const WEB_URL = process.env.WA_WEB_URL || "https://faecalendar.vercel.app";
 
 const app = express();
 
