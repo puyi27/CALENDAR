@@ -13,13 +13,12 @@ import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import SearchIcon from '@mui/icons-material/Search';
 
-export const ExportModal = (props: any) => {
+export const ExportModal = memo(({ onClose }: { onClose: () => void }) => {
   const { t, i18n } = useTranslation();
-  const store = useStore();
-
-  const users: User[] = props.users || store.users || [];
-  const categories: Category[] = props.categories || store.categories || [];
-  const onClose = props.onClose;
+  
+  // Optimized selectors: only re-render if users or categories change
+  const users = useStore(state => state.users);
+  const categories = useStore(state => state.categories);
 
   const [startDate, setStartDate] = useState(dayjs().startOf('month').format('YYYY-MM-DD'));
   const [endDate, setEndDate] = useState(dayjs().endOf('month').format('YYYY-MM-DD'));
@@ -35,23 +34,28 @@ export const ExportModal = (props: any) => {
     return [...new Set(users.map(u => u.department).filter(Boolean))] as string[];
   }, [users]);
 
-  const toggleUser = (id: number) => {
+  const toggleUser = useCallback((id: number) => {
     setSelectedUsers(prev => prev.includes(id) ? prev.filter(u => u !== id) : [...prev, id]);
-  };
+  }, []);
 
-  const toggleCategory = (id: number) => {
+  const toggleCategory = useCallback((id: number) => {
     setSelectedCategories(prev => prev.includes(id) ? prev.filter(c => c !== id) : [...prev, id]);
-  };
+  }, []);
 
-  const toggleDepartment = (dept: string) => {
+  const toggleDepartment = useCallback((dept: string) => {
     setSelectedDepartments(prev => prev.includes(dept) ? prev.filter(d => d !== dept) : [...prev, dept]);
-  };
+  }, []);
 
   const visibleUsers = useMemo(() => {
-    return users.filter(u => selectedDepartments.length === 0 || (u.department && selectedDepartments.includes(u.department)));
-  }, [users, selectedDepartments]);
+    const search = userSearch.toLowerCase();
+    return users.filter(u => {
+      const matchesDept = selectedDepartments.length === 0 || (u.department && selectedDepartments.includes(u.department));
+      const matchesSearch = !search || (u.alias || '').toLowerCase().includes(search) || (u.full_name || '').toLowerCase().includes(search);
+      return matchesDept && matchesSearch;
+    });
+  }, [users, selectedDepartments, userSearch]);
 
-  const areAllUsersSelected = visibleUsers.length > 0 && selectedUsers.length === visibleUsers.length;
+  const areAllUsersSelected = useMemo(() => visibleUsers.length > 0 && visibleUsers.every(u => selectedUsers.includes(u.id_user)), [visibleUsers, selectedUsers]);
 
   const handleSelectAllUsers = () => {
     if (areAllUsersSelected) {
@@ -75,14 +79,17 @@ export const ExportModal = (props: any) => {
     }
   };
 
-  const startOfGrid = calendarViewDate.startOf('month').startOf('isoWeek');
-  const endOfGrid = calendarViewDate.endOf('month').endOf('isoWeek');
-  const calendarDays = [];
-  let dayIterator = startOfGrid;
-  while (dayIterator.isBefore(endOfGrid) || dayIterator.isSame(endOfGrid, 'day')) {
-    calendarDays.push(dayIterator);
-    dayIterator = dayIterator.add(1, 'day');
-  }
+  const calendarDays = useMemo(() => {
+    const startOfGrid = calendarViewDate.startOf('month').startOf('isoWeek');
+    const endOfGrid = calendarViewDate.endOf('month').endOf('isoWeek');
+    const days = [];
+    let dayIterator = startOfGrid;
+    while (dayIterator.isBefore(endOfGrid) || dayIterator.isSame(endOfGrid, 'day')) {
+      days.push(dayIterator);
+      dayIterator = dayIterator.add(1, 'day');
+    }
+    return days;
+  }, [calendarViewDate]);
 
   const handleExport = () => {
     const sDate = dayjs(startDate);
@@ -94,12 +101,12 @@ export const ExportModal = (props: any) => {
       .forEach(u => {
         (u.presences || []).forEach((p: any) => {
           const pDate = dayjs(p.date);
-          const inDateRange = (pDate.isAfter(sDate) || pDate.isSame(sDate, 'day')) &&
+          const inRange = (pDate.isAfter(sDate) || pDate.isSame(sDate, 'day')) &&
             (pDate.isBefore(eDate) || pDate.isSame(eDate, 'day'));
-          const inCategory = selectedCategories.length === 0 ||
+          const inCat = selectedCategories.length === 0 ||
             (p.categories && selectedCategories.includes(p.categories.id_category));
 
-          if (inDateRange && inCategory) {
+          if (inRange && inCat) {
             allRecords.push({
               date: p.date,
               dayName: pDate.locale(i18n.language).format('ddd'),
@@ -120,12 +127,12 @@ export const ExportModal = (props: any) => {
       const blob = new Blob([dataStr], { type: 'application/json' });
       triggerDownload(blob, `FAE_Export_${dayjs().format('YYYYMMDD')}.json`);
     } else {
-      const hDate = i18n.language === 'es' ? 'Fecha' : i18n.language === 'en' ? 'Date' : 'Fecha';
-      const hDay = i18n.language === 'es' ? 'Día' : i18n.language === 'en' ? 'Day' : 'Día';
-      const hEmp = i18n.language === 'es' ? 'Empleado' : i18n.language === 'en' ? 'Employee' : 'Empleado';
-      const hDept = i18n.language === 'es' ? 'Departamento' : i18n.language === 'en' ? 'Department' : 'Departamento';
-      const hRole = i18n.language === 'es' ? 'Rol' : i18n.language === 'en' ? 'Role' : 'Rol';
-      const hCat = i18n.language === 'es' ? 'Categoría' : i18n.language === 'en' ? 'Category' : 'Categoría';
+      const hDate = t('export.csv_date', 'Fecha');
+      const hDay = t('export.csv_day', 'Día');
+      const hEmp = t('export.csv_employee', 'Empleado');
+      const hDept = t('export.csv_department', 'Departamento');
+      const hRole = t('export.csv_role', 'Rol');
+      const hCat = t('export.csv_category', 'Categoría');
 
       let csv = `${hDate},${hDay},${hEmp},${hDept},${hRole},${hCat}\n`;
       allRecords.forEach(r => {
@@ -145,6 +152,7 @@ export const ExportModal = (props: any) => {
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
+    URL.revokeObjectURL(url);
   };
 
   const dayNamesRaw = t('profile.days', { returnObjects: true });
@@ -237,7 +245,7 @@ export const ExportModal = (props: any) => {
               <section>
                 <div className="flex justify-between items-end mb-3 px-1">
                   <h4 className="text-xs font-black uppercase tracking-widest text-base-content/70">{t('admin.department', 'Departamentos')}</h4>
-                  <button type="button" onClick={() => setSelectedDepartments([])} className="text-[10px] font-bold uppercase text-primary hover:underline">{t('export.select_all', 'Borrar')}</button>
+                  <button type="button" onClick={() => setSelectedDepartments([])} className="text-[10px] font-bold uppercase text-primary hover:underline">{t('export.clear', 'Borrar')}</button>
                 </div>
                 <div className="flex flex-wrap gap-2 p-3 bg-base-200/50 rounded-2xl border border-base-300">
                   {availableDepartments.map(dept => (
@@ -255,11 +263,9 @@ export const ExportModal = (props: any) => {
                 <h4 className="text-xs font-black uppercase tracking-widest text-base-content/70">{t('export.employees', 'Users')}</h4>
                 <div className="flex gap-4">
                   <button type="button" onClick={handleSelectAllUsers} className="text-[10px] font-bold uppercase text-primary hover:underline">
-                    
                     {areAllUsersSelected ? t('export.unselect_all', 'Deselect All') : t('export.select_all', 'Select All')}
                   </button>
                   <button type="button" onClick={() => setSelectedUsers([])} className="text-[10px] font-bold uppercase text-base-content/50 hover:text-base-content hover:underline">
-                    
                     {t('export.clear', 'Clear')}
                   </button>
                 </div>
@@ -274,10 +280,8 @@ export const ExportModal = (props: any) => {
                   onChange={(e) => setUserSearch(e.target.value)}
                 />
               </div>
-              <div className="grid grid-cols-2 md:grid-cols-2 gap-2 max-h-40 overflow-y-auto p-4 rounded-2xl border border-base-300 bg-base-200/50">
-                {visibleUsers
-                  .filter(u => (u.alias || '').toLowerCase().includes(userSearch.toLowerCase()) || (u.full_name || '').toLowerCase().includes(userSearch.toLowerCase()))
-                  .map(u => (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-40 overflow-y-auto p-4 rounded-2xl border border-base-300 bg-base-200/50">
+                {visibleUsers.map(u => (
                     <label key={u.id_user} className={`flex items-center gap-3 p-2.5 rounded-xl border cursor-pointer transition-all ${selectedUsers.includes(u.id_user) ? 'bg-primary/5 text-primary border-primary/50' : 'bg-base-100 hover:bg-base-300 text-base-content/70 border-transparent'}`}>
                       <input type="checkbox" className="checkbox checkbox-xs checkbox-primary" checked={selectedUsers.includes(u.id_user)} onChange={() => toggleUser(u.id_user)} />
                       <span className="text-sm font-bold truncate">{u.alias || u.full_name}</span>
@@ -289,7 +293,7 @@ export const ExportModal = (props: any) => {
             <section>
               <div className="flex justify-between items-end mb-3 px-1">
                 <h4 className="text-xs font-black uppercase tracking-widest text-base-content/70">{t('export.categories', 'Categorías')}</h4>
-                <button type="button" onClick={() => setSelectedCategories([])} className="text-[10px] font-bold uppercase text-primary hover:underline">{t('export.select_all', 'Borrar')}</button>
+                <button type="button" onClick={() => setSelectedCategories([])} className="text-[10px] font-bold uppercase text-primary hover:underline">{t('export.clear', 'Borrar')}</button>
               </div>
               <div className="flex flex-wrap gap-2.5 p-3 bg-base-200/50 rounded-2xl border border-base-300">
                 {categories.map(c => (
@@ -326,4 +330,4 @@ export const ExportModal = (props: any) => {
       </div>
     </div>
   );
-};
+});

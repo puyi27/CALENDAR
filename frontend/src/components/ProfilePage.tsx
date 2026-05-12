@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef, useEffect } from 'react';
+import React, { useState, useMemo, useRef, useEffect, memo, useCallback } from 'react';
 import { createPortal } from 'react-dom';
 import { useParams, Navigate, useNavigate } from 'react-router-dom';
 import dayjs from 'dayjs';
@@ -37,14 +37,19 @@ export const ProfilePage = (props: any) => {
   const { id_user } = useParams();
   const triggerNavigation = useNavigate();
   
-  const store = useStore();
-  const users: User[] = props.users || store.users || [];
-  const categories: Category[] = props.categories || store.categories || [];
-  const currentUser: User | null = props.currentUser || store.currentUser;
+  // Optimized selectors: only re-render if specific data changes
+  const users = useStore(state => state.users);
+  const categories = useStore(state => state.categories);
+  const currentUser = useStore(state => state.currentUser);
+  const token = useStore(state => state.token);
   
-  const onUpdateUser = props.onUpdateUser || store.updateUser;
-  const onAddPresence = props.onAddPresence || ((userId: number, date: string) => store.setInteractionModalContext({ id_user: userId, date }));
-  const commitBulkPresences = store.commitBulkPresences;
+  const updateUser = useStore(state => state.updateUser);
+  const setInteractionModalContext = useStore(state => state.setInteractionModalContext);
+  const commitBulkPresences = useStore(state => state.commitBulkPresences);
+  const fetchGlobalData = useStore(state => state.fetchGlobalData);
+
+  const onUpdateUser = props.onUpdateUser || updateUser;
+  const onAddPresence = props.onAddPresence || ((userId: number, date: string) => setInteractionModalContext({ id_user: userId, date }));
 
   const focusedUserProfile = users.find(u => u.id_user === Number(id_user));
   const identifiesAuthorizedSession = focusedUserProfile?.id_user === currentUser?.id_user;
@@ -92,25 +97,29 @@ export const ProfilePage = (props: any) => {
   }, [focusedUserProfile]);
 
   useEffect(() => {
-    if (!store.token) return;
-    fetch(`${API_URL}/holidays`, { headers: { 'Authorization': `Bearer ${store.token}` } })
+    if (!token) return;
+    fetch(`${API_URL}/holidays`, { headers: { 'Authorization': `Bearer ${token}` } })
       .then(res => res.json())
       .then(data => setHolidays(data || []))
       .catch(() => {});
-  }, [store.token]);
+  }, [token]);
 
   if (users.length === 0) return <div className="flex h-96 items-center justify-center"><span className="loading loading-spinner text-primary loading-lg"></span></div>;
   if (!focusedUserProfile) return <Navigate to="/" />;
 
-  const boundingMonthStart = navigationalDatePivot.startOf('month');
-  const evaluatedDaysInMonth = navigationalDatePivot.daysInMonth();
-  const prependedEmptyGridSlots = boundingMonthStart.isoWeekday() - 1;
-  
-  const iterativeDaysArray = Array.from({ length: evaluatedDaysInMonth }, (_, indexIncrement) => boundingMonthStart.add(indexIncrement, 'day'));
-  const placeholderGridArray = Array.from({ length: prependedEmptyGridSlots }, (_, indexIncrement) => indexIncrement);
-  
-  const extractedDayLabels = t('profile.days', { returnObjects: true });
-  const finalGridHeaderLabels = Array.isArray(extractedDayLabels) ? extractedDayLabels : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+  const { boundingMonthStart, evaluatedDaysInMonth, iterativeDaysArray, placeholderGridArray, finalGridHeaderLabels } = useMemo(() => {
+    const start = navigationalDatePivot.startOf('month');
+    const days = navigationalDatePivot.daysInMonth();
+    const emptySlots = start.isoWeekday() - 1;
+    
+    const dayArray = Array.from({ length: days }, (_, i) => start.add(i, 'day'));
+    const placeholderArray = Array.from({ length: emptySlots }, (_, i) => i);
+    
+    const labelsRaw = t('profile.days', { returnObjects: true });
+    const labels = Array.isArray(labelsRaw) ? labelsRaw : ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+    return { boundingMonthStart: start, evaluatedDaysInMonth: days, iterativeDaysArray: dayArray, placeholderGridArray: placeholderArray, finalGridHeaderLabels: labels };
+  }, [navigationalDatePivot, t]);
 
   const commitProfileConfigurationChanges = () => {
     const identifiesEmptyAvatarString = formInputRegistry.avatar.trim() === '';
@@ -189,14 +198,14 @@ export const ProfilePage = (props: any) => {
           const queries = datesToDelete.map(date => 
             fetch(`${API_URL}/presences`, {
               method: 'DELETE',
-              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(store as any).token}` },
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
               body: JSON.stringify({ id_user: focusedUserProfile.id_user, date: date })
             })
           );
           await Promise.all(queries);
         }
         if (commitBulkPresences) await commitBulkPresences(derivedMissingPresences);
-        if ((store as any).fetchGlobalData) await (store as any).fetchGlobalData();
+        if (fetchGlobalData) await fetchGlobalData();
         toast.success(t('profile.bulk_success', 'Mes autocompletado'));
       } catch (error) {
         toast.error('Error aplicando autocompletar');
@@ -235,12 +244,12 @@ export const ProfilePage = (props: any) => {
       const queries = datesToDelete.map(date => 
         fetch(`${API_URL}/presences`, {
           method: 'DELETE',
-          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${(store as any).token}` },
+          headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
           body: JSON.stringify({ id_user: focusedUserProfile.id_user, date: date })
         })
       );
       await Promise.all(queries);
-      if ((store as any).fetchGlobalData) await (store as any).fetchGlobalData();
+      if (fetchGlobalData) await fetchGlobalData();
       toast.success(t('profile.clear_success', 'Mes vaciado correctamente'));
     } catch (error) {
       toast.error('Error al vaciar el mes');
@@ -455,49 +464,16 @@ export const ProfilePage = (props: any) => {
         </div>
       </div>
 
-      {isCustomFillModalOpen && createPortal(
-        <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-base-300/80 backdrop-blur-sm" onClick={() => setIsCustomFillModalOpen(false)}></div>
-          <div className="bg-base-100 rounded-[2rem] shadow-2xl border border-base-300 w-full max-w-md p-8 relative z-10 animate-fade-in-up flex flex-col gap-6">
-            <div className="flex justify-between items-center">
-              <h3 className="text-2xl font-bold tracking-tight text-base-content flex items-center gap-2">
-                <SettingsSuggestIcon className="text-primary" /> {t('profile.custom_month', 'Autocompletar Mes')}
-              </h3>
-              <button onClick={() => setIsCustomFillModalOpen(false)} className="btn btn-circle btn-ghost btn-sm">✕</button>
-            </div>
-            <p className="text-sm text-base-content/60 font-medium">{t('profile.custom_month_desc', 'Configura tu ubicación por defecto para cada día de la semana.')}</p>
-            <div className="flex flex-col gap-5 pt-2">
-              {[1, 2, 3, 4, 5, ...(focusedUserProfile.can_work_weekends ? [6, 7] : [])].map(dayNumber => (
-                <div key={dayNumber} className="flex flex-col gap-1.5 w-full">
-                  <label className="text-[10px] font-black uppercase tracking-widest text-base-content/50 ml-1">
-                    {dayjs().isoWeekday(dayNumber).locale(i18n.language).format('dddd')}
-                  </label>
-                  <select 
-                    className="select select-bordered w-full bg-base-100 rounded-xl focus:border-primary font-semibold text-sm h-12 border-base-300 shadow-sm transition-all"
-                    value={customFillPattern[dayNumber]}
-                    onChange={(e) => setCustomFillPattern({ ...customFillPattern, [dayNumber]: e.target.value })}
-                  >
-                    <option value="">---</option>
-                    {categories?.filter(c => {
-                      const icon = c.icon || '';
-                      const name = (c.name || '').toLowerCase();
-                      return icon !== 'BeachAccess' && icon !== 'Sick' && icon !== 'Flight' && 
-                             !name.includes('ferie') && !name.includes('malattia') && !name.includes('travel') && !name.includes('trasferta');
-                    }).map(c => (
-                      <option key={c.id_category} value={c.id_category}>
-                        {getDynamicCategoryName(c, i18n.language, t)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              ))}
-            </div>
-            <div className="grid grid-cols-2 gap-4 mt-4 pt-6 border-t border-base-200">
-              <button type="button" onClick={() => setIsCustomFillModalOpen(false)} className="btn btn-ghost rounded-xl">{t('profile.cancel', 'Cancelar')}</button>
-              <button type="button" onClick={saveCustomFillPattern} className="btn btn-primary rounded-xl shadow-md">{t('profile.save', 'Guardar')}</button>
-            </div>
-          </div>
-        </div>,
+      {isCustomFillModalOpen && (
+        <CustomFillModal 
+          onClose={() => setIsCustomFillModalOpen(false)}
+          onSave={saveCustomFillPattern}
+          pattern={customFillPattern}
+          setPattern={setCustomFillPattern}
+          categories={categories}
+          canWorkWeekends={focusedUserProfile.can_work_weekends}
+        />
+      )}
         document.body
       )}
 
@@ -702,4 +678,54 @@ export const ProfilePage = (props: any) => {
       )}
     </>
   );
-};
+});
+
+const CustomFillModal = memo(({ onClose, onSave, pattern, setPattern, categories, canWorkWeekends }: any) => {
+  const { t, i18n } = useTranslation();
+  
+  return createPortal(
+    <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
+      <div className="absolute inset-0 bg-base-300/80 backdrop-blur-sm" onClick={onClose}></div>
+      <div className="bg-base-100 rounded-[2rem] shadow-2xl border border-base-300 w-full max-w-md p-8 relative z-10 animate-fade-in-up flex flex-col gap-6">
+        <div className="flex justify-between items-center">
+          <h3 className="text-2xl font-bold tracking-tight text-base-content flex items-center gap-2">
+            <SettingsSuggestIcon className="text-primary" /> {t('profile.custom_month', 'Autocompletar Mes')}
+          </h3>
+          <button onClick={onClose} className="btn btn-circle btn-ghost btn-sm">✕</button>
+        </div>
+        <p className="text-sm text-base-content/60 font-medium">{t('profile.custom_month_desc', 'Configura tu ubicación por defecto para cada día de la semana.')}</p>
+        <div className="flex flex-col gap-5 pt-2">
+          {[1, 2, 3, 4, 5, ...(canWorkWeekends ? [6, 7] : [])].map(dayNumber => (
+            <div key={dayNumber} className="flex flex-col gap-1.5 w-full">
+              <label className="text-[10px] font-black uppercase tracking-widest text-base-content/50 ml-1">
+                {dayjs().isoWeekday(dayNumber).locale(i18n.language).format('dddd')}
+              </label>
+              <select 
+                className="select select-bordered w-full bg-base-100 rounded-xl focus:border-primary font-semibold text-sm h-12 border-base-300 shadow-sm transition-all"
+                value={pattern[dayNumber]}
+                onChange={(e) => setPattern({ ...pattern, [dayNumber]: e.target.value })}
+              >
+                <option value="">---</option>
+                {categories?.filter((c: any) => {
+                  const icon = c.icon || '';
+                  const name = (c.name || '').toLowerCase();
+                  return icon !== 'BeachAccess' && icon !== 'Sick' && icon !== 'Flight' && 
+                         !name.includes('ferie') && !name.includes('malattia') && !name.includes('travel') && !name.includes('trasferta');
+                }).map((c: any) => (
+                  <option key={c.id_category} value={c.id_category}>
+                    {getDynamicCategoryName(c, i18n.language, t)}
+                  </option>
+                ))}
+              </select>
+            </div>
+          ))}
+        </div>
+        <div className="grid grid-cols-2 gap-4 mt-4 pt-6 border-t border-base-200">
+          <button type="button" onClick={onClose} className="btn btn-ghost rounded-xl">{t('profile.cancel', 'Cancelar')}</button>
+          <button type="button" onClick={onSave} className="btn btn-primary rounded-xl shadow-md">{t('profile.save', 'Guardar')}</button>
+        </div>
+      </div>
+    </div>,
+    document.body
+  );
+});
