@@ -153,9 +153,12 @@
     "holidays": "HOLIDAYS",
     "import_holidays": "Import Holidays",
     "import_holidays_desc": "Automatically fetch public holidays for the current year.",
+    "import_italy": "Import Italy",
     "new_holiday": "Manual Holiday",
     "date": "Date",
-    "name_holiday": "Name"
+    "holiday_ph": "Local Holiday...",
+    "add_holiday": "Add Holiday",
+    "registered_holidays": "Registered Holidays"
   },
   "daycell": {
     "status": "Status",

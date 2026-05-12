@@ -153,9 +153,12 @@
     "holidays": "FESTIVITÀ",
     "import_holidays": "Importa Festività",
     "import_holidays_desc": "Recupera automaticamente le festività pubbliche per l'anno in corso.",
+    "import_italy": "Importa Italia",
     "new_holiday": "Festività Manuale",
     "date": "Data",
-    "name_holiday": "Nome"
+    "holiday_ph": "Festività Locale...",
+    "add_holiday": "Aggiungi Festività",
+    "registered_holidays": "Festività Registrate"
   },
   "daycell": {
     "status": "Stato",

@@ -153,9 +153,12 @@
     "holidays": "FESTIVOS",
     "import_holidays": "Importar Festivos",
     "import_holidays_desc": "Obtén automáticamente los días festivos públicos para el año en curso.",
+    "import_italy": "Importar Italia",
     "new_holiday": "Festivo Manual",
     "date": "Fecha",
-    "name_holiday": "Nombre"
+    "holiday_ph": "Festivo Local...",
+    "add_holiday": "Añadir Festivo",
+    "registered_holidays": "Festivos Registrados"
   },
   "daycell": {
     "status": "Estado",

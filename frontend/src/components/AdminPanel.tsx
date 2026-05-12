@@ -610,10 +610,9 @@ export default function AdminPanel() {
              <div className="bg-base-100 rounded-[2rem] p-6 border border-base-300 shadow-lg">
                 <h2 className="text-xl font-black tracking-tight mb-4 flex items-center gap-2"><BeachAccessIcon className="text-error" /> {t('admin.import_holidays', 'Import Holidays')}</h2>
                 <p className="text-sm text-base-content/60 mb-6">{t('admin.import_holidays_desc', 'Automatically fetch public holidays for the current year using Nager.Date API.')}</p>
-                <div className="flex flex-col sm:flex-row gap-3">
-                   <button onClick={() => importHolidaysFromAPI('IT')} className="btn btn-outline border-error text-error hover:bg-error hover:text-error-content rounded-xl flex-1">🇮🇹 Importar Italia</button>
-                   <button onClick={() => importHolidaysFromAPI('ES')} className="btn btn-outline border-error text-error hover:bg-error hover:text-error-content rounded-xl flex-1">🇪🇸 Importar España</button>
-                </div>
+                 <div className="flex flex-col sm:flex-row gap-3">
+                    <button onClick={() => importHolidaysFromAPI('IT')} className="btn btn-outline border-error text-error hover:bg-error hover:text-error-content rounded-xl flex-1">🇮🇹 {t('admin.import_italy', 'Import Italy')}</button>
+                 </div>
              </div>
 
              <div className="bg-base-100 rounded-[2rem] p-6 border border-base-300 shadow-lg">
@@ -626,16 +625,16 @@ export default function AdminPanel() {
                     </div>
                     <div className="flex flex-col gap-1.5 flex-1">
                        <label className="px-1"><span className="font-bold text-[10px] uppercase tracking-wider text-base-content/60">{t('admin.name', 'Name')}</span></label>
-                       <input type="text" className="input input-sm input-bordered bg-base-100 rounded-xl focus:border-error focus:ring-1 focus:ring-error/30 text-sm h-11" placeholder="Festivo Local..." value={newHolidayPayload.name_holiday} onChange={e => setNewHolidayPayload({ ...newHolidayPayload, name_holiday: e.target.value })} required />
+                       <input type="text" className="input input-sm input-bordered bg-base-100 rounded-xl focus:border-error focus:ring-1 focus:ring-error/30 text-sm h-11" placeholder={t('admin.holiday_ph', 'Local Holiday...')} value={newHolidayPayload.name_holiday} onChange={e => setNewHolidayPayload({ ...newHolidayPayload, name_holiday: e.target.value })} required />
                     </div>
                   </div>
-                  <button type="submit" className="btn btn-error h-11 min-h-0 rounded-xl font-black uppercase tracking-widest text-error-content shadow-md hover:shadow-lg transition-all w-full">{t('admin.create', 'Add Holiday')}</button>
+                  <button type="submit" className="btn btn-error h-11 min-h-0 rounded-xl font-black uppercase tracking-widest text-error-content shadow-md hover:shadow-lg transition-all w-full">{t('admin.add_holiday', 'Add Holiday')}</button>
                 </form>
              </div>
           </div>
 
           <div className="bg-base-100 rounded-[2rem] overflow-hidden border border-base-300 shadow-lg p-6">
-             <h2 className="text-xl font-black tracking-tight mb-6">{t('admin.holidays', 'Registered Holidays')}</h2>
+             <h2 className="text-xl font-black tracking-tight mb-6">{t('admin.registered_holidays', 'Registered Holidays')}</h2>
              {holidays.length === 0 ? (
                <div className="text-center py-10 text-base-content/40 font-bold">{t('admin.alert_warning', 'No records found')}</div>
              ) : (
