@@ -299,7 +299,7 @@ export const ProfilePage = (props: any) => {
            </button>
         </div>
 
-        <div className="bg-base-100 rounded-2xl p-6 md:p-8 shadow-sm border border-base-300 flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 md:mb-10 relative overflow-hidden transition-all hover:shadow-md">
+        <div className="bg-base-100 rounded-[2rem] p-6 md:p-8 shadow-lg border border-base-300 border-t-4 border-t-primary/30 flex flex-col md:flex-row items-center md:items-start gap-6 mb-8 md:mb-10 relative overflow-hidden transition-all hover:shadow-xl" style={{background: 'linear-gradient(135deg, var(--fallback-b1,oklch(var(--b1))) 60%, color-mix(in oklch, oklch(var(--p)) 5%, var(--fallback-b1,oklch(var(--b1)))))' }}>
           <div className="absolute top-0 right-0 p-4 md:p-6 flex items-center gap-2 md:gap-3 z-20">
             {identifiesAuthorizedSession && (
               <>
@@ -314,11 +314,11 @@ export const ProfilePage = (props: any) => {
           </div>
           
           <div className="relative group z-10 mx-auto md:mx-0 mt-4 md:mt-0">
-            <div className="w-24 h-24 md:w-32 md:h-32 rounded-2xl ring-2 ring-base-300 shadow-sm bg-base-200 overflow-hidden">
+            <div className="w-28 h-28 md:w-36 md:h-36 rounded-3xl ring-4 ring-primary/20 ring-offset-2 ring-offset-base-100 shadow-xl bg-base-200 overflow-hidden transition-all group-hover:ring-primary/40">
               <img src={focusedUserProfile.avatar ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(focusedUserProfile.alias || focusedUserProfile.full_name || 'U')}&background=random`} alt={focusedUserProfile.alias} className="object-cover w-full h-full" />
             </div>
             {focusedUserProfile.status && (
-              <div className="absolute -bottom-2 -right-2 bg-base-100 rounded-xl border border-base-300 flex items-center justify-center shadow-md px-2.5 py-2 z-10 text-primary transition-transform group-hover:scale-110">
+              <div className="absolute -bottom-2 -right-2 bg-base-100 rounded-xl border-2 border-base-200 flex items-center justify-center shadow-lg px-3 py-2 z-10 transition-all group-hover:scale-110 group-hover:shadow-xl">
                 <span className="flex items-center justify-center" title={focusedUserProfile.status}>{evaluateStatusIndicatorType(focusedUserProfile.status)}</span>
               </div>
             )}
@@ -341,7 +341,7 @@ export const ProfilePage = (props: any) => {
           </div>
         </div>
         
-        <div className="flex flex-col lg:flex-row items-center justify-between gap-4 bg-base-100 shadow-sm border border-base-300 p-2.5 rounded-full mb-6">
+        <div className="flex flex-col lg:flex-row items-center justify-between gap-4 bg-base-100 shadow-md border border-base-300 p-2.5 rounded-full mb-6 border-l-4 border-l-secondary/40">
           <div className="flex items-center gap-3 w-full lg:w-auto justify-center lg:justify-start pl-1">
             <div className="flex items-center bg-base-200/50 rounded-full h-11 px-1 border border-base-200 shadow-inner">
               <button onClick={() => setNavigationalDatePivot(c => c.subtract(1, 'month'))} className="btn btn-sm btn-ghost hover:bg-base-300 rounded-full h-9 w-9 p-0 text-base-content/70"><KeyboardArrowLeftIcon fontSize="small"/></button>
@@ -370,9 +370,9 @@ export const ProfilePage = (props: any) => {
           )}
         </div>
 
-        <div className="bg-base-100 rounded-[2rem] shadow-sm border border-base-300 overflow-hidden pb-6">
-          <div className="grid grid-cols-7 bg-base-200/50 border-b border-base-300">
-            {finalGridHeaderLabels.map((d: string) => <div key={d} className="py-3 md:py-4 text-center text-[10px] md:text-[11px] font-semibold text-base-content/60 uppercase tracking-widest">{d}</div>)}
+        <div className="bg-base-100 rounded-[2rem] shadow-xl border-2 border-base-300 overflow-hidden pb-6">
+          <div className="grid grid-cols-7 border-b-2 border-base-300" style={{background: 'linear-gradient(180deg, var(--fallback-b2,oklch(var(--b2))) 0%, var(--fallback-b1,oklch(var(--b1))) 100%)'}}>
+            {finalGridHeaderLabels.map((d: string) => <div key={d} className="py-4 text-center text-[10px] font-black text-base-content/50 uppercase tracking-[0.2em]">{d}</div>)}
           </div>
           <div className="grid grid-cols-7 divide-x divide-base-300/60">
             {placeholderGridArray.map(b => <div key={`blank-${b}`} className="min-h-[80px] md:min-h-[120px] bg-base-200/30 border-b border-base-300/50"></div>)}

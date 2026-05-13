@@ -226,7 +226,7 @@ export const Calendar = () => {
   return (
     <div className="space-y-6 animate-fade-in pb-24 lg:pb-10">
       <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; } .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }`}</style>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 bg-base-100 p-4 md:p-5 rounded-[2rem] border border-base-300 shadow-sm relative z-[90]">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 bg-base-100 p-4 md:p-5 rounded-[2rem] border border-base-300 shadow-lg relative z-[90] border-t-4 border-t-primary/30">
         {activeDropdownContext && <div className="fixed inset-0 z-[95]" onClick={() => setActiveDropdownContext(null)}></div>}
         <div className={`w-full flex flex-col gap-2 relative ${activeDropdownContext ? 'z-[10]' : 'z-[20]'}`}>
           <label className="text-[10px] font-black uppercase tracking-widest text-base-content opacity-50 ml-2">{t('calendar.search_label', 'Search')}</label>
@@ -310,11 +310,14 @@ export const Calendar = () => {
         </div>
 
         {!holidays.some(h => h.date === activeMobileViewDate) && headerCounts[activeMobileViewDate]?.length > 0 && (
-          <div className="flex flex-wrap items-center justify-center gap-4 bg-base-200/50 py-3 px-4 rounded-[1.25rem] border border-base-300 shadow-inner">
+          <div className="flex flex-wrap items-center justify-center gap-2 bg-base-200/30 py-3 px-4 rounded-[1.25rem] border border-base-300">
             {headerCounts[activeMobileViewDate].map(item => (
-              <div key={item.category.id_category} className="flex items-center gap-1.5" title={getDynamicCategoryName(item.category, i18n.language, t)}>
-                <span className={`text-xl flex items-center justify-center drop-shadow-sm ${getCategoryColorClass(item.category)}`}>{getCategoryIcon(item.category)}</span>
-                <span className="text-sm font-black text-base-content/60">{item.count}</span>
+              <div key={item.category.id_category}
+                className="flex items-center gap-1.5 bg-base-100 border border-base-300 rounded-xl px-3 py-1.5 shadow-xs"
+                title={getDynamicCategoryName(item.category, i18n.language, t)}
+              >
+                <span className={`text-base flex items-center justify-center ${getCategoryColorClass(item.category)}`}>{getCategoryIcon(item.category)}</span>
+                <span className="text-xs font-black text-base-content/70">{item.count}</span>
               </div>
             ))}
           </div>
@@ -394,7 +397,7 @@ export const Calendar = () => {
         </div>
       </div>
 
-      <div className="hidden lg:block rounded-[2.5rem] border-2 border-base-300 bg-base-100 shadow-xl overflow-hidden relative z-10">
+      <div className="hidden lg:block rounded-[2.5rem] border-2 border-base-300 bg-base-100 shadow-xl overflow-hidden relative z-10" style={{background: 'linear-gradient(180deg, var(--fallback-b1,oklch(var(--b1))) 0%, var(--fallback-b2,oklch(var(--b2))) 100%)'}}>
         <div className="overflow-x-auto w-full hide-scrollbar">
           <table className="table table-fixed w-full min-w-[1000px] border-separate border-spacing-0">
             <thead>
@@ -440,26 +443,39 @@ export const Calendar = () => {
                     <th
                       key={serializedDateReference}
                       onClick={() => setActiveDateFilter(serializedDateReference)}
-                      className={`p-0 align-top border-r-2 ${contextualBorderHighlight} cursor-pointer hover:bg-base-300 select-none transition-colors ${appliedHeaderCSSConfiguration} ${saturdaySeparatorClass}`}
+                      className={`p-0 align-top border-r-2 ${contextualBorderHighlight} cursor-pointer select-none transition-all duration-150 ${appliedHeaderCSSConfiguration} ${saturdaySeparatorClass} hover:brightness-95 group/th`}
                     >
-                      <div className="flex flex-col h-full justify-between items-center py-4 relative">
+                      <div className="flex flex-col h-full justify-between items-center py-4 px-1 relative">
                         <div className="text-center w-full">
-                          <div className="text-[11px] uppercase font-black tracking-[0.15em] mb-1 opacity-80">{mappedDayNode.locale(i18n.language).format('ddd')}</div>
-                          <div className={`text-2xl font-black tracking-tighter transition-transform duration-300 ${matchesFilterCriteria ? 'scale-110' : 'group-hover/th:scale-105'}`}>{mappedDayNode.locale(i18n.language).format('DD')}</div>
+                          <div className="text-[10px] uppercase font-black tracking-[0.2em] mb-2 opacity-60">{mappedDayNode.locale(i18n.language).format('ddd')}</div>
+                          <div className={`relative inline-flex items-center justify-center transition-all duration-300 ${
+                            evaluatesToCurrentDay && !matchesFilterCriteria
+                              ? 'w-9 h-9 rounded-full bg-primary/10 ring-2 ring-primary/30 text-primary'
+                              : matchesFilterCriteria
+                              ? 'w-9 h-9 rounded-full bg-primary text-primary-content shadow-md shadow-primary/30 scale-110'
+                              : 'w-9 h-9 rounded-full group-hover/th:bg-base-300'
+                          } text-2xl font-black tracking-tighter`}>
+                            {mappedDayNode.locale(i18n.language).format('DD')}
+                          </div>
                         </div>
                         {!targetHoliday && activeCategories.length > 0 && (
-                          <div className="mt-3 w-full flex flex-wrap justify-center gap-x-2 gap-y-1 text-[10px] font-bold text-base-content/60 px-1 opacity-80">
+                          <div className="mt-3 w-full flex flex-wrap justify-center gap-1 px-1">
                             {activeCategories.map(item => (
-                              <span key={item.category.id_category} className="flex items-center gap-0.5" title={getDynamicCategoryName(item.category, i18n.language, t)}>
-                                <span className={`text-[12px] flex items-center justify-center ${getCategoryColorClass(item.category)}`}>{getCategoryIcon(item.category)}</span> {item.count}
+                              <span
+                                key={item.category.id_category}
+                                className="flex items-center gap-0.5 bg-base-200/80 border border-base-300/60 rounded-lg px-1.5 py-0.5 text-[10px] font-bold text-base-content/60"
+                                title={getDynamicCategoryName(item.category, i18n.language, t)}
+                              >
+                                <span className={`text-[11px] ${getCategoryColorClass(item.category)}`}>{getCategoryIcon(item.category)}</span>
+                                <span>{item.count}</span>
                               </span>
                             ))}
                           </div>
                         )}
                         {targetHoliday && (
-                           <div className="mt-3 w-full flex flex-wrap justify-center px-1">
-                              <span className="text-[9px] font-black uppercase tracking-widest text-error/80 text-center truncate w-full px-1" title={targetHoliday.name_holiday}>{targetHoliday.name_holiday}</span>
-                           </div>
+                          <div className="mt-3 w-full px-1">
+                            <span className="text-[9px] font-black uppercase tracking-widest text-error/80 text-center truncate w-full block bg-error/10 rounded-lg px-2 py-1" title={targetHoliday.name_holiday}>{targetHoliday.name_holiday}</span>
+                          </div>
                         )}
                       </div>
                     </th>
@@ -477,7 +493,7 @@ export const Calendar = () => {
                   const sequentialRowColorTheme = iterationIndex % 2 !== 0 ? 'bg-base-200' : 'bg-base-100';
 
                   return (
-                    <tr key={profileEntity.id_user} className={`group/row ${mapsToAuthenticatedUser ? 'outline outline-2 outline-primary outline-offset-[-2px] relative z-20' : ''} ${sequentialRowColorTheme}`}>
+                    <tr key={profileEntity.id_user} className={`group/row transition-colors duration-100 ${mapsToAuthenticatedUser ? 'outline outline-2 outline-primary/50 outline-offset-[-2px] relative z-20' : 'hover:bg-base-200/60'} ${sequentialRowColorTheme}`}>
                       <td className={`relative p-0 border-r-2 border-base-300 sticky left-0 z-50 overflow-hidden shadow-[4px_0_10px_-4px_rgba(0,0,0,0.15)] ${sequentialRowColorTheme}`}>
                         <div className="relative z-10 flex flex-col h-full divide-y divide-base-300">
                           <div className="p-5 pl-6 flex items-center gap-4 cursor-pointer hover:bg-base-300 transition-colors relative" onClick={() => triggerNavigation(`/profile/${profileEntity.id_user}`)}>
@@ -578,29 +594,35 @@ export const Calendar = () => {
 
       {overlayContextProperties && createPortal(
         <div className="fixed inset-0 z-[999] flex items-center justify-center p-4">
-          <div className="absolute inset-0 bg-base-300/60 backdrop-blur-sm transition-opacity animate-fade-in" onClick={() => setOverlayContextProperties(null)}></div>
-          <div className="bg-base-100 border border-base-300 shadow-2xl rounded-[2rem] p-8 text-center relative z-10 w-full max-w-sm animate-fade-in-up">
-            <button onClick={() => setOverlayContextProperties(null)} className="btn btn-sm btn-ghost btn-circle absolute right-4 top-4 text-base-content/50">✕</button>
-            <div className="w-20 h-20 bg-base-200 border-2 border-base-300 rounded-2xl flex items-center justify-center text-5xl mx-auto mb-6 text-primary shadow-sm">
+          <div className="absolute inset-0 bg-base-300/70 backdrop-blur-md transition-opacity animate-fade-in" onClick={() => setOverlayContextProperties(null)}></div>
+          <div className="bg-base-100/95 backdrop-blur-sm border border-base-300 shadow-2xl rounded-[2rem] p-8 text-center relative z-10 w-full max-w-sm animate-fade-in-up">
+            <button onClick={() => setOverlayContextProperties(null)} className="btn btn-sm btn-ghost btn-circle absolute right-4 top-4 text-base-content/40 hover:text-base-content hover:bg-base-200">✕</button>
+            <div className={`w-24 h-24 rounded-3xl flex items-center justify-center text-5xl mx-auto mb-5 shadow-lg ${
+              overlayContextProperties.isHoliday
+                ? 'bg-error/10 border-2 border-error/30 text-error'
+                : 'bg-primary/10 border-2 border-primary/20 text-primary'
+            }`}>
               {overlayContextProperties.isHoliday ? (
-                  <CelebrationIcon fontSize="large" className="text-error scale-150" />
+                <CelebrationIcon sx={{ fontSize: 44 }} className="text-error" />
               ) : (
-                  getCategoryIcon(overlayContextProperties.categoryData)
+                getCategoryIcon(overlayContextProperties.categoryData)
               )}
             </div>
-            <h3 className="text-2xl font-bold tracking-tight text-base-content mb-2">{overlayContextProperties.catName}</h3>
-            <div className="inline-flex items-center gap-2 bg-base-200 text-base-content/80 px-4 py-2 rounded-xl mt-2 font-medium text-xs border border-base-300">
-              <span className="font-semibold text-primary">{overlayContextProperties.userName}</span>
-              <span className="w-1 h-1 bg-base-300 rounded-full"></span>
-              <span>{overlayContextProperties.date}</span>
+            <h3 className="text-2xl font-black tracking-tight text-base-content mb-1">{overlayContextProperties.catName}</h3>
+            <div className="flex items-center justify-center gap-2 mt-3">
+              <span className="inline-flex items-center gap-1.5 bg-primary/10 text-primary border border-primary/20 px-3 py-1.5 rounded-xl text-xs font-black">
+                {overlayContextProperties.userName}
+              </span>
+              <span className="text-base-content/30 text-xs">·</span>
+              <span className="text-xs font-bold text-base-content/50 bg-base-200 border border-base-300 px-3 py-1.5 rounded-xl">{overlayContextProperties.date}</span>
             </div>
             {overlayContextProperties.isDefault && (
-                <div className="mt-4 text-[10px] font-bold uppercase tracking-widest text-base-content/40 italic">
-                    {t('profile.optional', 'Default Location')}
-                </div>
+              <div className="mt-4 inline-flex items-center gap-1 text-[10px] font-black uppercase tracking-widest text-base-content/30 bg-base-200 border border-base-300 rounded-lg px-3 py-1">
+                {t('profile.optional', 'Default Location')}
+              </div>
             )}
-            <div className="w-full mt-8">
-              <button onClick={() => setOverlayContextProperties(null)} className="btn btn-primary w-full rounded-xl font-semibold text-sm h-11 min-h-0 uppercase tracking-wider shadow-lg shadow-primary/20">
+            <div className="w-full mt-7">
+              <button onClick={() => setOverlayContextProperties(null)} className="btn btn-primary w-full rounded-2xl font-black text-sm h-12 min-h-0 uppercase tracking-wider shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-shadow">
                 {t('admin.btn_accept', 'Accept')}
               </button>
             </div>
