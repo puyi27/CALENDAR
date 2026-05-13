@@ -226,7 +226,7 @@ export const Calendar = () => {
   return (
     <div className="space-y-6 animate-fade-in pb-24 lg:pb-10">
       <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; } .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }`}</style>
-      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 bg-base-100 p-4 md:p-5 rounded-[2rem] border border-base-300 shadow-lg relative z-[90] border-t-4 border-t-primary/30">
+      <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-5 bg-base-100 p-5 rounded-[2rem] border border-base-300 shadow-xl relative z-[90]" style={{background: 'linear-gradient(135deg, var(--fallback-b1,oklch(var(--b1))) 60%, color-mix(in oklch, oklch(var(--p)) 3%, var(--fallback-b1,oklch(var(--b1)))))', borderTop: '4px solid color-mix(in oklch, oklch(var(--p)) 40%, transparent)'}}>
         {activeDropdownContext && <div className="fixed inset-0 z-[95]" onClick={() => setActiveDropdownContext(null)}></div>}
         <div className={`w-full flex flex-col gap-2 relative ${activeDropdownContext ? 'z-[10]' : 'z-[20]'}`}>
           <label className="text-[10px] font-black uppercase tracking-widest text-base-content opacity-50 ml-2">{t('calendar.search_label', 'Search')}</label>
@@ -284,7 +284,7 @@ export const Calendar = () => {
 
       <div className="lg:hidden space-y-3 pt-2">
         <label className="text-[10px] font-black uppercase tracking-widest text-base-content opacity-50 ml-4 flex items-center gap-1"><DateRangeIcon sx={{ fontSize: 12 }} /> {t('calendar.select_day', 'Select Day')}</label>
-        <div className="flex overflow-x-auto hide-scrollbar gap-2 bg-base-100 p-3 rounded-[1.5rem] border border-base-300 shadow-sm sticky top-[4.5rem] z-30 scroll-smooth snap-x snap-mandatory" ref={scrollableMobileContainerRef}>
+        <div className="flex overflow-x-auto hide-scrollbar gap-2 bg-base-100/90 p-3 rounded-[2rem] border border-base-300 shadow-lg sticky top-[4.5rem] z-30 scroll-smooth snap-x snap-mandatory backdrop-blur-sm" ref={scrollableMobileContainerRef}>
           {extendedMobileDateCollection.map(dayItem => {
             const compiledDateIdentifier = dayItem.format('YYYY-MM-DD');
             const evaluatesToCurrentDay = dayItem.isSame(dayjs(), 'day');
@@ -292,17 +292,26 @@ export const Calendar = () => {
             const identifiesWeekendBoundary = dayItem.isoWeekday() >= 6;
             const isHoliday = holidays.some(h => h.date === compiledDateIdentifier);
 
-            let assignedMobileClassSelector = 'bg-base-100 border-base-300';
-            if (representsSelection) assignedMobileClassSelector = 'bg-primary text-primary-content border-primary shadow-md scale-105';
-            else if (evaluatesToCurrentDay) assignedMobileClassSelector = 'bg-base-200 text-primary border-primary cursor-pointer';
-            else if (isHoliday) assignedMobileClassSelector = 'bg-error/10 text-error border-error/20 opacity-90 cursor-pointer';
-            else if (identifiesWeekendBoundary) assignedMobileClassSelector = 'bg-base-300 text-base-content border-base-300 opacity-70 cursor-default';
-            else assignedMobileClassSelector = 'bg-base-100 hover:bg-base-200 border-base-300 cursor-pointer';
-
             return (
-              <button key={compiledDateIdentifier} data-date={compiledDateIdentifier} onClick={() => { setActiveMobileViewDate(compiledDateIdentifier); setActiveDateFilter(compiledDateIdentifier); executeScrollToTargetDate(compiledDateIdentifier); }} className={`flex flex-col items-center justify-center p-3 rounded-2xl transition-transform min-w-[4.5rem] snap-center border ${assignedMobileClassSelector}`}>
-                <span className="text-[10px] uppercase font-black tracking-widest opacity-70">{dayItem.locale(i18n.language).format('ddd')}</span>
-                <span className="text-xl font-black tracking-tighter mt-1">{dayItem.format('D')}</span>
+              <button
+                key={compiledDateIdentifier}
+                data-date={compiledDateIdentifier}
+                onClick={() => { setActiveMobileViewDate(compiledDateIdentifier); setActiveDateFilter(compiledDateIdentifier); executeScrollToTargetDate(compiledDateIdentifier); }}
+                className={`flex flex-col items-center justify-center snap-center transition-all duration-200 min-w-[4rem] rounded-2xl border-2 ${
+                  representsSelection
+                    ? 'bg-primary text-primary-content border-primary shadow-lg shadow-primary/25 scale-105'
+                    : evaluatesToCurrentDay
+                    ? 'bg-primary/10 text-primary border-primary/40 cursor-pointer'
+                    : isHoliday
+                    ? 'bg-error/10 text-error border-error/20 cursor-pointer'
+                    : identifiesWeekendBoundary
+                    ? 'bg-base-200/50 text-base-content/40 border-base-200 cursor-default'
+                    : 'bg-transparent text-base-content border-base-200 hover:bg-base-200 hover:border-base-300 cursor-pointer'
+                } py-3 px-2`}
+              >
+                <span className="text-[9px] uppercase font-black tracking-widest opacity-70 mb-1">{dayItem.locale(i18n.language).format('ddd')}</span>
+                <span className={`text-xl font-black tracking-tighter ${representsSelection ? '' : evaluatesToCurrentDay ? 'text-primary' : ''}`}>{dayItem.format('D')}</span>
+                {isHoliday && !representsSelection && <span className="w-1 h-1 rounded-full bg-error mt-1"></span>}
               </button>
             );
           })}
@@ -397,20 +406,31 @@ export const Calendar = () => {
         </div>
       </div>
 
-      <div className="hidden lg:block rounded-[2.5rem] border-2 border-base-300 bg-base-100 shadow-xl overflow-hidden relative z-10" style={{background: 'linear-gradient(180deg, var(--fallback-b1,oklch(var(--b1))) 0%, var(--fallback-b2,oklch(var(--b2))) 100%)'}}>
+      <div className="hidden lg:block rounded-[2.5rem] border-2 border-base-300 shadow-2xl overflow-hidden relative z-10" style={{background: 'var(--fallback-b1,oklch(var(--b1)))'}}>
         <div className="overflow-x-auto w-full hide-scrollbar">
           <table className="table table-fixed w-full min-w-[1000px] border-separate border-spacing-0">
             <thead>
-              <tr className="bg-base-100">
-                <th className="p-0 border-r-2 border-b-4 border-base-300 w-[320px] sticky left-0 top-0 z-[60] bg-base-100 shadow-[4px_0_10px_-4px_rgba(0,0,0,0.2)]">
-                  <div className="flex flex-col h-full divide-y divide-base-300 bg-base-100">
-                    <div onClick={() => triggerSortingExecution('alias')} className="p-5 cursor-pointer hover:bg-base-200 transition-colors flex items-center justify-between group/sort">
-                      <div><span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary block mb-1">{t('calendar.employee', 'Employee')}</span><div className={`text-lg font-black tracking-tighter ${sortingConfiguration.metric === 'alias' ? 'text-primary' : 'text-base-content'}`}>{t('calendar.personal_data', 'Personal Data')}</div></div>
-                      <div className={`transition-all duration-500 transform ${sortingConfiguration.metric === 'alias' ? 'opacity-100 scale-110' : 'opacity-0 scale-50'}`}><span className="inline-block font-black text-xl text-primary transform transition-transform duration-500" style={{ transform: sortingConfiguration.orderingDirection === 'desc' ? 'rotate(180deg)' : 'rotate(0deg)' }}><ArrowUpwardIcon /></span></div>
+              <tr>
+                <th className="p-0 border-r-2 border-base-300 w-[320px] sticky left-0 top-0 z-[60] shadow-[4px_0_16px_-4px_rgba(0,0,0,0.18)]" style={{background: 'var(--fallback-b1,oklch(var(--b1)))'}}>
+                  <div className="flex flex-col h-full divide-y-2 divide-base-300">
+                    <div onClick={() => triggerSortingExecution('alias')} className="p-5 cursor-pointer hover:bg-base-200/60 transition-colors flex items-center justify-between">
+                      <div>
+                        <span className="text-[9px] font-black uppercase tracking-[0.3em] text-primary/70 block mb-1">{t('calendar.employee', 'Employee')}</span>
+                        <div className={`text-base font-black tracking-tight ${sortingConfiguration.metric === 'alias' ? 'text-primary' : 'text-base-content'}`}>{t('calendar.personal_data', 'Personal Data')}</div>
+                      </div>
+                      <div className={`w-7 h-7 rounded-lg flex items-center justify-center transition-all duration-300 ${sortingConfiguration.metric === 'alias' ? 'bg-primary/10 text-primary opacity-100' : 'opacity-0'}`}>
+                        <ArrowUpwardIcon sx={{ fontSize: 14, transform: sortingConfiguration.orderingDirection === 'desc' ? 'rotate(180deg)' : 'none', transition: 'transform 0.3s' }} />
+                      </div>
                     </div>
-                    <div className="grid grid-cols-2 divide-x divide-base-300">
-                      <div onClick={() => triggerSortingExecution('work')} className="px-5 py-3.5 cursor-pointer hover:bg-base-200 transition-colors flex items-center justify-between group/sort"><span className={`text-[10px] font-black uppercase tracking-widest truncate mr-1 ${sortingConfiguration.metric === 'work' ? 'text-primary' : 'text-base-content opacity-70'}`}>{t('admin.role', 'Role')}</span><div className={`transition-all duration-300 shrink-0 ${sortingConfiguration.metric === 'work' ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}><span className="inline-block text-primary transform transition-transform duration-300" style={{ transform: sortingConfiguration.orderingDirection === 'desc' ? 'rotate(180deg)' : 'rotate(0deg)' }}><ArrowUpwardIcon sx={{ fontSize: 16 }} /></span></div></div>
-                      <div onClick={() => triggerSortingExecution('department')} className="px-5 py-3.5 cursor-pointer hover:bg-base-200 transition-colors flex items-center justify-between group/sort"><span className={`text-[10px] font-black uppercase tracking-widest truncate mr-1 ${sortingConfiguration.metric === 'department' ? 'text-primary' : 'text-base-content opacity-70'}`}>{t('admin.department', 'Department')}</span><div className={`transition-all duration-300 shrink-0 ${sortingConfiguration.metric === 'department' ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}><span className="inline-block text-primary transform transition-transform duration-300" style={{ transform: sortingConfiguration.orderingDirection === 'desc' ? 'rotate(180deg)' : 'rotate(0deg)' }}><ArrowUpwardIcon sx={{ fontSize: 16 }} /></span></div></div>
+                    <div className="grid grid-cols-2 divide-x-2 divide-base-300">
+                      <div onClick={() => triggerSortingExecution('work')} className="px-4 py-3 cursor-pointer hover:bg-base-200/60 transition-colors flex items-center justify-between">
+                        <span className={`text-[9px] font-black uppercase tracking-widest truncate ${sortingConfiguration.metric === 'work' ? 'text-primary' : 'text-base-content/50'}`}>{t('admin.role', 'Role')}</span>
+                        {sortingConfiguration.metric === 'work' && <ArrowUpwardIcon sx={{ fontSize: 11 }} className="text-primary shrink-0" />}
+                      </div>
+                      <div onClick={() => triggerSortingExecution('department')} className="px-4 py-3 cursor-pointer hover:bg-base-200/60 transition-colors flex items-center justify-between">
+                        <span className={`text-[9px] font-black uppercase tracking-widest truncate ${sortingConfiguration.metric === 'department' ? 'text-primary' : 'text-base-content/50'}`}>{t('admin.department', 'Dept')}</span>
+                        {sortingConfiguration.metric === 'department' && <ArrowUpwardIcon sx={{ fontSize: 11 }} className="text-primary shrink-0" />}
+                      </div>
                     </div>
                   </div>
                 </th>
@@ -490,27 +510,35 @@ export const Calendar = () => {
                 formattedUserDataset.map((profileEntity, iterationIndex) => {
                   const mapsToAuthenticatedUser = currentUser?.id_user === profileEntity.id_user;
                   const grantsModificationRights = currentUser?.role?.toLowerCase() === 'admin' || currentUser?.role?.toLowerCase() === 'superadmin' || currentUser?.role === 'ADMIN' || mapsToAuthenticatedUser;
-                  const sequentialRowColorTheme = iterationIndex % 2 !== 0 ? 'bg-base-200' : 'bg-base-100';
+                  const sequentialRowColorTheme = iterationIndex % 2 !== 0 ? 'bg-base-200/40' : 'bg-base-100';
 
                   return (
                     <tr key={profileEntity.id_user} className={`group/row transition-colors duration-100 ${mapsToAuthenticatedUser ? 'outline outline-2 outline-primary/50 outline-offset-[-2px] relative z-20' : 'hover:bg-base-200/60'} ${sequentialRowColorTheme}`}>
-                      <td className={`relative p-0 border-r-2 border-base-300 sticky left-0 z-50 overflow-hidden shadow-[4px_0_10px_-4px_rgba(0,0,0,0.15)] ${sequentialRowColorTheme}`}>
-                        <div className="relative z-10 flex flex-col h-full divide-y divide-base-300">
-                          <div className="p-5 pl-6 flex items-center gap-4 cursor-pointer hover:bg-base-300 transition-colors relative" onClick={() => triggerNavigation(`/profile/${profileEntity.id_user}`)}>
-                            <div className={`absolute left-0 top-0 bottom-0 w-1.5 bg-base-300 z-20`}><div className={`w-full bg-primary transition-all duration-500 ease-out ${mapsToAuthenticatedUser ? 'h-full shadow-[0_0_8px_var(--p)]' : 'h-0 group-hover/row:h-full'}`}></div></div>
-                            <div className={`avatar shrink-0 relative transition-all duration-500 group-hover/row:scale-110 ${mapsToAuthenticatedUser ? 'ring-2 ring-primary ring-offset-2 ring-offset-base-100 rounded-2xl' : ''}`}>
-                              <div className="w-14 h-14 rounded-2xl border-2 border-base-300 shadow-md overflow-hidden bg-base-300">
+                      <td className={`relative p-0 border-r-2 border-base-300 sticky left-0 z-50 overflow-hidden shadow-[6px_0_20px_-6px_rgba(0,0,0,0.12)] ${sequentialRowColorTheme}`}>
+                        <div className="relative z-10 flex flex-col h-full divide-y-2 divide-base-300/60">
+                          <div className="p-4 pl-5 flex items-center gap-3 cursor-pointer hover:bg-primary/[0.03] transition-colors relative group/name" onClick={() => triggerNavigation(`/profile/${profileEntity.id_user}`)}>
+                            <div className="absolute left-0 top-0 bottom-0 w-1 z-20 overflow-hidden rounded-r-full">
+                              <div className={`w-full bg-primary transition-all duration-500 ease-out ${mapsToAuthenticatedUser ? 'h-full' : 'h-0 group-hover/row:h-full'}`}></div>
+                            </div>
+                            <div className={`avatar shrink-0 relative transition-all duration-300 group-hover/row:scale-105 ${mapsToAuthenticatedUser ? 'ring-2 ring-primary ring-offset-2 rounded-2xl' : ''}`}>
+                              <div className="w-12 h-12 rounded-2xl border-2 border-base-300 shadow-sm overflow-hidden">
                                 <img src={profileEntity.avatar ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(profileEntity.alias || profileEntity.full_name || 'U')}&background=random`} alt={profileEntity.alias} className="object-cover w-full h-full" />
                               </div>
-                              <div className="absolute -bottom-1.5 -right-1.5 bg-base-100 rounded-full border border-base-200 shadow-sm p-[2px] z-10 flex items-center justify-center" title={mapStatusToTranslation(profileEntity.status)}>
+                              <div className="absolute -bottom-1 -right-1 bg-base-100 rounded-full border border-base-200 shadow-sm p-[2px] z-10 flex items-center justify-center" title={mapStatusToTranslation(profileEntity.status)}>
                                 {resolveStatusIndicatorIcon(profileEntity.status)}
                               </div>
                             </div>
-                            <div className="overflow-hidden relative z-20"><div className="font-black text-base-content text-lg truncate group-hover/row:text-primary transition-colors uppercase tracking-tight flex items-center gap-1.5">{profileEntity.alias}{mapsToAuthenticatedUser && <div className="text-[9px] text-primary-content font-black uppercase tracking-widest bg-primary px-1.5 py-0.5 rounded shadow-md">{t('profile.you', 'You')}</div>}</div><div className="text-[10px] text-base-content opacity-60 font-medium truncate mt-0.5">{profileEntity.full_name}</div></div>
+                            <div className="overflow-hidden z-20 flex-1">
+                              <div className="font-black text-base-content text-base truncate group-hover/name:text-primary transition-colors uppercase tracking-tight flex items-center gap-1.5">
+                                {profileEntity.alias}
+                                {mapsToAuthenticatedUser && <span className="text-[8px] text-primary-content font-black uppercase tracking-widest bg-primary px-1.5 py-0.5 rounded-md shadow-sm">{t('profile.you', 'You')}</span>}
+                              </div>
+                              <div className="text-[10px] text-base-content/50 font-medium truncate mt-0.5">{profileEntity.full_name}</div>
+                            </div>
                           </div>
-                          <div className="grid grid-cols-2 divide-x divide-base-300 font-bold text-xs uppercase tracking-widest text-base-content opacity-70">
-                            <div className="px-5 py-3 truncate" title={profileEntity.work || t('profile.team_member', 'Team Member')}>{profileEntity.work || t('profile.team_member', 'Team Member')}</div>
-                            <div className="px-5 py-3 truncate text-primary flex items-center gap-1.5" title={profileEntity.department}><BusinessIcon sx={{ fontSize: 14 }} className="opacity-70" /> {profileEntity.department}</div>
+                          <div className="grid grid-cols-2 divide-x-2 divide-base-300/60 text-[9px] font-black uppercase tracking-widest text-base-content/40">
+                            <div className="px-4 py-2.5 truncate" title={profileEntity.work}>{profileEntity.work || t('profile.team_member', 'Team Member')}</div>
+                            <div className="px-4 py-2.5 truncate text-primary/70 flex items-center gap-1" title={profileEntity.department}><BusinessIcon sx={{ fontSize: 11 }} /> {profileEntity.department}</div>
                           </div>
                         </div>
                       </td>
@@ -534,7 +562,7 @@ export const Calendar = () => {
                         const confirmsGhostEntityRender = !validatesActivePresence && !isWeekendDisabled && !targetHoliday && profileEntity.default_category;
 
                         return (
-                          <td key={serializedDateReference} className={`p-0 border-r border-base-300 relative ${isWeekendDisabled || targetHoliday ? '' : 'hover:bg-base-300'} ${responsiveCellBackground} ${saturdaySeparatorClass}`}>
+                          <td key={serializedDateReference} className={`p-0 border-r border-base-300/50 relative transition-colors duration-150 ${isWeekendDisabled || targetHoliday ? '' : 'hover:bg-primary/[0.025]'} ${responsiveCellBackground} ${saturdaySeparatorClass}`}>
                             <div 
                               onClick={() => {
                                 if (targetHoliday) {

@@ -24,9 +24,11 @@ export const DayCell = memo(({ presence, defaultCategory, onAddPresence, userId,
   
   if (holidayName) {
     return (
-      <div className="w-full h-full min-h-[90px] flex flex-col items-center justify-center transition-all p-2 bg-error/5 border border-error/10 rounded-[1rem] cursor-not-allowed" title={holidayName}>
-        <CelebrationIcon fontSize="large" className="opacity-80 mb-1 text-error" />
-        <span className="text-[9px] font-extrabold text-center uppercase tracking-widest leading-tight text-error/80 line-clamp-2">
+      <div className="w-full h-full min-h-[90px] flex flex-col items-center justify-center p-3 gap-2" title={holidayName}>
+        <div className="w-12 h-12 rounded-2xl bg-error/10 border border-error/20 flex items-center justify-center shadow-sm">
+          <CelebrationIcon className="text-error" sx={{ fontSize: 26 }} />
+        </div>
+        <span className="text-[8px] font-black text-center uppercase tracking-wider leading-tight text-error/70 line-clamp-2 max-w-full px-1">
           {holidayName}
         </span>
       </div>
@@ -37,28 +39,37 @@ export const DayCell = memo(({ presence, defaultCategory, onAddPresence, userId,
   const validatesActivePresence = presence && presence.categories;
   const computedCategoryPayload = validatesActivePresence ? presence.categories : (determinesWeekend ? null : defaultCategory);
   const evaluatesGhostRender = !validatesActivePresence && !determinesWeekend && defaultCategory;
-
   const runtimeColorTheme = getCategoryColorClass(computedCategoryPayload);
 
   return (
     <div
       onClick={validatesEditState ? () => onAddPresence(userId, targetDate) : undefined}
-      className={`w-full h-full min-h-[90px] flex flex-col items-center justify-center transition-all p-2 group/cell ${validatesEditState ? 'cursor-pointer hover:bg-primary/[0.03]' : 'cursor-default'} ${computedCategoryPayload ? 'gap-1' : ''}`}
-      title={computedCategoryPayload ? `${t('daycell.status', 'Status')}: ${getDynamicCategoryName(computedCategoryPayload, i18n.language, t)}${evaluatesGhostRender ? ` (${t('profile.optional', 'Default')})` : ''}` : undefined}
+      className={`w-full h-full min-h-[90px] flex flex-col items-center justify-center p-2 group/cell ${validatesEditState ? 'cursor-pointer' : 'cursor-default'} ${computedCategoryPayload ? 'gap-1.5' : ''}`}
+      title={computedCategoryPayload ? `${getDynamicCategoryName(computedCategoryPayload, i18n.language, t)}${evaluatesGhostRender ? ` (${t('profile.optional', 'Default')})` : ''}` : undefined}
     >
       {computedCategoryPayload ? (
         <>
-          <span className={`text-3xl md:text-4xl flex items-center justify-center transition-all duration-300 ease-in-out ${validatesEditState && !evaluatesGhostRender ? 'group-hover/cell:scale-110 hover:!scale-115 hover:rotate-[5deg]' : ''} ${evaluatesGhostRender ? 'opacity-40 grayscale grayscale-[50%]' : runtimeColorTheme} ${evaluatesGhostRender && validatesEditState ? 'group-hover/cell:opacity-60' : ''}`}>
-            {getCategoryIcon(computedCategoryPayload)}
-          </span>
-          <span className={`text-[9px] font-semibold text-center uppercase tracking-widest leading-tight transition-colors duration-200 mt-1 ${evaluatesGhostRender ? 'text-base-content/40' : 'text-base-content/60'} ${validatesEditState && !evaluatesGhostRender ? 'group-hover/cell:text-base-content' : ''}`}>
+          <div className={`w-11 h-11 md:w-12 md:h-12 rounded-2xl flex items-center justify-center transition-all duration-300 shadow-sm border ${
+            evaluatesGhostRender
+              ? 'bg-base-200/60 border-base-300 opacity-50 grayscale'
+              : 'bg-base-200 border-base-300/50 group-hover/cell:scale-105 group-hover/cell:shadow-md group-hover/cell:border-primary/20'
+          }`}>
+            <span className={`text-2xl md:text-3xl flex items-center justify-center transition-all duration-300 ${
+              evaluatesGhostRender ? 'opacity-50' : `${runtimeColorTheme} ${validatesEditState ? 'group-hover/cell:rotate-[8deg]' : ''}`
+            }`}>
+              {getCategoryIcon(computedCategoryPayload)}
+            </span>
+          </div>
+          <span className={`text-[8px] font-black text-center uppercase tracking-wider leading-tight transition-colors duration-200 max-w-full px-1 ${
+            evaluatesGhostRender ? 'text-base-content/30' : 'text-base-content/50 group-hover/cell:text-base-content/80'
+          }`}>
             {getDynamicCategoryName(computedCategoryPayload, i18n.language, t)}
           </span>
         </>
       ) : (
         validatesEditState && (
-          <div className="w-8 h-8 md:w-9 md:h-9 m-auto rounded-lg border-2 border-dashed border-base-300 flex items-center justify-center text-base-content/30 opacity-100 lg:opacity-0 lg:group-hover/cell:opacity-100 lg:group-hover/cell:border-primary lg:group-hover/cell:text-primary transition-all duration-300 bg-base-100 shadow-sm hover:scale-110 hover:shadow-md">
-            <AddIcon fontSize="small" />
+          <div className="w-9 h-9 md:w-10 md:h-10 rounded-xl border-2 border-dashed border-base-300 flex items-center justify-center text-base-content/20 opacity-0 group-hover/cell:opacity-100 group-hover/cell:border-primary/40 group-hover/cell:text-primary/60 group-hover/cell:scale-110 transition-all duration-300 bg-base-100/50">
+            <AddIcon sx={{ fontSize: 18 }} />
           </div>
         )
       )}
