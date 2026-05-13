@@ -391,25 +391,64 @@ export default function AdminPanel() {
 
   return (
     <div className="animate-fade-in flex flex-col gap-6 pb-24 lg:pb-10">
-      <div className="flex flex-col sm:flex-row justify-between items-center bg-base-100 p-4 rounded-3xl border border-base-300 shadow-sm gap-4">
-        <div role="tablist" className="tabs tabs-boxed bg-base-200/50 p-1 rounded-2xl w-full sm:w-auto font-bold">
-          <a role="tab" className={`tab rounded-xl h-10 px-4 transition-all ${activeNavigationTab === 'users' ? 'bg-primary text-primary-content shadow-md' : 'text-base-content/60 hover:text-base-content'}`} onClick={() => setActiveNavigationTab('users')}><PeopleIcon fontSize="small" className="mr-2" /> {t('admin.users', 'Users')}</a>
+      <div className="flex flex-col sm:flex-row justify-between items-center bg-base-100 p-3 rounded-[2rem] border border-base-300 shadow-lg gap-3" style={{background: 'linear-gradient(135deg, var(--fallback-b1,oklch(var(--b1))) 70%, color-mix(in oklch, oklch(var(--p)) 4%, var(--fallback-b1,oklch(var(--b1)))))'}}>
+        <div className="flex gap-2 flex-wrap w-full sm:w-auto">
+          <button
+            onClick={() => setActiveNavigationTab('users')}
+            className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-black uppercase tracking-wider transition-all duration-200 ${
+              activeNavigationTab === 'users'
+                ? 'bg-primary text-primary-content shadow-lg shadow-primary/25 scale-[1.02]'
+                : 'text-base-content/50 hover:text-base-content hover:bg-base-200'
+            }`}
+          >
+            <PeopleIcon fontSize="small" /> {t('admin.users', 'Users')}
+          </button>
           {grantsSuperAdminPrivileges && (
             <>
-              <a role="tab" className={`tab rounded-xl h-10 px-4 transition-all ${activeNavigationTab === 'categories' ? 'bg-secondary text-secondary-content shadow-md' : 'text-base-content/60 hover:text-base-content'}`} onClick={() => setActiveNavigationTab('categories')}><CategoryIcon fontSize="small" className="mr-2" /> {t('admin.categories', 'Categories')}</a>
-              <a role="tab" className={`tab rounded-xl h-10 px-4 transition-all ${activeNavigationTab === 'departments' ? 'bg-accent text-accent-content shadow-md' : 'text-base-content/60 hover:text-base-content'}`} onClick={() => setActiveNavigationTab('departments')}><BusinessIcon fontSize="small" className="mr-2" /> {t('admin.department', 'Departments')}</a>
-              <a role="tab" className={`tab rounded-xl h-10 px-4 transition-all ${activeNavigationTab === 'holidays' ? 'bg-error text-error-content shadow-md' : 'text-base-content/60 hover:text-base-content'}`} onClick={() => setActiveNavigationTab('holidays')}><BeachAccessIcon fontSize="small" className="mr-2" /> {t('admin.holidays', 'Holidays')}</a>
+              <button
+                onClick={() => setActiveNavigationTab('categories')}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-black uppercase tracking-wider transition-all duration-200 ${
+                  activeNavigationTab === 'categories'
+                    ? 'bg-secondary text-secondary-content shadow-lg shadow-secondary/25 scale-[1.02]'
+                    : 'text-base-content/50 hover:text-base-content hover:bg-base-200'
+                }`}
+              >
+                <CategoryIcon fontSize="small" /> {t('admin.categories', 'Categories')}
+              </button>
+              <button
+                onClick={() => setActiveNavigationTab('departments')}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-black uppercase tracking-wider transition-all duration-200 ${
+                  activeNavigationTab === 'departments'
+                    ? 'bg-accent text-accent-content shadow-lg shadow-accent/25 scale-[1.02]'
+                    : 'text-base-content/50 hover:text-base-content hover:bg-base-200'
+                }`}
+              >
+                <BusinessIcon fontSize="small" /> {t('admin.department', 'Departments')}
+              </button>
+              <button
+                onClick={() => setActiveNavigationTab('holidays')}
+                className={`flex items-center gap-2 px-5 py-2.5 rounded-2xl text-sm font-black uppercase tracking-wider transition-all duration-200 ${
+                  activeNavigationTab === 'holidays'
+                    ? 'bg-error text-error-content shadow-lg shadow-error/25 scale-[1.02]'
+                    : 'text-base-content/50 hover:text-base-content hover:bg-base-200'
+                }`}
+              >
+                <BeachAccessIcon fontSize="small" /> {t('admin.holidays', 'Holidays')}
+              </button>
             </>
           )}
         </div>
-        <div className="badge badge-outline border-base-300 h-10 px-4 font-bold rounded-xl flex gap-2 uppercase tracking-widest text-[10px]">
-          <ShieldIcon fontSize="small" className="text-primary" /> {currentUser?.role} | {grantsSuperAdminPrivileges ? t('admin.all_depts', 'All Departments') : currentUser?.department}
+        <div className="flex items-center gap-2 bg-base-200/60 border border-base-300 h-10 px-4 font-black rounded-2xl uppercase tracking-widest text-[10px] shrink-0">
+          <ShieldIcon fontSize="small" className="text-primary" />
+          <span>{currentUser?.role}</span>
+          <span className="text-base-content/30">·</span>
+          <span className="text-primary">{grantsSuperAdminPrivileges ? t('admin.all_depts', 'All Depts') : currentUser?.department}</span>
         </div>
       </div>
 
       {activeNavigationTab === 'users' && (
         <div className="space-y-6 animate-fade-in">
-          <div className="bg-base-100 rounded-[2rem] p-6 md:p-8 border border-base-300 shadow-lg">
+          <div className="bg-base-100 rounded-[2rem] p-6 md:p-8 border border-base-300 shadow-lg border-t-4 border-t-primary/30">
             <h2 className="text-xl font-black tracking-tight mb-6 flex items-center gap-2"><PersonAddIcon className="text-primary" /> {t('admin.new_user', 'New User')}</h2>
             <form onSubmit={dispatchUserCreation} className="flex flex-col">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
@@ -490,17 +529,58 @@ export default function AdminPanel() {
             </div>
             <div className="overflow-x-auto min-h-[400px]">
               <table className="table w-full table-pin-rows">
-                <thead><tr className="bg-base-200/80 border-b border-base-300"><th className="font-black uppercase text-[10px] tracking-widest py-4 pl-8">{t('admin.employee', 'Employee')}</th><th className="font-black uppercase text-[10px] tracking-widest py-4">{t('admin.department', 'Department')}</th><th className="font-black uppercase text-[10px] tracking-widest py-4">{t('admin.role', 'Role')}</th><th className="font-black uppercase text-[10px] tracking-widest py-4 text-right pr-8">{t('admin.actions', 'Actions')}</th></tr></thead>
-                <tbody>
+                <thead>
+                  <tr style={{background: 'linear-gradient(90deg, var(--fallback-b2,oklch(var(--b2))) 0%, var(--fallback-b1,oklch(var(--b1))) 100%)'}}>
+                    <th className="font-black uppercase text-[10px] tracking-widest py-4 pl-8 border-b-2 border-base-300">{t('admin.employee', 'Employee')}</th>
+                    <th className="font-black uppercase text-[10px] tracking-widest py-4 border-b-2 border-base-300">{t('admin.department', 'Department')}</th>
+                    <th className="font-black uppercase text-[10px] tracking-widest py-4 border-b-2 border-base-300">{t('admin.role', 'Role')}</th>
+                    <th className="font-black uppercase text-[10px] tracking-widest py-4 text-right pr-8 border-b-2 border-base-300">{t('admin.actions', 'Actions')}</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y divide-base-200">
                   {isolatedPaginationSlice.length === 0 ? (
                     <tr><td colSpan={4} className="text-center py-20"><div className="flex flex-col items-center justify-center text-base-content/40"><WarningAmberIcon sx={{ fontSize: 64 }} className="mb-4 opacity-50" /><p className="text-lg font-black tracking-tight">{t('admin.alert_warning', 'No records found')}</p></div></td></tr>
                   ) : (
                     isolatedPaginationSlice.map(userRecord => (
-                      <tr key={userRecord.id_user} className="hover:bg-base-200/50 transition-colors">
-                        <td className="pl-8 py-4"><div className="flex items-center gap-4"><div className="avatar"><div className="w-10 h-10 rounded-xl border border-base-300"><img src={userRecord.avatar || `https://ui-avatars.com/api/?name=${userRecord.alias}`} alt="Avatar" /></div></div><div><div className="font-bold text-sm text-base-content">{userRecord.full_name}</div><div className="text-xs opacity-60 font-medium">{userRecord.email}</div></div></div></td>
-                        <td className="py-4"><span className="badge badge-ghost font-bold uppercase text-[10px] py-2">{userRecord.department}</span></td>
-                        <td className="py-4"><span className={`badge font-bold uppercase text-[10px] py-2 ${userRecord.role === 'superadmin' ? 'badge-primary' : (userRecord.role === 'admin' ? 'badge-secondary' : 'badge-outline')}`}>{userRecord.role === 'superadmin' ? 'SuperAdmin' : (userRecord.role === 'admin' ? t('admin.user_admin', 'Admin') : t('admin.user_standard', 'Standard User'))}</span></td>
-                        <td className="text-right pr-8 py-4 space-x-2 whitespace-nowrap"><button onClick={() => setTargetedUserForEdit({ ...userRecord, password: '', default_category_id: userRecord.default_category_id || '', can_work_weekends: userRecord.can_work_weekends || false })} className="btn btn-ghost btn-sm text-info hover:bg-info/10 rounded-lg"><EditIcon fontSize="small" /></button><button onClick={() => setDeletionConfirmationTarget({ type: 'user', id: userRecord.id_user })} className="btn btn-ghost btn-sm text-error hover:bg-error/10 rounded-lg"><DeleteIcon fontSize="small" /></button></td>
+                      <tr key={userRecord.id_user} className="group hover:bg-primary/[0.02] transition-colors">
+                        <td className="pl-8 py-4">
+                          <div className="flex items-center gap-4">
+                            <div className="avatar shrink-0">
+                              <div className="w-12 h-12 rounded-2xl border-2 border-base-300 group-hover:border-primary/30 transition-colors shadow-sm overflow-hidden">
+                                <img src={userRecord.avatar || `https://ui-avatars.com/api/?name=${userRecord.alias}&background=random`} alt="Avatar" className="object-cover w-full h-full" />
+                              </div>
+                            </div>
+                            <div>
+                              <div className="font-black text-sm text-base-content tracking-tight group-hover:text-primary transition-colors">{userRecord.full_name}</div>
+                              <div className="text-xs opacity-50 font-medium mt-0.5">{userRecord.alias && <span className="font-black text-primary/70">@{userRecord.alias}</span>} · {userRecord.email}</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="py-4">
+                          <span className="inline-flex items-center gap-1.5 bg-base-200 border border-base-300 text-base-content/70 font-black uppercase text-[10px] tracking-wider px-3 py-1.5 rounded-xl">
+                            <BusinessIcon sx={{ fontSize: 11 }} className="opacity-60" />{userRecord.department}
+                          </span>
+                        </td>
+                        <td className="py-4">
+                          <span className={`inline-flex items-center gap-1 font-black uppercase text-[10px] py-1.5 px-3 rounded-xl ${
+                            userRecord.role === 'superadmin'
+                              ? 'bg-primary/10 text-primary border border-primary/30'
+                              : userRecord.role === 'admin'
+                              ? 'bg-secondary/10 text-secondary border border-secondary/30'
+                              : 'bg-base-200 text-base-content/60 border border-base-300'
+                          }`}>
+                            {userRecord.role === 'superadmin' ? <ShieldIcon sx={{ fontSize: 12 }} /> : null}
+                            {userRecord.role === 'superadmin' ? 'SuperAdmin' : (userRecord.role === 'admin' ? t('admin.user_admin', 'Admin') : t('admin.user_standard', 'Standard'))}
+                          </span>
+                        </td>
+                        <td className="text-right pr-8 py-4 space-x-1.5 whitespace-nowrap">
+                          <button onClick={() => setTargetedUserForEdit({ ...userRecord, password: '', default_category_id: userRecord.default_category_id || '', can_work_weekends: userRecord.can_work_weekends || false })} className="btn btn-ghost btn-sm text-info hover:bg-info/10 rounded-xl transition-all">
+                            <EditIcon fontSize="small" />
+                          </button>
+                          <button onClick={() => setDeletionConfirmationTarget({ type: 'user', id: userRecord.id_user })} className="btn btn-ghost btn-sm text-error hover:bg-error/10 rounded-xl transition-all">
+                            <DeleteIcon fontSize="small" />
+                          </button>
+                        </td>
                       </tr>
                     ))
                   )}
@@ -508,12 +588,12 @@ export default function AdminPanel() {
               </table>
             </div>
             {calculatedTotalPages > 1 && (
-              <div className="p-4 border-t border-base-200 flex justify-between items-center bg-base-100">
-                <span className="text-xs font-bold text-base-content/50">{(paginationIndex - 1) * MAX_RECORDS_PER_PAGE + 1} - {Math.min(paginationIndex * MAX_RECORDS_PER_PAGE, compiledUserDataset.length)} / {compiledUserDataset.length}</span>
-                <div className="join border border-base-300 rounded-xl shadow-sm">
-                  <button className="join-item btn btn-sm bg-base-100 hover:bg-base-200" onClick={() => setPaginationIndex(p => Math.max(1, p - 1))} disabled={paginationIndex === 1}><KeyboardArrowLeftIcon fontSize="small" /></button>
-                  <button className="join-item btn btn-sm bg-base-100 font-bold px-4 cursor-default border-x border-base-300 text-base-content/80">{paginationIndex} / {calculatedTotalPages}</button>
-                  <button className="join-item btn btn-sm bg-base-100 hover:bg-base-200" onClick={() => setPaginationIndex(p => Math.min(calculatedTotalPages, p + 1))} disabled={paginationIndex === calculatedTotalPages}><KeyboardArrowRightIcon fontSize="small" /></button>
+              <div className="p-4 border-t border-base-200 flex justify-between items-center">
+                <span className="text-xs font-bold text-base-content/40">{(paginationIndex - 1) * MAX_RECORDS_PER_PAGE + 1} – {Math.min(paginationIndex * MAX_RECORDS_PER_PAGE, compiledUserDataset.length)} / {compiledUserDataset.length}</span>
+                <div className="flex items-center gap-1">
+                  <button className="btn btn-sm btn-ghost rounded-xl" onClick={() => setPaginationIndex(p => Math.max(1, p - 1))} disabled={paginationIndex === 1}><KeyboardArrowLeftIcon fontSize="small" /></button>
+                  <span className="text-xs font-black px-3 py-1.5 bg-base-200 rounded-xl border border-base-300">{paginationIndex} / {calculatedTotalPages}</span>
+                  <button className="btn btn-sm btn-ghost rounded-xl" onClick={() => setPaginationIndex(p => Math.min(calculatedTotalPages, p + 1))} disabled={paginationIndex === calculatedTotalPages}><KeyboardArrowRightIcon fontSize="small" /></button>
                 </div>
               </div>
             )}
@@ -523,7 +603,7 @@ export default function AdminPanel() {
 
       {activeNavigationTab === 'categories' && grantsSuperAdminPrivileges && (
         <div className="space-y-6 animate-fade-in">
-          <div className="bg-base-100 rounded-[2rem] p-6 md:p-8 border border-base-300 shadow-lg">
+          <div className="bg-base-100 rounded-[2rem] p-6 md:p-8 border border-base-300 shadow-lg border-t-4 border-t-secondary/30">
             <h2 className="text-xl font-black tracking-tight mb-6 flex items-center gap-2"><AddBoxIcon className="text-secondary" /> {t('admin.new_category', 'New Category')}</h2>
             <form onSubmit={dispatchCategoryCreation} className="flex flex-col">
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5">
@@ -549,13 +629,18 @@ export default function AdminPanel() {
 
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-4">
             {categories.map(renderedCategory => (
-              <div key={renderedCategory.id_category} className="bg-base-100 flex flex-col p-5 border border-base-300 rounded-[1.5rem] hover:border-secondary hover:shadow-md transition-all group relative">
-                <div className="absolute top-3 right-3 flex gap-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity bg-base-100/80 backdrop-blur-sm rounded-lg p-1 z-10">
-                  <button onClick={() => setTargetedCategoryForEdit(renderedCategory)} className="btn btn-ghost btn-xs btn-circle text-info hover:bg-info/10"><EditIcon fontSize="small" /></button>
-                  <button onClick={() => setDeletionConfirmationTarget({ type: 'category', id: renderedCategory.id_category })} className="btn btn-ghost btn-xs btn-circle text-error hover:bg-error/10"><DeleteIcon fontSize="small" /></button>
+              <div key={renderedCategory.id_category} className="bg-base-100 flex flex-col p-5 border-2 border-base-300 rounded-[1.5rem] hover:border-secondary/50 hover:shadow-lg hover:scale-[1.02] transition-all duration-200 group relative overflow-hidden">
+                <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" style={{background: 'linear-gradient(135deg, color-mix(in oklch, oklch(var(--s)) 5%, transparent) 0%, transparent 70%)'}}></div>
+                <div className="absolute top-2 right-2 flex gap-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity bg-base-100/90 backdrop-blur-sm rounded-xl p-1 z-10 shadow-sm">
+                  <button onClick={() => setTargetedCategoryForEdit(renderedCategory)} className="btn btn-ghost btn-xs btn-circle text-info hover:bg-info/10"><EditIcon sx={{ fontSize: 14 }} /></button>
+                  <button onClick={() => setDeletionConfirmationTarget({ type: 'category', id: renderedCategory.id_category })} className="btn btn-ghost btn-xs btn-circle text-error hover:bg-error/10"><DeleteIcon sx={{ fontSize: 14 }} /></button>
                 </div>
-                <div className="flex items-start justify-between mb-4 mt-2"><span className={`text-4xl drop-shadow-sm flex items-center justify-center w-14 h-14 bg-base-200 rounded-2xl border border-base-300 ${getCategoryColorClass(renderedCategory)}`}>{getCategoryIcon(renderedCategory)}</span></div>
-                <span className="text-sm font-bold truncate text-base-content pr-8">{getDynamicCategoryName(renderedCategory, i18n.language, t)}</span>
+                <div className="mb-4 mt-1 relative z-10">
+                  <div className={`text-4xl flex items-center justify-center w-16 h-16 bg-base-200 group-hover:bg-secondary/10 rounded-2xl border-2 border-base-300 group-hover:border-secondary/30 transition-all shadow-sm ${getCategoryColorClass(renderedCategory)}`}>
+                    {getCategoryIcon(renderedCategory)}
+                  </div>
+                </div>
+                <span className="text-sm font-black truncate text-base-content pr-8 relative z-10 group-hover:text-secondary transition-colors">{getDynamicCategoryName(renderedCategory, i18n.language, t)}</span>
               </div>
             ))}
           </div>
