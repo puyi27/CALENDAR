@@ -103,7 +103,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <OledDarkTheme />
-      <div className="min-h-screen bg-base-200 text-base-content font-sans antialiased relative">
+      <div className="min-h-screen bg-base-200 text-base-content font-sans antialiased relative overflow-x-hidden">
+        <div className="premium-glow"></div>
         <Toaster position="bottom-right" toastOptions={{ className: 'bg-base-100 text-base-content border border-base-300 shadow-xl font-bold text-sm', style: { borderRadius: '1rem', background: 'var(--fallback-b1,oklch(var(--b1)))', color: 'var(--fallback-bc,oklch(var(--bc)))' } }} />
 
         <Navbar

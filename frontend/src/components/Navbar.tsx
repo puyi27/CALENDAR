@@ -31,7 +31,7 @@ export default function Navbar({ onChangeTheme, onChangeLang, onExportCSV }: Nav
 
   return (
     <>
-      <header className="sticky top-0 z-[990] w-full transition-all border-b border-base-300 bg-base-100">
+      <header className="sticky top-0 z-[990] w-full transition-all border-b border-base-300 bg-base-100/80 backdrop-blur-md">
         <div className="navbar max-w-[1800px] w-full mx-auto px-4 md:px-8 min-h-[4rem] flex justify-between items-center py-2">
           <Link to="/" className="flex items-center transition-opacity hover:opacity-80 pl-2 md:pl-4">
             <FaeLogo className="w-24 md:w-32 h-auto text-base-content" />

@@ -22,6 +22,51 @@
   color-scheme: dark;
 }
 
+body {
+  background-image: radial-gradient(rgba(0, 0, 0, 0.04) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+html[data-theme="dark"] body {
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px) !important;
+  background-size: 24px 24px !important;
+}
+
+/* Premium smooth top ambient glow */
+.premium-glow {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100%;
+  max-width: 1400px;
+  height: 450px;
+  background: radial-gradient(circle, var(--fallback-p, oklch(var(--p))) 0%, transparent 65%);
+  opacity: 0.05;
+  pointer-events: none;
+  z-index: 0;
+}
+
+html[data-theme="dark"] .premium-glow {
+  opacity: 0.08;
+}
+
+/* Beautiful custom scrollbar styling */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: color-mix(in srgb, currentColor 15%, transparent);
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: color-mix(in srgb, currentColor 25%, transparent);
+}
+
 @theme {
   --animate-bg-gradient: bg-gradient 3s ease infinite;
   --animate-fade-in-up: fade-in-up 0.5s ease-out forwards;

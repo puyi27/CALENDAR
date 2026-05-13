@@ -124,9 +124,10 @@ export default function AdminPanel() {
         (evaluatingUser.email || '').toLowerCase().includes(searchQueryString.toLowerCase()) ||
         (evaluatingUser.work || '').toLowerCase().includes(searchQueryString.toLowerCase());
       const satisfiesDepartmentCondition = departmentFilterSelection === 'ALL' || evaluatingUser.department === departmentFilterSelection;
-      return satisfiesSearchCondition && satisfiesDepartmentCondition;
+      const satisfiesAdminScope = grantsSuperAdminPrivileges || evaluatingUser.department === currentUser?.department;
+      return satisfiesSearchCondition && satisfiesDepartmentCondition && satisfiesAdminScope;
     });
-  }, [users, searchQueryString, departmentFilterSelection]);
+  }, [users, searchQueryString, departmentFilterSelection, grantsSuperAdminPrivileges, currentUser]);
 
   const calculatedTotalPages = Math.max(1, Math.ceil(compiledUserDataset.length / MAX_RECORDS_PER_PAGE));
 

@@ -336,16 +336,29 @@ export const Calendar = () => {
               const confirmsGhostEntityRender = !validatesActivePresence && !isWeekendDisabled && !targetHoliday && profileEntity.default_category;
 
               return (
-                <div key={profileEntity.id_user} className={`bg-base-100 rounded-3xl p-4 border flex items-center gap-4 shadow-sm ${mapsToAuthenticatedUser ? 'border-primary outline outline-2 outline-primary outline-offset-1' : 'border-base-300'}`}>
-                  <div className="avatar shrink-0 relative" onClick={() => triggerNavigation(`/profile/${profileEntity.id_user}`)}>
-                    <div className={`w-14 h-14 rounded-2xl border-2 overflow-hidden shadow-inner ${mapsToAuthenticatedUser ? 'border-primary' : 'border-base-300'}`}>
+                <div key={profileEntity.id_user} className={`bg-base-100 rounded-3xl p-4 border flex items-center gap-4 shadow-sm transition-all duration-200 hover:shadow-md hover:border-primary/40 ${mapsToAuthenticatedUser ? 'border-primary outline outline-2 outline-primary/40 outline-offset-1 bg-gradient-to-r from-primary/[0.02] to-transparent' : 'border-base-300'}`}>
+                  <div className="avatar shrink-0 relative cursor-pointer hover:opacity-80 transition-opacity" onClick={() => triggerNavigation(`/profile/${profileEntity.id_user}`)}>
+                    <div className={`w-14 h-14 rounded-2xl border-2 overflow-hidden shadow-sm ${mapsToAuthenticatedUser ? 'border-primary' : 'border-base-300'}`}>
                       <img src={profileEntity.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(profileEntity.alias || profileEntity.full_name || 'U')}&background=random`} alt={profileEntity.alias} className="object-cover w-full h-full" />
                     </div>
-                    <div className="absolute -bottom-1 -right-1 bg-base-100 rounded-full border border-base-200 shadow-sm p-[2px] z-10 flex items-center justify-center" title={mapStatusToTranslation(profileEntity.status)}>
+                    <div className="absolute -bottom-1 -right-1 bg-base-100 rounded-full border border-base-200 shadow-sm p-[2px] z-10 flex items-center justify-center scale-105" title={mapStatusToTranslation(profileEntity.status)}>
                       {resolveStatusIndicatorIcon(profileEntity.status)}
                     </div>
                   </div>
-                  <div className="flex-1 overflow-hidden" onClick={() => triggerNavigation(`/profile/${profileEntity.id_user}`)}><div className="font-black text-base-content text-lg truncate uppercase tracking-tight flex items-center gap-2">{profileEntity.alias}<ArrowForwardIosIcon sx={{ fontSize: 12 }} className="text-base-content opacity-30" /></div><div className="text-[10px] text-base-content opacity-70 font-bold uppercase tracking-widest truncate">{profileEntity.work || t('profile.team_member', 'Team Member')}</div>{profileEntity.department && (<div className="text-[9px] text-primary-content font-black uppercase tracking-wider bg-primary px-2 py-0.5 rounded mt-1 inline-flex items-center gap-1 shadow-sm"><BusinessIcon sx={{ fontSize: 11 }} /> {profileEntity.department}</div>)}</div>
+                  <div className="flex-1 overflow-hidden cursor-pointer group/card" onClick={() => triggerNavigation(`/profile/${profileEntity.id_user}`)}>
+                    <div className="font-black text-base-content text-lg truncate uppercase tracking-tight flex items-center gap-2 group-hover/card:text-primary transition-colors">
+                      {profileEntity.alias}
+                      <ArrowForwardIosIcon sx={{ fontSize: 10 }} className="text-base-content opacity-30 group-hover/card:translate-x-0.5 transition-transform" />
+                    </div>
+                    <div className="text-[10px] text-base-content opacity-70 font-bold uppercase tracking-widest truncate mt-0.5">
+                      {profileEntity.work || t('profile.team_member', 'Team Member')}
+                    </div>
+                    {profileEntity.department && (
+                      <div className="text-[9px] text-primary-content font-black uppercase tracking-wider bg-primary px-2 py-0.5 rounded-md mt-1.5 inline-flex items-center gap-1 shadow-xs">
+                        <BusinessIcon sx={{ fontSize: 10 }} /> {profileEntity.department}
+                      </div>
+                    )}
+                  </div>
                   <div 
                     onClick={() => {
                       if (targetHoliday) {
@@ -370,7 +383,7 @@ export const Calendar = () => {
                         });
                       }
                     }}
-                    className={`shrink-0 w-16 h-16 flex items-center justify-center rounded-2xl border-2 ${targetHoliday || (grantsModificationRights && !isWeekendDisabled) || (!grantsModificationRights && computedCategoryPayload) ? 'cursor-pointer' : ''} ${(localizedPresenceObject || (!isWeekendDisabled && profileEntity.default_category) || targetHoliday) ? 'bg-base-200 border-base-300' : 'border-dashed border-base-300 bg-base-200'}`}
+                    className={`shrink-0 w-20 h-20 flex items-center justify-center rounded-2xl border-2 transition-all duration-200 hover:scale-105 ${targetHoliday || (grantsModificationRights && !isWeekendDisabled) || (!grantsModificationRights && computedCategoryPayload) ? 'cursor-pointer' : ''} ${(localizedPresenceObject || (!isWeekendDisabled && profileEntity.default_category) || targetHoliday) ? 'bg-base-200/80 border-base-300 shadow-xs' : 'border-dashed border-base-300 bg-base-200/40 hover:bg-base-200'}`}
                   >
                     <DayCell presence={localizedPresenceObject} defaultCategory={profileEntity.default_category} grantsEditPermissions={grantsModificationRights} onAddPresence={onAddPresence} userId={profileEntity.id_user} targetDate={activeMobileViewDate} canWorkWeekends={profileEntity.can_work_weekends} holidayName={targetHoliday?.name_holiday} />
                   </div>
