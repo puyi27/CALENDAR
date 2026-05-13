@@ -223,6 +223,16 @@ export const Calendar = () => {
     }
   };
 
+  // All filtered users with their presenceMaps pre-built (for monthly desktop grid)
+  const allUsersWithPresenceMap = useMemo(() => {
+    const all = extractedSelfRecord ? [extractedSelfRecord, ...sortedPeerCollection] : sortedPeerCollection;
+    return all.map(u => {
+      const pm: Record<string, any> = {};
+      if (Array.isArray(u.presences)) u.presences.forEach((p: any) => { pm[p.date] = p; });
+      return { ...u, presenceMap: pm };
+    });
+  }, [extractedSelfRecord, sortedPeerCollection]);
+
   return (
     <div className="space-y-6 animate-fade-in pb-24 lg:pb-10">
       <style>{`.hide-scrollbar::-webkit-scrollbar { display: none; } .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }`}</style>
@@ -271,13 +281,20 @@ export const Calendar = () => {
         </div>
         <div className={`w-full flex flex-col gap-2 relative ${activeDropdownContext ? 'z-[10]' : 'z-[20]'}`}>
           <div className="flex justify-between items-center px-2">
-            <label className="text-[10px] font-black uppercase tracking-widest text-base-content opacity-50 flex items-center gap-1"><DateRangeIcon sx={{ fontSize: 12 }} /> {t('calendar.visible_week', 'Visible Week')}</label>
+            <label className="text-[10px] font-black uppercase tracking-widest text-base-content opacity-50 flex items-center gap-1">
+              <DateRangeIcon sx={{ fontSize: 12 }} />
+              <span className="hidden lg:inline">{t('calendar.visible_month', 'Mes')}</span>
+              <span className="lg:hidden">{t('calendar.visible_week', 'Semana')}</span>
+            </label>
             <button onClick={triggerResetToPresentDate} className="text-[10px] font-black uppercase tracking-widest text-primary flex items-center gap-1 hover:opacity-70 transition-opacity cursor-pointer"><TodayIcon sx={{ fontSize: 12 }} /> {t('calendar.today', 'Today')}</button>
           </div>
           <div className="flex items-center justify-between gap-2 bg-base-200 px-2 rounded-[1.25rem] border border-base-300 h-12 w-full shadow-inner">
-            <button onClick={() => setReferenceDateObject(c => c.subtract(1, 'week'))} className="btn btn-sm btn-circle btn-ghost hover:bg-base-300 text-base-content opacity-70"><KeyboardArrowLeftIcon fontSize="small" /></button>
-            <h3 className="text-[10px] font-black uppercase tracking-widest text-base-content text-center flex-1 whitespace-nowrap px-1">{initialWeeklyBound.locale(i18n.language).format('DD MMM')} - {terminalWeeklyBound.locale(i18n.language).format('DD MMM YYYY')}</h3>
-            <button onClick={() => setReferenceDateObject(c => c.add(1, 'week'))} className="btn btn-sm btn-circle btn-ghost hover:bg-base-300 text-base-content opacity-70"><KeyboardArrowRightIcon fontSize="small" /></button>
+            <button onClick={() => setReferenceDateObject(c => c.subtract(1, window.innerWidth >= 1024 ? 'month' : 'week'))} className="btn btn-sm btn-circle btn-ghost hover:bg-base-300 text-base-content opacity-70"><KeyboardArrowLeftIcon fontSize="small" /></button>
+            <h3 className="text-[10px] font-black uppercase tracking-widest text-base-content text-center flex-1 whitespace-nowrap px-1">
+              <span className="hidden lg:inline">{referenceDateObject.locale(i18n.language).format('MMMM YYYY')}</span>
+              <span className="lg:hidden">{initialWeeklyBound.locale(i18n.language).format('DD MMM')} – {terminalWeeklyBound.locale(i18n.language).format('DD MMM')}</span>
+            </h3>
+            <button onClick={() => setReferenceDateObject(c => c.add(1, window.innerWidth >= 1024 ? 'month' : 'week'))} className="btn btn-sm btn-circle btn-ghost hover:bg-base-300 text-base-content opacity-70"><KeyboardArrowRightIcon fontSize="small" /></button>
           </div>
         </div>
       </div>
@@ -397,181 +414,144 @@ export const Calendar = () => {
         </div>
       </div>
 
-      <div className="hidden lg:block rounded-[2.5rem] border-2 border-base-300 bg-base-100 shadow-xl overflow-hidden relative z-10" style={{background: 'linear-gradient(180deg, var(--fallback-b1,oklch(var(--b1))) 0%, var(--fallback-b2,oklch(var(--b2))) 100%)'}}>
-        <div className="overflow-x-auto w-full hide-scrollbar">
-          <table className="table table-fixed w-full min-w-[1000px] border-separate border-spacing-0">
-            <thead>
-              <tr className="bg-base-100">
-                <th className="p-0 border-r-2 border-b-4 border-base-300 w-[320px] sticky left-0 top-0 z-[60] bg-base-100 shadow-[4px_0_10px_-4px_rgba(0,0,0,0.2)]">
-                  <div className="flex flex-col h-full divide-y divide-base-300 bg-base-100">
-                    <div onClick={() => triggerSortingExecution('alias')} className="p-5 cursor-pointer hover:bg-base-200 transition-colors flex items-center justify-between group/sort">
-                      <div><span className="text-[10px] font-black uppercase tracking-[0.3em] text-primary block mb-1">{t('calendar.employee', 'Employee')}</span><div className={`text-lg font-black tracking-tighter ${sortingConfiguration.metric === 'alias' ? 'text-primary' : 'text-base-content'}`}>{t('calendar.personal_data', 'Personal Data')}</div></div>
-                      <div className={`transition-all duration-500 transform ${sortingConfiguration.metric === 'alias' ? 'opacity-100 scale-110' : 'opacity-0 scale-50'}`}><span className="inline-block font-black text-xl text-primary transform transition-transform duration-500" style={{ transform: sortingConfiguration.orderingDirection === 'desc' ? 'rotate(180deg)' : 'rotate(0deg)' }}><ArrowUpwardIcon /></span></div>
-                    </div>
-                    <div className="grid grid-cols-2 divide-x divide-base-300">
-                      <div onClick={() => triggerSortingExecution('work')} className="px-5 py-3.5 cursor-pointer hover:bg-base-200 transition-colors flex items-center justify-between group/sort"><span className={`text-[10px] font-black uppercase tracking-widest truncate mr-1 ${sortingConfiguration.metric === 'work' ? 'text-primary' : 'text-base-content opacity-70'}`}>{t('admin.role', 'Role')}</span><div className={`transition-all duration-300 shrink-0 ${sortingConfiguration.metric === 'work' ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}><span className="inline-block text-primary transform transition-transform duration-300" style={{ transform: sortingConfiguration.orderingDirection === 'desc' ? 'rotate(180deg)' : 'rotate(0deg)' }}><ArrowUpwardIcon sx={{ fontSize: 16 }} /></span></div></div>
-                      <div onClick={() => triggerSortingExecution('department')} className="px-5 py-3.5 cursor-pointer hover:bg-base-200 transition-colors flex items-center justify-between group/sort"><span className={`text-[10px] font-black uppercase tracking-widest truncate mr-1 ${sortingConfiguration.metric === 'department' ? 'text-primary' : 'text-base-content opacity-70'}`}>{t('admin.department', 'Department')}</span><div className={`transition-all duration-300 shrink-0 ${sortingConfiguration.metric === 'department' ? 'opacity-100 scale-100' : 'opacity-0 scale-50'}`}><span className="inline-block text-primary transform transition-transform duration-300" style={{ transform: sortingConfiguration.orderingDirection === 'desc' ? 'rotate(180deg)' : 'rotate(0deg)' }}><ArrowUpwardIcon sx={{ fontSize: 16 }} /></span></div></div>
-                    </div>
+      {/* ── DESKTOP: Monthly calendar grid ── */}
+      <div className="hidden lg:block animate-fade-in">
+        {/* Month title bar */}
+        <div className="flex items-end justify-between mb-5 px-1">
+          <div>
+            <h2 className="text-4xl font-black tracking-tight text-base-content capitalize">
+              {referenceDateObject.locale(i18n.language).format('MMMM')}
+              <span className="text-base-content/30 ml-3 font-light text-3xl">{referenceDateObject.format('YYYY')}</span>
+            </h2>
+            <p className="text-xs font-bold uppercase tracking-[0.2em] text-base-content/40 mt-1">
+              {allUsersWithPresenceMap.length} {t('calendar.members', 'miembros')}
+            </p>
+          </div>
+          <div className="flex items-center gap-2">
+            <button onClick={() => setReferenceDateObject(c => c.subtract(1, 'month'))} className="btn btn-sm btn-circle btn-ghost border border-base-300 hover:bg-base-200">
+              <KeyboardArrowLeftIcon fontSize="small" />
+            </button>
+            <button onClick={triggerResetToPresentDate} className="btn btn-sm rounded-xl font-black uppercase tracking-widest px-5 border border-base-300 hover:bg-primary hover:text-primary-content hover:border-primary transition-all">
+              {t('calendar.today', 'Hoy')}
+            </button>
+            <button onClick={() => setReferenceDateObject(c => c.add(1, 'month'))} className="btn btn-sm btn-circle btn-ghost border border-base-300 hover:bg-base-200">
+              <KeyboardArrowRightIcon fontSize="small" />
+            </button>
+          </div>
+        </div>
+
+        {/* Calendar grid */}
+        <div className="rounded-[2.5rem] border-2 border-base-300 overflow-hidden shadow-xl bg-base-100">
+          {/* Weekday headers */}
+          <div className="grid grid-cols-7 border-b-2 border-base-300" style={{background: 'linear-gradient(180deg, var(--fallback-b2,oklch(var(--b2))) 0%, var(--fallback-b1,oklch(var(--b1))) 100%)'}}>
+            {Array.from({ length: 7 }, (_, i) => {
+              const dayLabel = dayjs().startOf('isoWeek').add(i, 'day').locale(i18n.language).format('ddd');
+              const isWeekendCol = i >= 5;
+              return (
+                <div key={i} className={`py-4 text-center text-[11px] font-black uppercase tracking-[0.2em] ${isWeekendCol ? 'text-base-content/30' : 'text-base-content/50'}`}>{dayLabel}</div>
+              );
+            })}
+          </div>
+
+          {/* Day cells */}
+          <div className="grid grid-cols-7">
+            {/* Leading blanks */}
+            {Array.from({ length: referenceDateObject.startOf('month').isoWeekday() - 1 }, (_, i) => (
+              <div key={`blank-${i}`} className={`min-h-[150px] border-b border-r border-base-300/50 bg-base-200/20 ${i === referenceDateObject.startOf('month').isoWeekday() - 2 ? 'border-r-2 border-r-base-300' : ''}`} />
+            ))}
+
+            {/* Month days */}
+            {Array.from({ length: referenceDateObject.daysInMonth() }, (_, idx) => {
+              const dayObj = referenceDateObject.startOf('month').add(idx, 'day');
+              const dateStr = dayObj.format('YYYY-MM-DD');
+              const isToday = dayObj.isSame(dayjs(), 'day');
+              const isSelected = dateStr === activeDateFilter;
+              const isWeekend = dayObj.isoWeekday() >= 6;
+              const isSaturday = dayObj.isoWeekday() === 6;
+              const targetHoliday = holidays.find(h => h.date === dateStr);
+
+              // Users with activity on this day
+              const MAX_VISIBLE = 4;
+              const dayUsers = allUsersWithPresenceMap.map(u => {
+                const wkDisabled = isWeekend && !u.can_work_weekends;
+                if (wkDisabled) return null;
+                const presence = u.presenceMap[dateStr];
+                const category = presence?.categories || (targetHoliday ? null : u.default_category);
+                if (!category) return null;
+                const isGhost = !presence?.categories && !!u.default_category;
+                return { u, category, isGhost };
+              }).filter(Boolean) as { u: any; category: any; isGhost: boolean }[];
+
+              const visible = dayUsers.slice(0, MAX_VISIBLE);
+              const overflow = dayUsers.length - MAX_VISIBLE;
+
+              return (
+                <div
+                  key={dateStr}
+                  onClick={() => { setActiveDateFilter(dateStr); setActiveMobileViewDate(dateStr); }}
+                  className={`min-h-[150px] border-b border-r border-base-300/50 p-2.5 flex flex-col gap-1 cursor-pointer transition-all duration-150 group/cell relative
+                    ${isSaturday ? 'border-r-2 border-r-base-300' : ''}
+                    ${isWeekend ? 'bg-base-200/25' : 'bg-base-100'}
+                    ${targetHoliday ? '!bg-error/5' : ''}
+                    ${isSelected ? '!bg-primary/5 ring-2 ring-inset ring-primary/40' : 'hover:bg-base-200/50'}
+                  `}
+                >
+                  {/* Date number */}
+                  <div className="flex items-center justify-between mb-1">
+                    <span className={`text-sm font-black w-8 h-8 flex items-center justify-center rounded-full transition-all select-none
+                      ${isToday ? 'bg-primary text-primary-content shadow-md' : ''}
+                      ${isSelected && !isToday ? 'ring-2 ring-primary text-primary' : ''}
+                      ${!isToday && !isSelected ? (isWeekend ? 'text-base-content/30' : 'text-base-content/60 group-hover/cell:text-base-content') : ''}
+                    `}>{dayObj.format('D')}</span>
+                    {targetHoliday && (
+                      <span className="text-[8px] font-black uppercase text-error bg-error/10 rounded-full px-2 py-0.5 truncate max-w-[55%]" title={targetHoliday.name_holiday}>
+                        {targetHoliday.name_holiday}
+                      </span>
+                    )}
                   </div>
-                </th>
-                {localizedWeekCollection.map(mappedDayNode => {
-                  const serializedDateReference = mappedDayNode.format('YYYY-MM-DD');
-                  const evaluatesToCurrentDay = mappedDayNode.isSame(dayjs(), 'day');
-                  const matchesFilterCriteria = serializedDateReference === activeDateFilter;
-                  const indicatesWeekendEntity = mappedDayNode.isoWeekday() >= 6;
-                  const indicatesSaturdayEntity = mappedDayNode.isoWeekday() === 6;
-                  const targetHoliday = holidays.find(h => h.date === serializedDateReference);
 
-                  const activeCategories = headerCounts[serializedDateReference] || [];
-
-                  let appliedHeaderCSSConfiguration = 'bg-base-100 text-base-content';
-                  if (targetHoliday) appliedHeaderCSSConfiguration = 'bg-error/10 text-error';
-                  else if (indicatesWeekendEntity) appliedHeaderCSSConfiguration = 'bg-base-200 text-base-content opacity-60';
-
-                  let contextualBorderHighlight = 'border-b-4 border-base-300';
-                  if (matchesFilterCriteria) {
-                    appliedHeaderCSSConfiguration = targetHoliday ? 'bg-error/20 text-error' : 'bg-base-200 text-primary';
-                    contextualBorderHighlight = targetHoliday ? 'border-b-4 border-error shadow-inner' : 'border-b-4 border-primary shadow-inner';
-                  } else if (evaluatesToCurrentDay) {
-                    appliedHeaderCSSConfiguration = targetHoliday ? 'bg-error/10 text-error' : 'bg-base-100 text-primary';
-                    contextualBorderHighlight = targetHoliday ? 'border-b-4 border-error' : 'border-b-4 border-primary';
-                  }
-
-                  const saturdaySeparatorClass = indicatesSaturdayEntity ? '!border-r-2 !border-r-base-300/80 shadow-[1px_0_2px_rgba(0,0,0,0.02)] relative z-[5]' : '';
-
-                  return (
-                    <th
-                      key={serializedDateReference}
-                      onClick={() => setActiveDateFilter(serializedDateReference)}
-                      className={`p-0 align-top border-r-2 ${contextualBorderHighlight} cursor-pointer select-none transition-all duration-150 ${appliedHeaderCSSConfiguration} ${saturdaySeparatorClass} hover:brightness-95 group/th`}
-                    >
-                      <div className="flex flex-col h-full justify-between items-center py-4 px-1 relative">
-                        <div className="text-center w-full">
-                          <div className="text-[10px] uppercase font-black tracking-[0.2em] mb-2 opacity-60">{mappedDayNode.locale(i18n.language).format('ddd')}</div>
-                          <div className={`relative inline-flex items-center justify-center transition-all duration-300 ${
-                            evaluatesToCurrentDay && !matchesFilterCriteria
-                              ? 'w-9 h-9 rounded-full bg-primary/10 ring-2 ring-primary/30 text-primary'
-                              : matchesFilterCriteria
-                              ? 'w-9 h-9 rounded-full bg-primary text-primary-content shadow-md shadow-primary/30 scale-110'
-                              : 'w-9 h-9 rounded-full group-hover/th:bg-base-300'
-                          } text-2xl font-black tracking-tighter`}>
-                            {mappedDayNode.locale(i18n.language).format('DD')}
-                          </div>
-                        </div>
-                        {!targetHoliday && activeCategories.length > 0 && (
-                          <div className="mt-3 w-full flex flex-wrap justify-center gap-1 px-1">
-                            {activeCategories.map(item => (
-                              <span
-                                key={item.category.id_category}
-                                className="flex items-center gap-0.5 bg-base-200/80 border border-base-300/60 rounded-lg px-1.5 py-0.5 text-[10px] font-bold text-base-content/60"
-                                title={getDynamicCategoryName(item.category, i18n.language, t)}
-                              >
-                                <span className={`text-[11px] ${getCategoryColorClass(item.category)}`}>{getCategoryIcon(item.category)}</span>
-                                <span>{item.count}</span>
-                              </span>
-                            ))}
-                          </div>
-                        )}
-                        {targetHoliday && (
-                          <div className="mt-3 w-full px-1">
-                            <span className="text-[9px] font-black uppercase tracking-widest text-error/80 text-center truncate w-full block bg-error/10 rounded-lg px-2 py-1" title={targetHoliday.name_holiday}>{targetHoliday.name_holiday}</span>
-                          </div>
-                        )}
+                  {/* User presence entries */}
+                  <div className="flex flex-col gap-0.5">
+                    {targetHoliday ? (
+                      <div className="flex items-center gap-1.5 px-1.5 py-1 rounded-lg bg-error/10">
+                        <CelebrationIcon sx={{ fontSize: 13 }} className="text-error shrink-0" />
+                        <span className="text-[10px] font-black text-error truncate">{targetHoliday.name_holiday}</span>
                       </div>
-                    </th>
-                  );
-                })}
-              </tr>
-            </thead>
-            <tbody className="divide-y-2 divide-base-300 relative z-10 bg-base-100">
-              {formattedUserDataset.length === 0 ? (
-                <tr><td colSpan={8} className="p-12 text-center text-base-content opacity-50 font-bold text-lg bg-base-100">{t('admin.alert_warning', 'No records found')}</td></tr>
-              ) : (
-                formattedUserDataset.map((profileEntity, iterationIndex) => {
-                  const mapsToAuthenticatedUser = currentUser?.id_user === profileEntity.id_user;
-                  const grantsModificationRights = currentUser?.role?.toLowerCase() === 'admin' || currentUser?.role?.toLowerCase() === 'superadmin' || currentUser?.role === 'ADMIN' || mapsToAuthenticatedUser;
-                  const sequentialRowColorTheme = iterationIndex % 2 !== 0 ? 'bg-base-200' : 'bg-base-100';
-
-                  return (
-                    <tr key={profileEntity.id_user} className={`group/row transition-colors duration-100 ${mapsToAuthenticatedUser ? 'outline outline-2 outline-primary/50 outline-offset-[-2px] relative z-20' : 'hover:bg-base-200/60'} ${sequentialRowColorTheme}`}>
-                      <td className={`relative p-0 border-r-2 border-base-300 sticky left-0 z-50 overflow-hidden shadow-[4px_0_10px_-4px_rgba(0,0,0,0.15)] ${sequentialRowColorTheme}`}>
-                        <div className="relative z-10 flex flex-col h-full divide-y divide-base-300">
-                          <div className="p-5 pl-6 flex items-center gap-4 cursor-pointer hover:bg-base-300 transition-colors relative" onClick={() => triggerNavigation(`/profile/${profileEntity.id_user}`)}>
-                            <div className={`absolute left-0 top-0 bottom-0 w-1.5 bg-base-300 z-20`}><div className={`w-full bg-primary transition-all duration-500 ease-out ${mapsToAuthenticatedUser ? 'h-full shadow-[0_0_8px_var(--p)]' : 'h-0 group-hover/row:h-full'}`}></div></div>
-                            <div className={`avatar shrink-0 relative transition-all duration-500 group-hover/row:scale-110 ${mapsToAuthenticatedUser ? 'ring-2 ring-primary ring-offset-2 ring-offset-base-100 rounded-2xl' : ''}`}>
-                              <div className="w-14 h-14 rounded-2xl border-2 border-base-300 shadow-md overflow-hidden bg-base-300">
-                                <img src={profileEntity.avatar ?? `https://ui-avatars.com/api/?name=${encodeURIComponent(profileEntity.alias || profileEntity.full_name || 'U')}&background=random`} alt={profileEntity.alias} className="object-cover w-full h-full" />
-                              </div>
-                              <div className="absolute -bottom-1.5 -right-1.5 bg-base-100 rounded-full border border-base-200 shadow-sm p-[2px] z-10 flex items-center justify-center" title={mapStatusToTranslation(profileEntity.status)}>
-                                {resolveStatusIndicatorIcon(profileEntity.status)}
-                              </div>
-                            </div>
-                            <div className="overflow-hidden relative z-20"><div className="font-black text-base-content text-lg truncate group-hover/row:text-primary transition-colors uppercase tracking-tight flex items-center gap-1.5">{profileEntity.alias}{mapsToAuthenticatedUser && <div className="text-[9px] text-primary-content font-black uppercase tracking-widest bg-primary px-1.5 py-0.5 rounded shadow-md">{t('profile.you', 'You')}</div>}</div><div className="text-[10px] text-base-content opacity-60 font-medium truncate mt-0.5">{profileEntity.full_name}</div></div>
-                          </div>
-                          <div className="grid grid-cols-2 divide-x divide-base-300 font-bold text-xs uppercase tracking-widest text-base-content opacity-70">
-                            <div className="px-5 py-3 truncate" title={profileEntity.work || t('profile.team_member', 'Team Member')}>{profileEntity.work || t('profile.team_member', 'Team Member')}</div>
-                            <div className="px-5 py-3 truncate text-primary flex items-center gap-1.5" title={profileEntity.department}><BusinessIcon sx={{ fontSize: 14 }} className="opacity-70" /> {profileEntity.department}</div>
-                          </div>
-                        </div>
-                      </td>
-                      {localizedWeekCollection.map(mappedDayNode => {
-                        const serializedDateReference = mappedDayNode.format('YYYY-MM-DD');
-                        const localizedPresenceObject = profileEntity.presenceMap[serializedDateReference];
-                        const indicatesSaturdayEntity = mappedDayNode.isoWeekday() === 6;
-                        const matchesFilterCriteria = serializedDateReference === activeDateFilter;
-                        const targetHoliday = holidays.find(h => h.date === serializedDateReference);
-
-                        const isWeekendDisabled = mappedDayNode.isoWeekday() >= 6 && !profileEntity.can_work_weekends;
-
-                        let responsiveCellBackground = 'bg-transparent';
-                        if (matchesFilterCriteria) responsiveCellBackground = 'bg-base-200 shadow-inner';
-                        else if (isWeekendDisabled || targetHoliday) responsiveCellBackground = 'bg-base-300/50';
-
-                        const saturdaySeparatorClass = indicatesSaturdayEntity ? '!border-r-2 !border-r-base-300/80 shadow-[1px_0_2px_rgba(0,0,0,0.02)] relative z-[5]' : '';
-                        
-                        const validatesActivePresence = localizedPresenceObject && localizedPresenceObject.categories;
-                        const computedCategoryPayload = validatesActivePresence ? localizedPresenceObject.categories : (isWeekendDisabled || targetHoliday ? null : profileEntity.default_category);
-                        const confirmsGhostEntityRender = !validatesActivePresence && !isWeekendDisabled && !targetHoliday && profileEntity.default_category;
-
+                    ) : (
+                      visible.map(({ u, category, isGhost }) => {
+                        const grantsEdit = currentUser?.role?.toLowerCase() === 'admin' || currentUser?.role?.toLowerCase() === 'superadmin' || currentUser?.id_user === u.id_user;
                         return (
-                          <td key={serializedDateReference} className={`p-0 border-r border-base-300 relative ${isWeekendDisabled || targetHoliday ? '' : 'hover:bg-base-300'} ${responsiveCellBackground} ${saturdaySeparatorClass}`}>
-                            <div 
-                              onClick={() => {
-                                if (targetHoliday) {
-                                  setOverlayContextProperties({
-                                    date: mappedDayNode.locale(i18n.language).format('DD MMM YYYY'),
-                                    catName: targetHoliday.name_holiday,
-                                    categoryData: null,
-                                    userName: profileEntity.alias || profileEntity.full_name,
-                                    isHoliday: true
-                                  });
-                                  return;
-                                }
-                                if (!grantsModificationRights && computedCategoryPayload && !isWeekendDisabled) {
-                                  setOverlayContextProperties({
-                                    date: mappedDayNode.locale(i18n.language).format('DD MMM YYYY'),
-                                    catName: getDynamicCategoryName(computedCategoryPayload, i18n.language, t),
-                                    categoryData: computedCategoryPayload,
-                                    userName: profileEntity.alias || profileEntity.full_name,
-                                    isDefault: !!confirmsGhostEntityRender
-                                  });
-                                } else if (grantsModificationRights && !isWeekendDisabled) {
-                                  onAddPresence(profileEntity.id_user, serializedDateReference);
-                                }
-                              }}
-                              className={`w-full h-full min-h-[125px] flex items-center justify-center ${(grantsModificationRights && !isWeekendDisabled && !targetHoliday) || (!grantsModificationRights && computedCategoryPayload && !isWeekendDisabled && !targetHoliday) || targetHoliday ? 'cursor-pointer' : ''}`}
-                            >
-                              <DayCell presence={localizedPresenceObject} defaultCategory={profileEntity.default_category} grantsEditPermissions={grantsModificationRights} onAddPresence={onAddPresence} userId={profileEntity.id_user} targetDate={serializedDateReference} canWorkWeekends={profileEntity.can_work_weekends} holidayName={targetHoliday?.name_holiday} />
-                            </div>
-                          </td>
+                          <div
+                            key={u.id_user}
+                            onClick={e => {
+                              e.stopPropagation();
+                              if (grantsEdit) {
+                                onAddPresence(u.id_user, dateStr);
+                              } else {
+                                setOverlayContextProperties({ date: dayObj.locale(i18n.language).format('DD MMM YYYY'), catName: getDynamicCategoryName(category, i18n.language, t), categoryData: category, userName: u.alias || u.full_name, isDefault: isGhost });
+                              }
+                            }}
+                            className={`flex items-center gap-1.5 px-1.5 py-1 rounded-lg transition-colors group/entry hover:bg-base-200 ${isGhost ? 'opacity-50' : ''} ${u.id_user === currentUser?.id_user ? 'bg-primary/8 ring-1 ring-primary/20' : ''}`}
+                          >
+                            <img
+                              src={u.avatar || `https://ui-avatars.com/api/?name=${encodeURIComponent(u.alias || 'U')}&background=random&size=32`}
+                              className="w-5 h-5 rounded-full shrink-0 border border-base-300/60"
+                              alt={u.alias}
+                            />
+                            <span className={`text-sm leading-none shrink-0 ${getCategoryColorClass(category)}`}>{getCategoryIcon(category)}</span>
+                            <span className="text-[10px] font-bold truncate text-base-content/70 group-hover/entry:text-base-content">{u.alias}</span>
+                          </div>
                         );
-                      })}
-                    </tr>
-                  );
-                })
-              )}
-            </tbody>
-          </table>
+                      })
+                    )}
+                    {overflow > 0 && (
+                      <div className="text-[10px] font-black text-base-content/40 px-2 mt-0.5">+{overflow} más</div>
+                    )}
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
