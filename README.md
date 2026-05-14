@@ -39,13 +39,13 @@ PresenceLink is an enterprise-ready, high-performance presence management platfo
 
 ## 🚀 Features
 
-| Feature | Description | Visual Status |
-| :--- | :--- | :--- |
-| **Magic Fill🪄** | AI-driven bulk presence population based on recurring patterns. | <!-- ![Screenshot: Magic Fill Feature](/docs/assets/magic-fill.gif) --> |
-| **Smart Status** | Distinctive visual differentiation between confirmed and predicted locations. | <!-- ![Screenshot: Smart Status](/docs/assets/smart-status.png) --> |
-| **Multi-Channel Sync** | Automated updates to MS Teams and WhatsApp without manual input. | <!-- ![Screenshot: Notifications](/docs/assets/notifications.png) --> |
-| **iCal Engine** | Real-time synchronization with Outlook, Google, and Apple calendars. | <!-- ![Screenshot: iCal Sync](/docs/assets/ical-sync.png) --> |
-| **RBAC Security** | Granular permission levels: User, Admin, and SuperAdmin. | <!-- ![Screenshot: RBAC](/docs/assets/rbac.png) --> |
+| Feature | Description |
+| :--- | :--- |
+| **Magic Fill🪄** | AI-driven bulk presence population based on recurring patterns. |
+| **Smart Status** | Distinctive visual differentiation between confirmed and predicted locations. |
+| **Multi-Channel Sync** | Automated updates to MS Teams and WhatsApp without manual input. |
+| **iCal Engine** | Real-time synchronization with Outlook, Google, and Apple calendars. |
+| **RBAC Security** | Granular permission levels: User, Admin, and SuperAdmin. |
 
 ---
 
