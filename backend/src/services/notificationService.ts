@@ -23,7 +23,7 @@ export async function transmitTeamsNotification(cardBodyElements: any[], webhook
             {
               type: "Action.OpenUrl",
               title: "📅 Open Calendar",
-              url: config.WEB_URL
+              url: config.FRONTEND_URL
             }
           ]
         },

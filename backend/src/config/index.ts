@@ -3,7 +3,7 @@ import 'dotenv/config';
 export const config = {
   PORT: process.env.PORT || 4000,
   SECRET_KEY: process.env.JWT_SECRET || 'fallback-secret-for-dev-only',
-  WEB_URL: process.env.WA_WEB_URL || "https://faecalendar.vercel.app",
+  FRONTEND_URL: process.env.FRONTEND_URL || "https://faecalendar.vercel.app",
   APP_NAME: process.env.APP_NAME || 'PresenceLink',
   CORS_ORIGIN: process.env.CORS_ORIGIN || '*',
   ENABLE_TEAMS_WEBHOOKS: process.env.ENABLE_TEAMS_WEBHOOKS === 'true',

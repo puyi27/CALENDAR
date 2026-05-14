@@ -20,9 +20,7 @@
     "node-cron": "^4.2.1",
     "node-fetch": "^2.7.0",
     "pg": "^8.19.0",
-    "qrcode-terminal": "^0.12.0",
-    "tailwind-merge": "^3.5.0",
-    "whatsapp-web.js": "github:pedroslopez/whatsapp-web.js#main"
+    "tailwind-merge": "^3.5.0"
   },
   "devDependencies": {
     "@types/bcrypt": "^6.0.0",
@@ -33,7 +31,6 @@
     "@types/node-cron": "^3.0.11",
     "@types/node-fetch": "^2.6.13",
     "@types/pg": "^8.18.0",
-    "@types/qrcode-terminal": "^0.12.2",
     "nodemon": "^3.1.0",
     "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
