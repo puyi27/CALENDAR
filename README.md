@@ -1,4 +1,13 @@
+<p align="center">
+  <img src="./docs/assets/presence-link-banner.png" alt="PresenceLink Banner" width="800">
+</p>
 
+<p align="center">
+  <img src="https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge" alt="Build Status">
+  <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License">
+  <img src="https://img.shields.io/badge/version-v1.0.0-orange?style=for-the-badge" alt="Version">
+  <img src="https://img.shields.io/badge/Stack-React_19_|_Node_22-61dafb?style=for-the-badge" alt="Stack">
+</p>
 
 ---
 
