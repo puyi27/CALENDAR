@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" width="1200" height="400">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="accent" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#8b5cf6" />
+    </linearGradient>
+  </defs>
+
+  <rect width="1200" height="400" fill="url(#bg)" />
+
+  <g stroke="#ffffff" stroke-opacity="0.05" stroke-width="2">
+    <path d="M 0 100 L 1200 100 M 0 200 L 1200 200 M 0 300 L 1200 300" />
+    <path d="M 200 0 L 200 400 M 400 0 L 400 400 M 600 0 L 600 400 M 800 0 L 800 400 M 1000 0 L 1000 400" />
+  </g>
+
+  <rect x="150" y="120" width="160" height="160" rx="24" fill="none" stroke="url(#accent)" stroke-width="10" />
+  <path d="M 150 180 L 310 180" stroke="url(#accent)" stroke-width="10" />
+  <circle cx="200" cy="240" r="14" fill="#3b82f6" />
+  <circle cx="260" cy="240" r="14" fill="#8b5cf6" />
+
+  <text x="360" y="210" font-family="system-ui, -apple-system, sans-serif" font-size="85" font-weight="bold" fill="#ffffff" letter-spacing="-2">PresenceLink</text>
+  
+  <text x="365" y="270" font-family="system-ui, -apple-system, sans-serif" font-size="32" font-weight="300" fill="#94a3b8">The Smart Presence &amp; Team Coordination Platform</text>
+</svg>
