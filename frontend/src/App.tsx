@@ -40,6 +40,7 @@ const OledDarkTheme = () => (
 
 export default function App() {
   const { t, i18n } = useTranslation();
+  const { token, currentUser, users, categories, interactionModalContext, fetchGlobalData, updateCurrentUser, setInteractionModalContext, commitPresenceEntry, obliteratePresenceEntry } = useStore();
   const appName = import.meta.env.VITE_APP_NAME || 'SmartPresence';
 
   useEffect(() => {
