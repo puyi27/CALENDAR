@@ -39,7 +39,7 @@ const OledDarkTheme = () => (
 
 export default function App() {
   const { t, i18n } = useTranslation();
-  const { token, currentUser, users, categories, interactionModalContext, setAuth, fetchGlobalData, updateCurrentUser, setInteractionModalContext, commitPresenceEntry, obliteratePresenceEntry } = useStore();
+  const { token, currentUser, users, categories, interactionModalContext, fetchGlobalData, updateCurrentUser, setInteractionModalContext, commitPresenceEntry, obliteratePresenceEntry } = useStore();
 
   const [isExportInterfaceActive, setIsExportInterfaceActive] = useState(false);
   const [isScrollToTopVisible, setIsScrollToTopVisible] = useState(false);

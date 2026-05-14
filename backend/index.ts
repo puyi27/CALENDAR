@@ -11,6 +11,11 @@ import crypto from 'crypto';
 import ical from 'ical-generator';
 
 const { Pool } = pg;
+
+/**
+ * PostgreSQL connection pool initialized with the connection string from environment variables.
+ * Used for all database interactions within the application.
+ */
 const pool = new Pool({ connectionString: process.env.DATABASE_URL });
 const SECRET_KEY = process.env.JWT_SECRET;
 
@@ -32,6 +37,14 @@ interface AuthRequest extends Request {
   user?: { id_user: number; role: string; department: string };
 }
 
+/**
+ * Ensures all required database tables and columns exist on application startup.
+ * Handles schema migrations such as adding default categories, calendar tokens, 
+ * and weekend work flags.
+ * 
+ * @async
+ * @returns {Promise<void>}
+ */
 const initializeDatabase = async () => {
   try {
     await pool.query(`CREATE TABLE IF NOT EXISTS departments (name VARCHAR(255) PRIMARY KEY, webhook_url TEXT);`);
@@ -49,6 +62,14 @@ const initializeDatabase = async () => {
 };
 initializeDatabase();
 
+/**
+ * Express middleware to verify the JWT token provided in the 'Authorization' header.
+ * Attaches the decoded user data to `req.user` if valid.
+ * 
+ * @param req - The request object.
+ * @param res - The response object.
+ * @param next - The next middleware function.
+ */
 const authenticateSession = (req: AuthRequest, res: Response, next: NextFunction): void => {
   const token = req.headers['authorization']?.split(' ')[1];
   if (!token) { res.status(401).json({ error: "Access Denied" }); return; }
@@ -199,6 +220,19 @@ async function transmitTeamsNotification(cardBodyElements: any[], webhookUrl: st
   }
 }
 
+/**
+ * Core business logic that aggregates user presence for the next workday and 
+ * dispatches notifications to configured Microsoft Teams webhooks.
+ * 
+ * The logic follows these steps:
+ * 1. Calculates the next working date.
+ * 2. Fetches all users and resolves their presence (Manual > User Default > Dept Default).
+ * 3. Groups users by location/category.
+ * 4. Generates an Adaptive Card payload.
+ * 5. Transmits the payload to each department's webhook.
+ * 
+ * @async
+ */
 async function executeDailyTeamsNotifications() {
   const currentDate = new Date(new Date().toLocaleString("en-US", { timeZone: "Europe/Rome" }));
   const nextDate = new Date(currentDate);

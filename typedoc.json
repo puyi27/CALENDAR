@@ -1,0 +1,25 @@
+{
+    "entryPointStrategy": "expand",
+    "entryPoints": [
+        "frontend/src",
+        "backend/index.ts",
+        "guides/ARCHITECTURE.md",
+        "guides/DATABASE.md",
+        "guides/SECURITY.md",
+        "guides/DEVELOPMENT.md"
+    ],
+    "out": "docs",
+    "name": "FAE Calendar — Technical Portal",
+    "readme": "README.md",
+    "tsconfig": "tsconfig.docs.json",
+    "skipErrorChecking": true,
+    "lang": "en",
+    "githubPages": false,
+    "searchInComments": true,
+    "cleanOutputDir": true,
+    "exclude": [
+        "**/node_modules/**",
+        "**/*.test.*",
+        "**/*.spec.*"
+    ]
+}

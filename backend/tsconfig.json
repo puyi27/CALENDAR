@@ -1,12 +1,27 @@
 {
   "compilerOptions": {
     "target": "ESNext",
-    "module": "NodeNext",           // 👈 Cambia esto
-    "moduleResolution": "NodeNext", // 👈 Cambia esto
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "strict": true,
     "noEmit": true,
-    "allowJs": true
-  }
+    "allowJs": false,
+    "resolveJsonModule": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "rootDir": ".",
+    "outDir": "dist"
+  },
+  "include": [
+    "index.ts",
+    "src/**/*"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }

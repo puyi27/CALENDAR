@@ -22,7 +22,6 @@ import PasswordIcon from '@mui/icons-material/Password';
 import PhotoCameraIcon from '@mui/icons-material/PhotoCamera';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import PhoneIcon from '@mui/icons-material/Phone';
-import LocationOnIcon from '@mui/icons-material/LocationOn';
 import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth';
@@ -282,12 +281,6 @@ export const ProfilePage = (props: any) => {
     { value: 'In Ferie', label: t('profile.status_in_ferie', 'De Vacaciones') }
   ];
 
-  const filteredDepartments = categories?.filter(c => {
-    const icon = c.icon || '';
-    const name = (c.name || '').toLowerCase();
-    return icon !== 'BeachAccess' && icon !== 'Sick' && icon !== 'Flight' && 
-           !name.includes('ferie') && !name.includes('malattia') && !name.includes('travel') && !name.includes('trasferta');
-  });
 
   return (
     <>

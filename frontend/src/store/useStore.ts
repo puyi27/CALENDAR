@@ -3,21 +3,106 @@ import { type User, type Category } from '../types';
 
 import { API_URL } from '../config';
 
+/**
+ * Global application state shape managed by Zustand.
+ * Persists authentication credentials in `localStorage` under the keys
+ * `fae_token` and `fae_user`.
+ */
 interface AppState {
-  token: string | null;
-  currentUser: User | null;
-  users: User[];
-  categories: Category[];
-  interactionModalContext: { id_user: number; date: string } | null;
-  setAuth: (token: string | null, user: User | null) => void;
-  logout: () => void;
-  updateCurrentUser: (updates: Partial<User>) => void;
-  fetchGlobalData: () => Promise<void>;
-  updateUser: (mutatedDataPayload: any) => Promise<void>;
-  setInteractionModalContext: (context: { id_user: number; date: string } | null) => void;
-  commitPresenceEntry: (categoryId: number) => Promise<void>;
-  commitBulkPresences: (presences: {id_user: number, date: string, id_category: number}[]) => Promise<void>;
-  obliteratePresenceEntry: () => Promise<void>;
+  /** JWT access token returned by `POST /api/login`. `null` when unauthenticated. */
+  token: string | null
+
+  /** The currently authenticated user profile. `null` when unauthenticated. */
+  currentUser: User | null
+
+  /**
+   * Full list of all platform users, including their presence records.
+   * Populated by {@link fetchGlobalData}.
+   */
+  users: User[]
+
+  /**
+   * All available presence categories fetched from `GET /api/categories`.
+   * Populated by {@link fetchGlobalData}.
+   */
+  categories: Category[]
+
+  /**
+   * Context object for the presence interaction modal.
+   * When non-null, the modal is open for the specified user and date.
+   */
+  interactionModalContext: { id_user: number; date: string } | null
+
+  /**
+   * Persists the JWT token and user profile to `localStorage` and updates the store.
+   * Passing `null` for both arguments clears all persisted data (logout).
+   *
+   * @param token - JWT access token string, or `null` to clear.
+   * @param user - Authenticated user object, or `null` to clear.
+   */
+  setAuth: (token: string | null, user: User | null) => void
+
+  /**
+   * Clears all authentication state from memory and `localStorage`,
+   * then redirects the browser to `/` without a history entry.
+   */
+  logout: () => void
+
+  /**
+   * Applies a partial update to the current user profile both in memory and in `localStorage`.
+   * Does not trigger a server request — use after a successful API call.
+   *
+   * @param updates - Partial `User` object with only the fields to overwrite.
+   */
+  updateCurrentUser: (updates: Partial<User>) => void
+
+  /**
+   * Fetches the complete users and categories lists from the API in parallel.
+   * Auto-generates avatar URLs for users without one.
+   * Calls {@link logout} automatically if the server returns 401 or 403.
+   */
+  fetchGlobalData: () => Promise<void>
+
+  /**
+   * Sends a `PUT /api/users/:id` request to persist user profile changes.
+   * Omits the password field from the payload when left blank.
+   * Refreshes global data and updates `currentUser` if the edited user is the active session.
+   *
+   * @param mutatedDataPayload - Full user object with the updated fields merged in.
+   */
+  updateUser: (mutatedDataPayload: any) => Promise<void>
+
+  /**
+   * Sets or clears the interaction modal context.
+   * Setting a value opens the presence picker modal for that user/date combination.
+   *
+   * @param context - `{ id_user, date }` to open the modal, or `null` to close it.
+   */
+  setInteractionModalContext: (context: { id_user: number; date: string } | null) => void
+
+  /**
+   * Creates or updates a presence entry via `POST /api/presences`.
+   * Reads the current `interactionModalContext` for the target user and date.
+   * Clears the modal context and refreshes global data on success.
+   *
+   * @param categoryId - The `id_category` to assign to the presence.
+   */
+  commitPresenceEntry: (categoryId: number) => Promise<void>
+
+  /**
+   * Batch-creates or updates multiple presence entries via `POST /api/presences/bulk`.
+   * Used by the "Fill Month" feature in the profile page.
+   *
+   * @param presences - Array of `{ id_user, date, id_category }` records.
+   */
+  commitBulkPresences: (presences: { id_user: number; date: string; id_category: number }[]) => Promise<void>
+
+  /**
+   * Deletes the presence entry defined by the current `interactionModalContext`
+   * via `DELETE /api/presences`.
+   * Clears the modal context and refreshes global data on success.
+   */
+  obliteratePresenceEntry: () => Promise<void>
 }
 
 export const useStore = create<AppState>((set, get) => ({

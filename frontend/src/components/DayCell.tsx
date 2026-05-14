@@ -1,4 +1,4 @@
-import React, { memo } from 'react';
+import { memo } from 'react';
 import dayjs from 'dayjs';
 import { type Presence, type Category } from '../types';
 import { useTranslation } from 'react-i18next';
@@ -6,16 +6,58 @@ import AddIcon from '@mui/icons-material/Add';
 import CelebrationIcon from '@mui/icons-material/Celebration';
 import { getDynamicCategoryName, getCategoryIcon, getCategoryColorClass } from '../utils/categoryUtils';
 
+/**
+ * Props for the {@link DayCell} component.
+ */
 interface DayCellConfiguration {
-  presence?: Presence;
-  defaultCategory?: Category | null;
-  onAddPresence: (userId: number, targetDate: string) => void;
-  userId: number;
-  targetDate: string;
-  grantsEditPermissions: boolean;
-  canWorkWeekends?: boolean;
-  holidayName?: string;
+  /**
+   * The confirmed presence record for this cell's date, if one exists.
+   * When provided, its `categories` field takes priority over `defaultCategory`.
+   */
+  presence?: Presence
+  /**
+   * The user's default category (from user or department settings).
+   * Rendered as a semi-transparent "ghost" when no explicit presence exists.
+   */
+  defaultCategory?: Category | null
+  /**
+   * Callback to open the presence picker modal for a given user and date.
+   * Only called when the current session has edit permissions.
+   */
+  onAddPresence: (userId: number, targetDate: string) => void
+  /** The `id_user` of the user this cell belongs to. */
+  userId: number
+  /** ISO 8601 date string (e.g. `'2026-05-14'`) this cell represents. */
+  targetDate: string
+  /** When `true`, the cell is clickable and the presence picker can be triggered. */
+  grantsEditPermissions: boolean
+  /**
+   * When `true`, weekend days are treated as workable and will not be greyed out.
+   * @default false
+   */
+  canWorkWeekends?: boolean
+  /**
+   * Name of the public holiday falling on this date, if any.
+   * When provided, the cell renders a holiday indicator instead of a category icon.
+   */
+  holidayName?: string
 }
+
+/**
+ * A single calendar grid cell representing one user's presence status on one day.
+ *
+ * Rendering priority:
+ * 1. **Holiday** — renders a celebration icon and the holiday name.
+ * 2. **Explicit presence** — renders the category icon in full color.
+ * 3. **Default category (ghost)** — renders the category icon greyed out with reduced opacity.
+ * 4. **Empty + editable** — renders a dashed add button visible on hover.
+ * 5. **Weekend / locked** — renders nothing (empty cell).
+ *
+ * This component is memoised with `React.memo` to avoid re-renders when
+ * unrelated store slices change.
+ *
+ * @param props - See {@link DayCellConfiguration}.
+ */
 
 export const DayCell = memo(({ presence, defaultCategory, onAddPresence, userId, targetDate, grantsEditPermissions: inheritsEditPermissions, canWorkWeekends, holidayName }: DayCellConfiguration) => {
   const { t, i18n } = useTranslation();

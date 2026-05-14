@@ -1,0 +1,174 @@
+<!DOCTYPE html><html class="default" lang="it" data-base="./"><head><meta charset="utf-8"/><meta http-equiv="x-ua-compatible" content="IE=edge"/><title>FAE Calendar — API Reference</title><meta name="description" content="Documentation for FAE Calendar — API Reference"/><meta name="viewport" content="width=device-width, initial-scale=1"/><link rel="stylesheet" href="assets/style.css"/><link rel="stylesheet" href="assets/highlight.css"/><script defer src="assets/main.js"></script><script async src="assets/icons.js" id="tsd-icons-script"></script><script async src="assets/search.js" id="tsd-search-script"></script><script async src="assets/navigation.js" id="tsd-nav-script"></script></head><body><script>document.documentElement.dataset.theme = localStorage.getItem("tsd-theme") || "os";document.body.style.display="none";setTimeout(() => window.app?app.showPage():document.body.style.removeProperty("display"),500)</script><header class="tsd-page-toolbar"><div class="tsd-toolbar-contents container"><a href="index.html" class="title">FAE Calendar — API Reference</a><div id="tsd-toolbar-links"></div><button id="tsd-search-trigger" class="tsd-widget" aria-label="Search"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-search"></use></svg></button><dialog id="tsd-search" aria-label="Search"><input role="combobox" id="tsd-search-input" aria-controls="tsd-search-results" aria-autocomplete="list" aria-expanded="true" autocapitalize="off" autocomplete="off" placeholder="Search the docs" maxLength="100"/><ul role="listbox" id="tsd-search-results"></ul><div id="tsd-search-status" aria-live="polite" aria-atomic="true"><div>Preparing search index...</div></div></dialog><a href="#" class="tsd-widget menu" id="tsd-toolbar-menu-trigger" data-toggle="menu" aria-label="Menu"><svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-menu"></use></svg></a></div></header><div class="container container-main"><div class="col-content"><div class="tsd-page-title"><h1>FAE Calendar — API Reference</h1></div><div class="tsd-panel tsd-typography"><h1 id="fae-calendar" class="tsd-anchor-link">FAE Calendar<a href="#fae-calendar" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h1>
+<p>Plataforma de gestión de presencias y turnos para equipos. Permite a los empleados registrar su ubicación diaria (oficina, remoto, viaje, etc.) y envía notificaciones automáticas a Microsoft Teams con el resumen del día siguiente.</p>
+<h2 id="stack" class="tsd-anchor-link">Stack<a href="#stack" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<table>
+<thead>
+<tr>
+<th>Capa</th>
+<th>Tecnología</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td>React 19 + TypeScript + Vite 7</td>
+</tr>
+<tr>
+<td>Estilos</td>
+<td>TailwindCSS 4 + MUI</td>
+</tr>
+<tr>
+<td>Estado</td>
+<td>Zustand</td>
+</tr>
+<tr>
+<td>Backend</td>
+<td>Node.js 22 + Express + TypeScript (tsx)</td>
+</tr>
+<tr>
+<td>Base de datos</td>
+<td>PostgreSQL (Neon — cloud serverless)</td>
+</tr>
+<tr>
+<td>Notificaciones</td>
+<td>Microsoft Teams Webhooks + WhatsApp Web.js</td>
+</tr>
+<tr>
+<td>Internacionalización</td>
+<td>i18next (ES / EN / IT)</td>
+</tr>
+<tr>
+<td>Documentación</td>
+<td>TypeDoc</td>
+</tr>
+<tr>
+<td>Deploy</td>
+<td>Vercel (frontend + backend)</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="requisitos-previos" class="tsd-anchor-link">Requisitos previos<a href="#requisitos-previos" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<ul>
+<li><a href="https://nodejs.org/">Node.js 22+</a></li>
+<li><a href="https://www.npmjs.com/">npm 10+</a></li>
+<li><a href="https://www.docker.com/products/docker-desktop/">Docker Desktop</a> <em>(solo para arranque con contenedores)</em></li>
+<li>Acceso a una instancia PostgreSQL (Neon o local)</li>
+</ul>
+<hr>
+<h2 id="arranque-local-sin-docker" class="tsd-anchor-link">Arranque local (sin Docker)<a href="#arranque-local-sin-docker" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="1-clonar-el-repositorio" class="tsd-anchor-link">1. Clonar el repositorio<a href="#1-clonar-el-repositorio" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-0">git</span><span class="hl-1"> </span><span class="hl-2">clone</span><span class="hl-1"> &lt;</span><span class="hl-2">url-del-repositori</span><span class="hl-1">o&gt;</span><br/><span class="hl-0">cd</span><span class="hl-1"> </span><span class="hl-2">CALENDAR</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="2-instalar-dependencias-de-los-tres-niveles" class="tsd-anchor-link">2. Instalar dependencias de los tres niveles<a href="#2-instalar-dependencias-de-los-tres-niveles" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1"> </span><span class="hl-3">--prefix</span><span class="hl-1"> </span><span class="hl-2">frontend</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">install</span><span class="hl-1"> </span><span class="hl-3">--prefix</span><span class="hl-1"> </span><span class="hl-2">backend</span>
+</code><button type="button">Copy</button></pre>
+
+<h3 id="3-configurar-variables-de-entorno" class="tsd-anchor-link">3. Configurar variables de entorno<a href="#3-configurar-variables-de-entorno" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-0">cp</span><span class="hl-1"> </span><span class="hl-2">backend/.env.example</span><span class="hl-1"> </span><span class="hl-2">backend/.env</span><br/><span class="hl-0">cp</span><span class="hl-1"> </span><span class="hl-2">frontend/.env.example</span><span class="hl-1"> </span><span class="hl-2">frontend/.env</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Edita <code>backend/.env</code> con tus credenciales reales:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>DATABASE_URL</code></td>
+<td>Connection string de PostgreSQL (Neon u otro)</td>
+</tr>
+<tr>
+<td><code>JWT_SECRET</code></td>
+<td>String aleatorio seguro para firmar tokens</td>
+</tr>
+<tr>
+<td><code>WA_WEB_URL</code></td>
+<td>URL pública del frontend (para el QR de WhatsApp)</td>
+</tr>
+<tr>
+<td><code>WA_CRON_SCHEDULE</code></td>
+<td>Expresión cron para el envío de notificaciones</td>
+</tr>
+<tr>
+<td><code>CORS_ORIGIN</code></td>
+<td>Origen permitido (<code>http://localhost:5173</code> en local)</td>
+</tr>
+</tbody>
+</table>
+<p>Edita <code>frontend/.env</code>:</p>
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Descripción</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>VITE_API_URL</code></td>
+<td>URL base de la API (<code>http://localhost:4000/api</code> en local)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="4-arrancar-ambos-servicios" class="tsd-anchor-link">4. Arrancar ambos servicios<a href="#4-arrancar-ambos-servicios" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">dev</span>
+</code><button type="button">Copy</button></pre>
+
+<table>
+<thead>
+<tr>
+<th>Servicio</th>
+<th>URL</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Frontend</td>
+<td><a href="http://localhost:5173">http://localhost:5173</a></td>
+</tr>
+<tr>
+<td>Backend</td>
+<td><a href="http://localhost:4000">http://localhost:4000</a></td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2 id="arranque-con-docker" class="tsd-anchor-link">Arranque con Docker<a href="#arranque-con-docker" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<h3 id="1-clonar-y-configurar-mismo-proceso-que-arriba" class="tsd-anchor-link">1. Clonar y configurar <code>.env</code> (mismo proceso que arriba)<a href="#1-clonar-y-configurar-mismo-proceso-que-arriba" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<h3 id="2-construir-y-levantar-los-contenedores" class="tsd-anchor-link">2. Construir y levantar los contenedores<a href="#2-construir-y-levantar-los-contenedores" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<pre><code class="bash"><span class="hl-0">docker</span><span class="hl-1"> </span><span class="hl-2">compose</span><span class="hl-1"> </span><span class="hl-2">up</span><span class="hl-1"> </span><span class="hl-3">--build</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Los servicios se arrancan en paralelo. El frontend espera a que el backend esté disponible.</p>
+<h3 id="3-primera-autenticación-de-whatsapp" class="tsd-anchor-link">3. Primera autenticación de WhatsApp<a href="#3-primera-autenticación-de-whatsapp" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h3>
+<p>En el primer arranque, el backend imprimirá un código QR en los logs. Escanéalo con WhatsApp para activar el bot de notificaciones.</p>
+<pre><code class="bash"><span class="hl-0">docker</span><span class="hl-1"> </span><span class="hl-2">compose</span><span class="hl-1"> </span><span class="hl-2">logs</span><span class="hl-1"> </span><span class="hl-3">-f</span><span class="hl-1"> </span><span class="hl-2">backend</span>
+</code><button type="button">Copy</button></pre>
+
+<p>La sesión persiste en el volumen <code>wwebjs-auth</code> entre reinicios.</p>
+<hr>
+<h2 id="scripts-disponibles-desde-la-raíz" class="tsd-anchor-link">Scripts disponibles (desde la raíz)<a href="#scripts-disponibles-desde-la-raíz" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">dev</span><span class="hl-1">            </span><span class="hl-4"># Arranca frontend + backend en paralelo</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">dev:fe</span><span class="hl-1">         </span><span class="hl-4"># Solo frontend</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">dev:be</span><span class="hl-1">         </span><span class="hl-4"># Solo backend</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">build</span><span class="hl-1">          </span><span class="hl-4"># Build de producción del frontend</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">lint</span><span class="hl-1">           </span><span class="hl-4"># ESLint sobre el frontend</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">type-check</span><span class="hl-1">     </span><span class="hl-4"># tsc --noEmit en frontend y backend</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">docs</span><span class="hl-1">           </span><span class="hl-4"># Genera documentación TypeDoc en /docs</span><br/><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">clean</span><span class="hl-1">          </span><span class="hl-4"># Elimina frontend/dist, backend/dist y /docs</span>
+</code><button type="button">Copy</button></pre>
+
+<pre><code class="bash"><span class="hl-0">docker</span><span class="hl-1"> </span><span class="hl-2">compose</span><span class="hl-1"> </span><span class="hl-2">up</span><span class="hl-1"> </span><span class="hl-3">--build</span><span class="hl-1">        </span><span class="hl-4"># Primera vez (construye imágenes)</span><br/><span class="hl-0">docker</span><span class="hl-1"> </span><span class="hl-2">compose</span><span class="hl-1"> </span><span class="hl-2">up</span><span class="hl-1">                </span><span class="hl-4"># Arranque normal</span><br/><span class="hl-0">docker</span><span class="hl-1"> </span><span class="hl-2">compose</span><span class="hl-1"> </span><span class="hl-2">down</span><span class="hl-1">              </span><span class="hl-4"># Para y elimina contenedores</span><br/><span class="hl-0">docker</span><span class="hl-1"> </span><span class="hl-2">compose</span><span class="hl-1"> </span><span class="hl-2">down</span><span class="hl-1"> </span><span class="hl-3">-v</span><span class="hl-1">           </span><span class="hl-4"># Para, elimina contenedores y volúmenes</span><br/><span class="hl-0">docker</span><span class="hl-1"> </span><span class="hl-2">compose</span><span class="hl-1"> </span><span class="hl-2">logs</span><span class="hl-1"> </span><span class="hl-3">-f</span><span class="hl-1"> </span><span class="hl-2">backend</span><span class="hl-1">   </span><span class="hl-4"># Logs del backend en tiempo real</span>
+</code><button type="button">Copy</button></pre>
+
+<hr>
+<h2 id="estructura-del-proyecto" class="tsd-anchor-link">Estructura del proyecto<a href="#estructura-del-proyecto" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<pre><code><span class="hl-5">CALENDAR</span><span class="hl-1">/</span><br/><span class="hl-1">├── </span><span class="hl-6">frontend</span><span class="hl-1">/          # </span><span class="hl-6">App</span><span class="hl-1"> </span><span class="hl-0">React</span><span class="hl-1"> (</span><span class="hl-6">Vite</span><span class="hl-1">)</span><br/><span class="hl-1">│   ├── </span><span class="hl-6">src</span><span class="hl-1">/</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-6">components</span><span class="hl-1">/</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-6">store</span><span class="hl-1">/     # </span><span class="hl-6">Zustand</span><span class="hl-1"> </span><span class="hl-6">stores</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-6">types</span><span class="hl-1">/</span><br/><span class="hl-1">│   │   ├── </span><span class="hl-6">utils</span><span class="hl-1">/</span><br/><span class="hl-1">│   │   └── </span><span class="hl-6">i18n</span><span class="hl-1">/</span><br/><span class="hl-1">│   ├── </span><span class="hl-6">Dockerfile</span><br/><span class="hl-1">│   └── .</span><span class="hl-6">env</span><span class="hl-1">.</span><span class="hl-6">example</span><br/><span class="hl-1">├── </span><span class="hl-6">backend</span><span class="hl-1">/           # </span><span class="hl-5">API</span><span class="hl-1"> </span><span class="hl-6">Express</span><br/><span class="hl-1">│   ├── </span><span class="hl-6">index</span><span class="hl-1">.</span><span class="hl-6">ts</span><span class="hl-1">       # </span><span class="hl-6">Entrypoint</span><span class="hl-1"> </span><span class="hl-6">único</span><br/><span class="hl-1">│   ├── </span><span class="hl-6">src</span><span class="hl-1">/</span><br/><span class="hl-1">│   ├── </span><span class="hl-6">Dockerfile</span><br/><span class="hl-1">│   └── .</span><span class="hl-6">env</span><span class="hl-1">.</span><span class="hl-6">example</span><br/><span class="hl-1">├── </span><span class="hl-6">docker</span><span class="hl-1">-</span><span class="hl-6">compose</span><span class="hl-1">.</span><span class="hl-6">yml</span><br/><span class="hl-1">├── </span><span class="hl-6">typedoc</span><span class="hl-1">.</span><span class="hl-6">json</span><br/><span class="hl-1">└── </span><span class="hl-6">package</span><span class="hl-1">.</span><span class="hl-6">json</span><span class="hl-1">       # </span><span class="hl-6">Orquestador</span><span class="hl-1"> </span><span class="hl-6">raíz</span>
+</code><button>Copy</button></pre>
+
+<hr>
+<h2 id="documentación-de-la-api" class="tsd-anchor-link">Documentación de la API<a href="#documentación-de-la-api" aria-label="Permalink" class="tsd-anchor-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><use href="assets/icons.svg#icon-anchor"></use></svg></a></h2>
+<p>Genera la documentación TypeDoc ejecutando:</p>
+<pre><code class="bash"><span class="hl-0">npm</span><span class="hl-1"> </span><span class="hl-2">run</span><span class="hl-1"> </span><span class="hl-2">docs</span>
+</code><button type="button">Copy</button></pre>
+
+<p>Se genera en <code>/docs</code> y puede abrirse con cualquier servidor estático o directamente desde el sistema de archivos.</p>
+</div></div><div class="col-sidebar"><div class="page-menu"><div class="tsd-navigation settings"><details class="tsd-accordion"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>Settings</h3></summary><div class="tsd-accordion-details"><div class="tsd-filter-visibility"><span class="settings-label">Member Visibility</span><ul id="tsd-filter-options"><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-protected" name="protected"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Protected</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-inherited" name="inherited" checked/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>Inherited</span></label></li><li class="tsd-filter-item"><label class="tsd-filter-input"><input type="checkbox" id="tsd-filter-external" name="external"/><svg width="32" height="32" viewBox="0 0 32 32" aria-hidden="true"><rect class="tsd-checkbox-background" width="30" height="30" x="1" y="1" rx="6" fill="none"></rect><path class="tsd-checkbox-checkmark" d="M8.35422 16.8214L13.2143 21.75L24.6458 10.25" stroke="none" stroke-width="3.5" stroke-linejoin="round" fill="none"></path></svg><span>External</span></label></li></ul></div><div class="tsd-theme-toggle"><label class="settings-label" for="tsd-theme">Theme</label><select id="tsd-theme"><option value="os">OS</option><option value="light">Light</option><option value="dark">Dark</option></select></div></div></details></div><details open class="tsd-accordion tsd-page-navigation"><summary class="tsd-accordion-summary"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true"><use href="assets/icons.svg#icon-chevronDown"></use></svg><h3>On This Page</h3></summary><div class="tsd-accordion-details"><a href="#fae-calendar"><span>FAE <wbr/>Calendar</span></a><ul><li><a href="#stack"><span>Stack</span></a></li><li><a href="#requisitos-previos"><span>Requisitos previos</span></a></li><li><a href="#arranque-local-sin-docker"><span>Arranque local (sin <wbr/>Docker)</span></a></li><li><ul><li><a href="#1-clonar-el-repositorio"><span>1. <wbr/>Clonar el repositorio</span></a></li><li><a href="#2-instalar-dependencias-de-los-tres-niveles"><span>2. <wbr/>Instalar dependencias de los tres niveles</span></a></li><li><a href="#3-configurar-variables-de-entorno"><span>3. <wbr/>Configurar variables de entorno</span></a></li><li><a href="#4-arrancar-ambos-servicios"><span>4. <wbr/>Arrancar ambos servicios</span></a></li></ul></li><li><a href="#arranque-con-docker"><span>Arranque con <wbr/>Docker</span></a></li><li><ul><li><a href="#1-clonar-y-configurar-mismo-proceso-que-arriba"><span>1. <wbr/>Clonar y configurar  (mismo proceso que arriba)</span></a></li><li><a href="#2-construir-y-levantar-los-contenedores"><span>2. <wbr/>Construir y levantar los contenedores</span></a></li><li><a href="#3-primera-autenticación-de-whatsapp"><span>3. <wbr/>Primera autenticación de <wbr/>Whats<wbr/>App</span></a></li></ul></li><li><a href="#scripts-disponibles-desde-la-raíz"><span>Scripts disponibles (desde la raíz)</span></a></li><li><a href="#estructura-del-proyecto"><span>Estructura del proyecto</span></a></li><li><a href="#documentación-de-la-api"><span>Documentación de la <wbr/>API</span></a></li></ul></div></details></div><div class="site-menu"><nav class="tsd-navigation"><a href="modules.html">FAE Calendar — API Reference</a><ul class="tsd-small-nested-navigation" id="tsd-nav-container"><li>Loading...</li></ul></nav></div></div></div><footer><p class="tsd-generator">Generated using <a href="https://typedoc.org/" target="_blank">TypeDoc</a></p></footer><div class="overlay"></div></body></html>

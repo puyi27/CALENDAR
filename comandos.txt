@@ -1,0 +1,23 @@
+docker compose up --build          # Primera vez
+docker compose up                  # Arranque normal
+docker compose down                # Parar y limpiar contenedores
+docker compose down -v             # Parar + borrar volúmenes (resetea sesión WhatsApp)
+docker compose logs -f backend     # Ver logs del backend en tiempo real
+
+npm run dev                        # Sin Docker: arranca FE + BE en paralelo
+npm run dev:fe                     # Solo frontend
+npm run dev:be                     # Solo backend
+npm run lint                       # ESLint sobre frontend
+npm run type-check                 # tsc --noEmit en ambos servicios
+npm run docs                       # Genera documentación TypeDoc
+npm run clean                      # Borra dist/ y docs/
+
+1) Backend + Frontend en paralelo
+npm run dev
+2) Solo frontend
+npm run dev:fe
+3) Solo backend
+npm run dev:be
+
+npm run clean
+npm run docs

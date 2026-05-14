@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "tsx watch index.ts"
+    "dev": "tsx watch index.ts",
+    "type-check": "tsc --noEmit",
+    "format": "prettier --write \"**/*.ts\""
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
@@ -33,6 +35,7 @@
     "@types/pg": "^8.18.0",
     "@types/qrcode-terminal": "^0.12.2",
     "nodemon": "^3.1.0",
+    "prettier": "^3.5.3",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.4.5"
