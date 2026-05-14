@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/White--Label-Ready-purple?style=for-the-badge" alt="White-Label Ready">
 </p>
 
----
+----
 
 # 🔗 PresenceLink: The Enterprise Presence Engine
 
