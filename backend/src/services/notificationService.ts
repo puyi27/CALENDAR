@@ -1,6 +1,6 @@
 import fetch from 'node-fetch';
-import { config } from '../config';
-import { query, pool } from '../db/pool';
+import { config } from '../config/index.js';
+import { pool } from '../db/pool.js';
 
 export async function transmitTeamsNotification(cardBodyElements: any[], webhookUrl: string): Promise<void> {
   if (!webhookUrl || webhookUrl.trim() === '') {
@@ -68,7 +68,7 @@ export async function executeDailyTeamsNotifications() {
       [databaseDateString]
     );
 
-    const consolidatedUsers = userRecords.map(u => {
+    const consolidatedUsers = userRecords.map((u: any) => {
        const computedCategoryId = u.presence_cat_id || u.resolved_def_cat_id;
        const computedCategoryName = u.presence_cat_id ? (u.presence_name_en || u.presence_cat_name) : (u.def_name_en || u.def_cat_name);
        const computedIcon = u.presence_cat_id ? u.presence_icon : u.def_icon;
@@ -84,8 +84,8 @@ export async function executeDailyTeamsNotifications() {
       const departmentDefaultCategoryId = department.default_category_id;
       const destinationWebhook = department.webhook_url;
 
-      const nativeEmployees = consolidatedUsers.filter(u => u.department === currentDepartmentName);
-      const visitingEmployees = consolidatedUsers.filter(u => u.department !== currentDepartmentName && u.computedCategoryId === departmentDefaultCategoryId && departmentDefaultCategoryId !== null);
+      const nativeEmployees = consolidatedUsers.filter((u: any) => u.department === currentDepartmentName);
+      const visitingEmployees = consolidatedUsers.filter((u: any) => u.department !== currentDepartmentName && u.computedCategoryId === departmentDefaultCategoryId && departmentDefaultCategoryId !== null);
 
       const presentInOffice: string[] = [];
       const externalLocationsMap: Record<string, string[]> = {};
@@ -162,7 +162,7 @@ export async function executeDailyTeamsNotifications() {
           separator: !isFirstSection,
           items: [
             { type: "TextBlock", text: "🌟 GUESTS IN HQ", color: "Accent", weight: "Bolder", size: "Large", spacing: "Small" },
-            { type: "TextBlock", text: visitingEmployees.map(e => `* 👤 **${e.full_name}** _(${e.department})_`).join('\n'), wrap: true, spacing: "Small" }
+            { type: "TextBlock", text: visitingEmployees.map((e: any) => `* 👤 **${e.full_name}** _(${e.department})_`).join('\n'), wrap: true, spacing: "Small" }
           ]
         });
         isFirstSection = false;

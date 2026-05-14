@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import ical from 'ical-generator';
-import { pool } from '../db/pool';
-import { config } from '../config';
+import { pool } from '../db/pool.js';
+import { config } from '../config/index.js';
 
 export const getPresences = async (req: Request, res: Response): Promise<void> => {
   try {

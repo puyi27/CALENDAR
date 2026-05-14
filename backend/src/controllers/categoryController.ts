@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { pool } from '../db/pool';
+import { pool } from '../db/pool.js';
 
 export const getCategories = async (_req: Request, res: Response): Promise<void> => {
   try {

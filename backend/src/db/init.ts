@@ -1,4 +1,4 @@
-import { pool } from './pool';
+import { pool } from './pool.js';
 
 export const initializeDatabase = async () => {
   try {

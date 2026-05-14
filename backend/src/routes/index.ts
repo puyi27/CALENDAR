@@ -1,13 +1,12 @@
 import { Router } from 'express';
-import { pool } from '../db/pool';
-import { authenticateSession, requireAdminPrivileges, requireSuperAdminPrivileges } from '../middleware/auth';
-import * as authController from '../controllers/authController';
-import * as userController from '../controllers/userController';
-import * as holidayController from '../controllers/holidayController';
-import * as categoryController from '../controllers/categoryController';
-import * as departmentController from '../controllers/departmentController';
-import * as presenceController from '../controllers/presenceController';
-import { executeDailyTeamsNotifications } from '../services/notificationService';
+import { authenticateSession, requireAdminPrivileges, requireSuperAdminPrivileges } from '../middleware/auth.js';
+import * as authController from '../controllers/authController.js';
+import * as userController from '../controllers/userController.js';
+import * as holidayController from '../controllers/holidayController.js';
+import * as categoryController from '../controllers/categoryController.js';
+import * as departmentController from '../controllers/departmentController.js';
+import * as presenceController from '../controllers/presenceController.js';
+import { executeDailyTeamsNotifications } from '../services/notificationService.js';
 
 const router = Router();
 

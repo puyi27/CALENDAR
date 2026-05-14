@@ -1,8 +1,8 @@
 import { Request, Response } from 'express';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import { pool } from '../db/pool';
-import { config } from '../config';
+import { pool } from '../db/pool.js';
+import { config } from '../config/index.js';
 
 export const login = async (req: Request, res: Response): Promise<void> => {
   try {

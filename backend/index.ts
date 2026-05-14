@@ -3,10 +3,10 @@ import 'dotenv/config';
 import express from 'express';
 import cors from 'cors';
 import cron from 'node-cron';
-import { config } from './src/config';
-import { initializeDatabase } from './src/db/init';
-import apiRoutes from './src/routes';
-import { executeDailyTeamsNotifications } from './src/services/notificationService';
+import { config } from './src/config/index.js';
+import { initializeDatabase } from './src/db/init.js';
+import apiRoutes from './src/routes/index.js';
+import { executeDailyTeamsNotifications } from './src/services/notificationService.js';
 
 const app = express();
 

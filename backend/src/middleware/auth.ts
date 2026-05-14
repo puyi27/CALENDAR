@@ -1,7 +1,7 @@
 import { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { config } from '../config';
-import { AuthRequest, UserPayload } from '../types';
+import { config } from '../config/index.js';
+import { AuthRequest, UserPayload } from '../types/index.js';
 
 export const authenticateSession = (req: AuthRequest, res: Response, next: NextFunction): void => {
   const token = req.headers['authorization']?.split(' ')[1];

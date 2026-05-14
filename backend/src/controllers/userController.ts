@@ -1,8 +1,8 @@
 import { Response } from 'express';
 import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import { pool } from '../db/pool';
-import { AuthRequest } from '../types';
+import { pool } from '../db/pool.js';
+import { AuthRequest } from '../types/index.js';
 
 const CONSTRUCT_USERS_PRESENCE_QUERY = `
   SELECT u.*, 
