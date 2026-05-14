@@ -96,7 +96,7 @@ const requireSuperAdminPrivileges = (req: AuthRequest, res: Response, next: Next
   next();
 };
 
-app.get('/api/holidays', authenticateSession, async (req: Request, res: Response): Promise<void> => {
+app.get('/api/holidays', authenticateSession, async (_req: Request, res: Response): Promise<void> => {
   try {
     const { rows } = await pool.query("SELECT to_char(date, 'YYYY-MM-DD') as date, name_holiday FROM holidays ORDER BY date ASC");
     res.json(rows);
@@ -118,7 +118,7 @@ app.post('/api/holidays', authenticateSession, requireSuperAdminPrivileges, asyn
   }
 });
 
-app.post('/api/holidays/bulk', authenticateSession, requireSuperAdminPrivileges, async (req: Request, res: Response): Promise<void> => {
+app.post('/api/holidays/bulk', authenticateSession, requireSuperAdminPrivileges, async (_req: Request, res: Response): Promise<void> => {
   try {
     const { holidays } = req.body;
     for (const h of holidays) {
@@ -415,7 +415,7 @@ async function executeDailyTeamsNotifications() {
   }
 }
 
-app.all('/api/test-webhook', async (req: Request, res: Response) => {
+app.all('/api/test-webhook', async (_req: Request, res: Response) => {
   try {
     await executeDailyTeamsNotifications();
     res.json({ success: true, message: "Test completed." });
@@ -495,7 +495,7 @@ const CONSTRUCT_USERS_PRESENCE_QUERY = `
   FROM users u
 `;
 
-app.get('/api/users', authenticateSession, async (req: AuthRequest, res: Response): Promise<void> => {
+app.get('/api/users', authenticateSession, async (_req: AuthRequest, res: Response): Promise<void> => {
   try {
     const executableQuery = `${CONSTRUCT_USERS_PRESENCE_QUERY} ORDER BY u.department ASC, u.full_name ASC`;
     const { rows: fetchedUsers } = await pool.query(executableQuery);
@@ -639,7 +639,7 @@ app.delete('/api/categories/:id', authenticateSession, requireSuperAdminPrivileg
   }
 });
 
-app.get('/api/departments', authenticateSession, async (req: Request, res: Response): Promise<void> => {
+app.get('/api/departments', authenticateSession, async (_req: Request, res: Response): Promise<void> => {
   try {
     const { rows: fetchedDepartments } = await pool.query('SELECT d.name, d.webhook_url, d.default_category_id, c.name as category_name FROM departments d LEFT JOIN categories c ON d.default_category_id = c.id_category ORDER BY d.name ASC');
     res.json(fetchedDepartments);
