@@ -140,11 +140,15 @@ export default function App() {
                 {t('app.date', 'Fecha')}: {interactionModalContext.date}
               </h3>
               <div className="flex items-center gap-3 mb-6">
-                <AppLogo className="w-8 h-8 text-primary" />
-                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                  PresenceLink
-                </span>
-                <span className="text-[10px] uppercase tracking-widest opacity-50 block font-bold">Smart Presence Platform</span>
+                <AppLogo className="w-10 h-10" />
+                <div className="flex flex-col">
+                  <span className="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent leading-none">
+                    PresenceLink
+                  </span>
+                  <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-base-content/40 leading-none mt-1">
+                    Smart Presence Platform
+                  </span>
+                </div>
               </div>
               <div className="grid grid-cols-3 gap-3">
                 {categories.map((iteratingCategory: any) => (

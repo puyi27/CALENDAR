@@ -33,8 +33,16 @@ export default function Navbar({ onChangeTheme, onChangeLang, onExportCSV }: Nav
     <>
       <header className="sticky top-0 z-[990] w-full transition-all border-b border-base-300 bg-base-100/80 backdrop-blur-md">
         <div className="navbar max-w-[1800px] w-full mx-auto px-4 md:px-8 min-h-[4rem] flex justify-between items-center py-2">
-          <Link to="/" className="flex items-center transition-opacity hover:opacity-80 pl-2 md:pl-4">
-            <AppLogo className="w-24 md:w-32 h-auto text-base-content" />
+          <Link to="/" className="flex items-center gap-3 transition-all hover:scale-[1.02] pl-2 md:pl-4 group">
+            <AppLogo className="w-10 h-10" />
+            <div className="flex flex-col">
+              <span className="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent leading-none">
+                PresenceLink
+              </span>
+              <span className="text-[8px] uppercase tracking-[0.2em] font-bold text-base-content/40 leading-none mt-1">
+                Smart Presence
+              </span>
+            </div>
           </Link>
           <div className="flex items-center gap-2 md:gap-3">
             <Link to="/" className={`hidden md:flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold transition-all ${location.pathname === '/' ? 'bg-primary text-primary-content shadow-md' : 'text-base-content/70 hover:bg-base-200 hover:text-base-content'}`}><CalendarMonthIcon fontSize="small" /> {t('navbar.calendar')}</Link>
