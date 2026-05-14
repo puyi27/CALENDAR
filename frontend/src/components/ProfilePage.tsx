@@ -350,13 +350,14 @@ export const ProfilePage = (props: any) => {
 
           {identifiesAuthorizedSession && (
             <div className="flex flex-wrap items-center gap-2 w-full lg:w-auto justify-center lg:justify-end pr-1">
-              <button onClick={executeBulkMonthFill} className="btn btn-outline border-base-200 text-base-content hover:bg-base-200 hover:border-base-300 rounded-full text-xs font-bold uppercase tracking-wider h-11 px-5 shadow-sm flex items-center gap-2 min-h-0 bg-base-100">
-                <AutoFixHighIcon fontSize="small" /> <span className="hidden sm:inline">{t('profile.fill_month', 'Autocompletar')}</span>
+              <button onClick={executeBulkMonthFill} className="btn btn-primary border-none text-white hover:opacity-90 rounded-full text-xs font-black uppercase tracking-widest h-11 px-6 shadow-lg shadow-primary/20 flex items-center gap-2 min-h-0 bg-gradient-to-r from-primary to-accent">
+                <AutoFixHighIcon fontSize="small" className="animate-pulse" /> 
+                <span>{t('profile.magic_fill', 'Magic Fill')}</span>
               </button>
-              <button onClick={() => setIsCustomFillModalOpen(true)} className="btn btn-outline border-base-200 text-base-content hover:bg-base-200 hover:border-base-300 rounded-full text-xs font-bold uppercase tracking-wider h-11 px-5 shadow-sm flex items-center gap-2 min-h-0 bg-base-100">
-                <SettingsSuggestIcon fontSize="small" /> <span className="hidden sm:inline">{t('profile.custom', 'Patrón')}</span>
+              <button onClick={() => setIsCustomFillModalOpen(true)} className="btn btn-outline border-base-300 text-base-content/80 hover:bg-base-200 hover:border-base-300 rounded-full text-xs font-bold uppercase tracking-wider h-11 px-5 shadow-sm flex items-center gap-2 min-h-0 bg-base-100 transition-all">
+                <SettingsSuggestIcon fontSize="small" /> <span className="hidden sm:inline">{t('profile.config_pattern', 'Config')}</span>
               </button>
-              <button onClick={() => setIsClearMonthModalOpen(true)} className="btn btn-outline border-error/30 text-error hover:bg-error hover:text-white rounded-full h-11 w-11 p-0 flex items-center justify-center shadow-sm min-h-0 bg-base-100">
+              <button onClick={() => setIsClearMonthModalOpen(true)} className="btn btn-outline border-error/20 text-error/60 hover:bg-error hover:text-white rounded-full h-11 w-11 p-0 flex items-center justify-center shadow-sm min-h-0 bg-base-100 transition-all">
                 <DeleteSweepIcon fontSize="small" />
               </button>
             </div>
@@ -424,10 +425,10 @@ export const ProfilePage = (props: any) => {
                       </div>
                     ) : mappedVisualCategory ? (
                       <div className={`flex flex-col items-center gap-0.5 md:gap-1 w-full px-1 ${identifiesAuthorizedSession && !representsWeekendConstraint ? 'group-hover:scale-105 transition-transform' : ''}`}>
-                        <div className={`text-2xl md:text-4xl flex items-center justify-center transition-colors group-hover:opacity-80 ${confirmsGhostEntityRender ? 'opacity-40 grayscale grayscale-[50%]' : runtimeAppliedColorSyntax}`}>
+                        <div className={`text-2xl md:text-4xl flex items-center justify-center transition-all duration-300 ${confirmsGhostEntityRender ? 'opacity-20 grayscale scale-90 border-2 border-dashed border-base-300 rounded-xl p-1' : runtimeAppliedColorSyntax}`}>
                           {getCategoryIcon(mappedVisualCategory)}
                         </div>
-                        <span className={`hidden md:block text-[8px] md:text-[9px] font-semibold uppercase tracking-wider text-center w-full truncate px-1 ${confirmsGhostEntityRender ? 'text-base-content/40' : 'text-base-content/60 group-hover:text-base-content'}`} title={getDynamicCategoryName(mappedVisualCategory, i18n.language, t)}>
+                        <span className={`hidden md:block text-[8px] md:text-[9px] font-bold uppercase tracking-wider text-center w-full truncate px-1 ${confirmsGhostEntityRender ? 'text-base-content/30 italic' : 'text-base-content/60 group-hover:text-base-content'}`} title={getDynamicCategoryName(mappedVisualCategory, i18n.language, t)}>
                           {getDynamicCategoryName(mappedVisualCategory, i18n.language, t)}
                         </span>
                       </div>

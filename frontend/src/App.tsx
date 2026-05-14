@@ -41,10 +41,10 @@ const OledDarkTheme = () => (
 export default function App() {
   const { t, i18n } = useTranslation();
   const { token, currentUser, users, categories, interactionModalContext, fetchGlobalData, updateCurrentUser, setInteractionModalContext, commitPresenceEntry, obliteratePresenceEntry } = useStore();
-  const appName = import.meta.env.VITE_APP_NAME || 'SmartPresence';
+  const appName = import.meta.env.VITE_APP_NAME || 'PresenceLink';
 
   useEffect(() => {
-    document.title = `${appName} - Presence Management`;
+    document.title = `${appName} - Smart Presence Platform`;
   }, [appName]);
 
   const [isExportInterfaceActive, setIsExportInterfaceActive] = useState(false);
@@ -142,8 +142,9 @@ export default function App() {
               <div className="flex items-center gap-3 mb-6">
                 <AppLogo className="w-8 h-8 text-primary" />
                 <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
-                  {appName}
+                  PresenceLink
                 </span>
+                <span className="text-[10px] uppercase tracking-widest opacity-50 block font-bold">Smart Presence Platform</span>
               </div>
               <div className="grid grid-cols-3 gap-3">
                 {categories.map((iteratingCategory: any) => (

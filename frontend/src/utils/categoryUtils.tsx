@@ -97,19 +97,20 @@ export const getCategoryColorClass = (category: any) => {
   const name = typeof category === 'string' ? '' : (category.name || '').toLowerCase()
 
   if (icon === 'Sick' || name.includes('enfermedad') || name.includes('malattia') || name.includes('sick') || name.includes('baja') || name.includes('malo')) {
-    return 'text-error'
+    return 'text-rose-400'
   }
-  if (icon === 'Home' || icon === 'HomeWork' || name.includes('smart') || name.includes('teletrabajo') || name.includes('casa')) {
-    return 'text-success'
+  if (icon === 'HomeWork' || icon === 'Home' || name.includes('smart') || name.includes('teletrabajo') || name.includes('remoto')) {
+    return 'text-emerald-400'
   }
-  if (icon === 'BeachAccess' || name.includes('vacaciones') || name.includes('ferie') || name.includes('libre')) {
-    return 'text-[#15aabf]'
+  if (icon === 'BeachAccess' || name.includes('ferie') || name.includes('vacaciones') || name.includes('beach')) {
+    return 'text-sky-400'
   }
-  if (icon === 'Work' || icon === 'Flight' || name.includes('terreno') || name.includes('on-site')) {
-    return 'text-[#fab005]'
+  if (icon === 'Flight' || icon === 'DirectionsCar' || icon === 'Train' || name.includes('viaje') || name.includes('travel') || name.includes('trasferta')) {
+    return 'text-amber-400'
   }
-  if (icon === 'Business' || icon === 'Domain' || name.includes('kilometro rosso') || name.includes('albino')) {
-    return 'text-[#4dabf7]'
+  if (icon === 'Work' || name.includes('oficina') || name.includes('ufficio') || name.includes('hq') || name.includes('sede')) {
+    return 'text-indigo-400'
   }
-  return 'text-primary/80'
+
+  return 'text-slate-400'
 }
