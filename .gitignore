@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Testing
+coverage/
+
+# Production / Builds
+dist/
+build/
+.vercel
+.next/
+
+# Documentation
+docs/
+docs-es/
+docs-it/
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS Files
+.DS_Store
+Thumbs.db
+
+# WhatsApp Session (Crucial to keep local)
+backend/.wwebjs_auth/
+backend/.wwebjs_cache/
