@@ -34,6 +34,10 @@ cron.schedule(config.CRON_TIME, () => {
 }, { timezone: "Europe/Rome" });
 
 // Start Server
-app.listen(config.PORT, () => {
-  console.log(`PresenceLink Backend running on port ${config.PORT}`);
-});
+if (process.env.NODE_ENV !== 'test') {
+  app.listen(config.PORT, () => {
+    console.log(`PresenceLink API running on port ${config.PORT}`);
+  });
+}
+
+export default app;
