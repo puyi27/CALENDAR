@@ -126,6 +126,29 @@ PresenceLink is **Brand-Agnostic**. It has been built for other companies to ado
 ### 🐳 Option A: Docker (Production - The Easy Way)
 Ideal for quick deployments on AWS, Azure, or DigitalOcean.
 
+### 🐳 Docker Implementation (Recommended)
+
+The platform is fully containerized for both development and production.
+
+#### Local Development
+```bash
+# Start all services (Backend, Frontend, PostgreSQL)
+docker-compose up --build
+```
+
+The system will automatically:
+1. Spin up a **PostgreSQL 16** instance.
+2. Initialize the backend and wait for the database to be healthy.
+3. Start the **Vite** development server for the frontend.
+4. Orchestrate the **WhatsApp Web** bridge with persisted authentication.
+
+#### Key Services
+- **Frontend**: `http://localhost:5173`
+- **Backend API**: `http://localhost:4000`
+- **Database**: `localhost:5432`
+
+---
+
 ```bash
 # 1. Clone the professional repository
 git clone https://github.com/puyi27/CALENDAR.git && cd CALENDAR

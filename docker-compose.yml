@@ -1,4 +1,25 @@
 services:
+  db:
+    image: postgres:16-alpine
+    container_name: calendar-db
+    restart: unless-stopped
+    ports:
+      - "5432:5432"
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-presence_link}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - calendar-net
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
   backend:
     build:
       context: ./backend
@@ -12,11 +33,15 @@ services:
     environment:
       - TZ=Europe/Rome
       - NODE_ENV=development
+      - DATABASE_URL=postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@db:5432/${DB_NAME:-presence_link}?sslmode=disable
     volumes:
       - ./backend:/app
       - /app/node_modules
       - wwebjs-auth:/app/.wwebjs_auth
       - wwebjs-cache:/app/.wwebjs_cache
+    depends_on:
+      db:
+        condition: service_healthy
     networks:
       - calendar-net
 
@@ -32,6 +57,7 @@ services:
       - ./frontend/.env
     environment:
       - NODE_ENV=development
+      - VITE_API_URL=http://localhost:4000/api
     volumes:
       - ./frontend:/app
       - /app/node_modules
@@ -41,6 +67,7 @@ services:
       - calendar-net
 
 volumes:
+  postgres_data:
   wwebjs-auth:
   wwebjs-cache:
 
