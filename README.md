@@ -1,13 +1,4 @@
-<p align="center">
-  <img src="https://raw.githubusercontent.com/puyi27/CALENDAR/main/docs/assets/presence-link-banner.png" alt="PresenceLink Banner" width="800">
-</p>
 
-<p align="center">
-  <img src="https://img.shields.io/github/actions/workflow/status/puyi27/CALENDAR/deploy.yml?branch=main&style=for-the-badge" alt="Build Status">
-  <img src="https://img.shields.io/github/license/puyi27/CALENDAR?style=for-the-badge&color=blue" alt="License">
-  <img src="https://img.shields.io/github/v/release/puyi27/CALENDAR?style=for-the-badge&color=orange" alt="Version">
-  <img src="https://img.shields.io/badge/Stack-React_19_|_Node_22-61dafb?style=for-the-badge" alt="Stack">
-</p>
 
 ---
 
