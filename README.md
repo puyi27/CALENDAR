@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="./docs/assets/gemini-svg.svg" alt="PresenceLink Banner" width="800">
+  <img src="./docs/assets/image.png" alt="PresenceLink Banner" width="800">
 </p>
 
 <p align="center">
