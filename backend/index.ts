@@ -118,7 +118,7 @@ app.post('/api/holidays', authenticateSession, requireSuperAdminPrivileges, asyn
   }
 });
 
-app.post('/api/holidays/bulk', authenticateSession, requireSuperAdminPrivileges, async (_req: Request, res: Response): Promise<void> => {
+app.post('/api/holidays/bulk', authenticateSession, requireSuperAdminPrivileges, async (req: Request, res: Response): Promise<void> => {
   try {
     const { holidays } = req.body;
     for (const h of holidays) {
