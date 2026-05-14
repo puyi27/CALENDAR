@@ -44,7 +44,7 @@ export default function App() {
   const appName = import.meta.env.VITE_APP_NAME || 'PresenceLink';
 
   useEffect(() => {
-    document.title = `${appName} - Smart Presence Platform`;
+    document.title = appName;
   }, [appName]);
 
   const [isExportInterfaceActive, setIsExportInterfaceActive] = useState(false);

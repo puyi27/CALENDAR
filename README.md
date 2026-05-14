@@ -1,91 +1,157 @@
-# 🔗 PresenceLink - Smart Presence Platform
+<p align="center">
+  <img src="https://raw.githubusercontent.com/puyi27/CALENDAR/main/docs/assets/presence-link-banner.png" alt="PresenceLink Banner" width="800">
+</p>
 
-Welcome to the comprehensive documentation for **PresenceLink**. This is a professional-grade, white-label solution for team presence management, featuring an elegant UI and robust automation.
-
----
-
-## 📚 Technical Documentation Hub
-
-For a deeper dive into the system's inner workings, please refer to our specialized guides:
-
-- [🏗️ **Architecture & Data Flow**](./guides/ARCHITECTURE.md): How the pieces fit together.
-- [🗄️ **Database Schema**](./guides/DATABASE.md): Tables, relationships, and data dictionary.
-- [🔐 **Security & RBAC**](./guides/SECURITY.md): Auth flow and permission levels.
-- [🚀 **Developer Guide**](./guides/DEVELOPMENT.md): Coding standards and setup.
+<p align="center">
+  <img src="https://img.shields.io/github/actions/workflow/status/puyi27/CALENDAR/deploy.yml?branch=main&style=for-the-badge" alt="Build Status">
+  <img src="https://img.shields.io/github/license/puyi27/CALENDAR?style=for-the-badge&color=blue" alt="License">
+  <img src="https://img.shields.io/github/v/release/puyi27/CALENDAR?style=for-the-badge&color=orange" alt="Version">
+  <img src="https://img.shields.io/badge/Stack-React_19_|_Node_22-61dafb?style=for-the-badge" alt="Stack">
+</p>
 
 ---
 
-## 🏗️ System Architecture & Flow
+# 🔗 PresenceLink
+### **The Ultimate White-Label Presence Engine for Modern Teams.**
 
-PresenceLink is a full-stack solution designed for high-availability team coordination.
+PresenceLink is an enterprise-ready, high-performance presence management platform. It empowers distributed teams to synchronize locations, automate notifications, and maintain visibility through a sophisticated, brand-agnostic architecture. Built for scale, designed for simplicity.
 
-```mermaid
-graph TD
-    User((User)) -->|React SPA| Frontend[Frontend - Vite/React]
-    Frontend -->|REST API + JWT| Backend[Backend - Express/Node]
-    Backend -->|SQL Queries| DB[(PostgreSQL - Neon)]
-    Backend -->|Webhooks| Teams[MS Teams Channel]
-    Backend -->|Puppeteer/WA| WA[WhatsApp Web.js]
-    
-    subgraph "Automation Engine"
-        Backend -->|Cron Job| Notifier[Notification Engine]
-        Notifier -->|Adaptive Cards| Teams
-        Notifier -->|Direct Messages| WA
-    end
+---
+
+## 🎯 At a Glance
+
+- **Zero-Touch Branding:** Fully customizable UI via environment variables. No code changes required.
+- **Smart Automation:** Integrated Magic Fill🪄 engine and multi-channel notifications (Teams/WhatsApp).
+- **Architecture First:** Decoupled Full-Stack design with React 19, Vite 7, and Node.js 22.
+
+---
+
+## 📑 Table of Contents
+1. [🚀 Features](#-features)
+2. [🏗️ Architecture](#️-architecture)
+3. [⏱️ Quickstart](#️-quickstart)
+4. [🛠️ White-Label Configuration](#️-white-label-configuration)
+5. [🖥️ Troubleshooting](#️-troubleshooting)
+6. [🤝 Contributing](#-contributing)
+7. [📜 License](#-license)
+
+---
+
+## 🚀 Features
+
+| Feature | Description | Visual Status |
+| :--- | :--- | :--- |
+| **Magic Fill🪄** | AI-driven bulk presence population based on recurring patterns. | ![Screenshot: Magic Fill Feature](/docs/assets/magic-fill.gif) |
+| **Smart Status** | Distinctive visual differentiation between confirmed and predicted locations. | ![Screenshot: Smart Status](/docs/assets/smart-status.png) |
+| **Multi-Channel Sync** | Automated updates to MS Teams and WhatsApp without manual input. | ![Screenshot: Notifications](/docs/assets/notifications.png) |
+| **iCal Engine** | Real-time synchronization with Outlook, Google, and Apple calendars. | ![Screenshot: iCal Sync](/docs/assets/ical-sync.png) |
+| **RBAC Security** | Granular permission levels: User, Admin, and SuperAdmin. | ![Screenshot: RBAC](/docs/assets/rbac.png) |
+
+---
+
+## 🏗️ Architecture
+
+PresenceLink follows a **Decoupled Monorepo** pattern, ensuring high cohesion and low coupling between the UI and the automation engine.
+
+> [!IMPORTANT]
+> The system utilizes **PostgreSQL (Neon/Local)** as the source of truth, with a specialized Cron Engine for asynchronous notification delivery.
+
+### Tech Stack
+- **Frontend:** React 19 + TypeScript + Vite 7 + TailwindCSS 4
+- **State Management:** Zustand (High-performance atomic state)
+- **Backend:** Node.js 22 + Express + tsx
+- **Infrastructure:** Docker Ready + Vercel Optimized
+
+---
+
+## ⏱️ Quickstart
+
+### Option A: 🐳 Docker Deployment (Recommended - 1 min)
+The fastest way to get PresenceLink up and running.
+
+```bash
+# 1. Clone the repository
+git clone https://github.com/puyi27/CALENDAR.git && cd CALENDAR
+
+# 2. Start the environment
+docker-compose up -d
 ```
+*The app will be available at `http://localhost:3000`.*
+
+### Option B: 🛠️ Manual Setup
+For developers who want full control over the environment.
+
+1. **Install Dependencies:**
+   ```bash
+   npm run install:all
+   ```
+
+2. **Configure Environment:**
+   Copy `.env.example` to `.env` in both `frontend` and `backend` directories.
+
+3. **Launch Services:**
+   ```bash
+   # Start Backend (API + Cron)
+   npm run dev --prefix backend
+
+   # Start Frontend (HMR)
+   npm run dev --prefix frontend
+   ```
 
 ---
 
-## 📖 User Guide: How to use the App
+## 🛠️ White-Label Configuration
 
-### 1. Authentication
-- **Login**: Access with your corporate email and password.
-- **Session**: The system uses JWT tokens. Your session remains active for 8 hours.
-- **Default Language**: The system defaults to **English**, but you can switch to Spanish or Italian at any time.
+PresenceLink is designed to be **rebranded in seconds**. Change your identity without ever touching a line of React code.
 
-### 2. Managing your Calendar
-- **Daily Check-in**: Click on any day in the calendar grid. A modal will appear allowing you to select your location (e.g., Office, Home, Vacation).
-- **Smart Status Visualization**:
-    - 🏢 **Solid Color**: Your confirmed location for that day.
-    - 🌫️ **Dashed Border & Reduced Opacity**: Your "Predicted" location based on your defaults. This indicates a "Smart Status" that doesn't require manual confirmation.
-- **Navigation**: Use the arrows at the top to switch between months.
+Modify the following variables in `/frontend/.env`:
 
-### 3. Your Profile & Preferences
-- **Appearance**: Toggle between **Light** and **Dark** modes (DaisyUI themes).
-- **Language**: Switch the entire interface between **English**, **Spanish**, and **Italian**.
-- **iCal Synchronization**: Copy your unique **Personal Calendar URL** to see your presences in Outlook, Google Calendar, or Apple Calendar.
+| Variable | Description | Example |
+| :--- | :--- | :--- |
+| `VITE_APP_NAME` | Global application title | `PresenceLink` |
+| `VITE_APP_LOGO_URL` | External URL for the brand logo | `https://cdn.com/logo.png` |
+| `VITE_APP_PRIMARY_COLOR` | Theme primary accent (Hex) | `#4dabf7` |
+| `VITE_APP_COMPANY_NAME` | Copyright and footer identity | `Acme Corp` |
 
-### 4. Magic Fill 🪄 (One-Click Productivity)
-The star feature of PresenceLink!
-- Go to your **Profile Page**.
-- Click the **"Magic Fill"** button.
-- The system will automatically populate your future dates based on your personal work pattern (e.g., Mon-Thu Office, Fri Remote).
+> [!TIP]
+> Use the **Dynamic Logo Injection** to support multi-tenant deployments with a single build artifact.
 
 ---
 
-## 🛡️ Administrator Guide (Privileged Options)
+## 🖥️ Troubleshooting
 
-### 1. User Management
-- **Create/Edit Users**: Assign roles (User, Admin, Superadmin) and departments.
-- **Weekend Access**: Enable "Can work weekends" for specific profiles.
+### 1. ❌ Database Connection Refused
+**Symptoms:** Backend logs show `ECONNREFUSED` or `Pool error`.
+**Solution:** Ensure your PostgreSQL instance is running and the `DATABASE_URL` in `.env` includes the correct credentials and port (usually 5432).
 
-### 2. Category Management
-- **Custom Icons & Pastel Colors**: Create presence types with a modern, sophisticated palette.
-- **Multilingual Support**: Define names in EN/ES/IT for every category.
+### 2. ❌ TS6133: Unused Variables
+**Symptoms:** Vercel deployment fails during type-check.
+**Solution:** PresenceLink follows strict linting. Ensure all unused request parameters are prefixed with an underscore (e.g., `_req`).
 
-### 3. White-Label Configuration
-You can customize the platform identity in seconds via the `.env` file:
-- `VITE_APP_NAME`: Set your product name.
-- `VITE_APP_LOGO_URL`: Inject your corporate logo.
-- `VITE_APP_COMPANY_NAME`: Branded copyright notices.
+### 3. ❌ WhatsApp Bot not scanning
+**Symptoms:** QR code doesn't appear in logs.
+**Solution:** Ensure the environment has `chromium` installed (already handled in Docker). If local, set `ENABLE_WHATSAPP_BOT=false` if not needed.
 
 ---
 
-## 🛠️ Maintenance & Documentation
+## 🤝 Contributing
 
-- **Generate Docs**: `npm run docs`
-- **Serve Docs**: `npm run docs:serve` (available at http://localhost:3001)
+We welcome high-quality contributions! Follow these steps:
+
+1. **Fork** the repository.
+2. **Create** a feature branch: `git checkout -b feature/AmazingFeature`.
+3. **Commit** your changes: `git commit -m 'Add AmazingFeature'`.
+4. **Push** to the branch: `git push origin feature/AmazingFeature`.
+5. **Open** a Pull Request.
 
 ---
 
-*PresenceLink — Smart presence, connected teams.*
+## 📜 License
+
+Distributed under the **MIT License**. See `LICENSE` for more information.
+
+---
+
+<p align="center">
+  <b>PresenceLink — Connecting Teams, One Presence at a Time.</b>
+</p>
