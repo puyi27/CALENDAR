@@ -32,8 +32,30 @@ This is the most critical automated process in the application.
 
 ---
 
-## 3. State Management Strategy (Zustand)
-The `useStore` is the "Single Source of Truth". 
-- **Persistence**: Authentication state is persisted in `localStorage`.
-- **Reactivity**: Components subscribe only to the slices of state they need, preventing global re-renders.
-- **Optimistic Updates**: (Planned) The UI reflects changes immediately before the server confirms.
+## 4. White Labeling & Branding
+The system is designed for multi-client distribution. You can customize the entire identity without modifying the source code.
+
+### Branding via Environment Variables
+- `VITE_APP_NAME`: Changes the name in the Navbar, browser tab, and login screen.
+- `VITE_APP_LOGO_URL`: If set, replaces the default icon with a company logo.
+- `VITE_APP_COMPANY_NAME`: Used in footers and automated messages.
+
+### Modular Integrations (Opt-in)
+Integrations are disabled by default to ensure privacy and stability. Enable them in `backend/.env`:
+- `ENABLE_TEAMS_WEBHOOKS=true`: Activates the MS Teams notification engine.
+- `ENABLE_WHATSAPP_BOT=true`: Boots the Puppeteer-based WhatsApp bridge.
+
+---
+
+## 5. Deployment Models
+
+### Self-Hosted (On-Premise)
+The recommended model for strict privacy. Each client deploys their own Docker stack.
+- **Pros**: 100% data isolation, no maintenance overhead for the provider.
+- **Cons**: Requires the client to manage a database.
+
+### Multi-tenant SaaS (Future Roadmap)
+To support multiple companies in a single instance:
+- **Database**: Each table needs a `company_id`.
+- **Auth**: JWT payload must include the `company_id`.
+- **Filtering**: All repository queries must include `WHERE company_id = ...`.

@@ -9,7 +9,7 @@
         "guides/DEVELOPMENT.md"
     ],
     "out": "docs",
-    "name": "FAE Calendar — Technical Portal",
+    "name": "SmartPresence — Technical Portal",
     "readme": "README.md",
     "tsconfig": "tsconfig.docs.json",
     "skipErrorChecking": true,

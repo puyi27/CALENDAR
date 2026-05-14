@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import LockIcon from '@mui/icons-material/Lock';
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import PasswordIcon from '@mui/icons-material/Password';
-import { FaeLogo } from './FaeLogo';
+import { AppLogo } from './AppLogo';
 import { useStore } from '../store/useStore';
 
 import { API_URL } from '../config';
@@ -48,7 +48,7 @@ export const LoginPage = () => {
 
       <div className="w-full max-w-md bg-base-100 rounded-3xl shadow-2xl border border-base-300 p-8 md:p-10 relative z-10 animate-fade-in-up">
         <div className="flex justify-center mb-8">
-          <FaeLogo className="w-40 md:w-48 h-auto text-base-content drop-shadow-sm" />
+          <AppLogo className="w-40 md:w-48 h-auto text-base-content drop-shadow-sm" />
         </div>
 
         <div className="text-center mb-8">
@@ -72,7 +72,7 @@ export const LoginPage = () => {
               </span>
               <input 
                 type="email" 
-                placeholder="nombre.apellido@fae.technology" 
+                placeholder="your.name@company.com" 
                 className="input input-bordered w-full bg-base-100 rounded-xl pl-12 border-base-300 focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all text-sm h-12"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -105,7 +105,7 @@ export const LoginPage = () => {
 
         <div className="mt-10 text-center border-t border-base-300 pt-8">
           <p className="text-xs text-base-content/60 leading-relaxed font-semibold uppercase tracking-widest">
-            © FAE Technology S.p.A. <br/>
+            © {new Date().getFullYear()} {import.meta.env.VITE_APP_COMPANY_NAME || 'SmartPresence'} <br/>
             <span className="opacity-70 font-medium normal-case tracking-normal">Todos los derechos reservados</span>
           </p>
         </div>

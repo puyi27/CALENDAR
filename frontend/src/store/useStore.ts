@@ -106,16 +106,16 @@ interface AppState {
 }
 
 export const useStore = create<AppState>((set, get) => ({
-  token: localStorage.getItem('fae_token'),
-  currentUser: JSON.parse(localStorage.getItem('fae_user') || 'null'),
+  token: localStorage.getItem('app_token'),
+  currentUser: JSON.parse(localStorage.getItem('app_user') || 'null'),
   users: [],
   categories: [],
   interactionModalContext: null,
 
   setAuth: (token, user) => {
     if (token && user) {
-      localStorage.setItem('fae_token', token);
-      localStorage.setItem('fae_user', JSON.stringify(user));
+      localStorage.setItem('app_token', token);
+      localStorage.setItem('app_user', JSON.stringify(user));
     } else {
       localStorage.clear();
     }
@@ -131,7 +131,7 @@ export const useStore = create<AppState>((set, get) => ({
   updateCurrentUser: (updates) => set((state) => {
     if (!state.currentUser) return state;
     const updated = { ...state.currentUser, ...updates };
-    localStorage.setItem('fae_user', JSON.stringify(updated));
+    localStorage.setItem('app_user', JSON.stringify(updated));
     return { currentUser: updated };
   }),
 

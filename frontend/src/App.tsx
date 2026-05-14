@@ -10,6 +10,7 @@ import { Toaster } from 'react-hot-toast';
 import { useStore } from './store/useStore';
 import AdminPanel from './components/AdminPanel';
 import Navbar from './components/Navbar';
+import { AppLogo } from './components/AppLogo';
 import { Calendar } from './components/Calendar';
 import { ProfilePage } from './components/ProfilePage';
 import { LoginPage } from './components/LoginPage';
@@ -39,7 +40,11 @@ const OledDarkTheme = () => (
 
 export default function App() {
   const { t, i18n } = useTranslation();
-  const { token, currentUser, users, categories, interactionModalContext, fetchGlobalData, updateCurrentUser, setInteractionModalContext, commitPresenceEntry, obliteratePresenceEntry } = useStore();
+  const appName = import.meta.env.VITE_APP_NAME || 'SmartPresence';
+
+  useEffect(() => {
+    document.title = `${appName} - Presence Management`;
+  }, [appName]);
 
   const [isExportInterfaceActive, setIsExportInterfaceActive] = useState(false);
   const [isScrollToTopVisible, setIsScrollToTopVisible] = useState(false);
@@ -129,7 +134,16 @@ export default function App() {
           <div className="fixed inset-0 z-[200] flex items-center justify-center p-4">
             <div className="absolute inset-0 bg-base-300/60 backdrop-blur-sm" onClick={() => setInteractionModalContext(null)}></div>
             <div className="bg-base-100 p-6 rounded-2xl border border-base-300 shadow-xl w-full max-w-lg relative z-10 animate-fade-in">
-              <h3 className="font-bold text-lg mb-5 flex items-center gap-2 text-base-content"><CalendarMonthIcon /> {t('app.date', 'Fecha')}: {interactionModalContext.date}</h3>
+              <h3 className="font-bold text-lg mb-5 flex items-center gap-2 text-base-content">
+                <CalendarMonthIcon /> 
+                {t('app.date', 'Fecha')}: {interactionModalContext.date}
+              </h3>
+              <div className="flex items-center gap-3 mb-6">
+                <AppLogo className="w-8 h-8 text-primary" />
+                <span className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent">
+                  {appName}
+                </span>
+              </div>
               <div className="grid grid-cols-3 gap-3">
                 {categories.map((iteratingCategory: any) => (
                   <button 

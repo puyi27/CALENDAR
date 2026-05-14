@@ -162,7 +162,7 @@ app.get('/api/calendar/:token.ics', async (req: Request, res: Response): Promise
       [user.id_user]
     );
 
-    const calendar = ical({ name: `FAE Presences - ${user.alias || user.full_name}` });
+    const calendar = ical({ name: `${process.env.APP_NAME || 'Calendar'} Presences - ${user.alias || user.full_name}` });
 
     presencesQuery.rows.forEach(p => {
       calendar.createEvent({
@@ -403,7 +403,12 @@ async function executeDailyTeamsNotifications() {
         ]
       });
 
-      await transmitTeamsNotification(cardBodyElements, destinationWebhook);
+      const enableTeams = process.env.ENABLE_TEAMS_WEBHOOKS === 'true';
+      if (enableTeams) {
+        await transmitTeamsNotification(cardBodyElements, destinationWebhook);
+      } else {
+        console.log(`Teams notification skipped for ${currentDepartmentName} (Feature disabled)`);
+      }
     }
   } catch (error) {
     console.error("Cron Error:", error);
@@ -420,8 +425,14 @@ app.all('/api/test-webhook', async (req: Request, res: Response) => {
 });
 
 const CRON_SCHEDULE = process.env.CRON_TIME || "23 14 * * 1-5";
+
 cron.schedule(CRON_SCHEDULE, () => {
-  executeDailyTeamsNotifications();
+  const enableNotifications = process.env.ENABLE_NOTIFICATIONS === 'true';
+  if (enableNotifications) {
+    executeDailyTeamsNotifications();
+  } else {
+    console.log("Daily notification cron skipped (ENABLE_NOTIFICATIONS is false)");
+  }
 }, { timezone: "Europe/Rome" });
 
 app.post('/api/login', async (req: Request, res: Response): Promise<void> => {
