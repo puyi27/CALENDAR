@@ -1,6 +1,4 @@
-<p align="center">
-  <img src="./docs/assets/image.png" alt="PresenceLink Banner" width="800">
-</p>
+
 
 <p align="center">
   <img src="https://img.shields.io/badge/build-passing-brightgreen?style=for-the-badge" alt="Build Status">
