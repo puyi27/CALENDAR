@@ -158,7 +158,14 @@
     "date": "Fecha",
     "holiday_ph": "Festivo Local...",
     "add_holiday": "Añadir Festivo",
-    "registered_holidays": "Festivos Registrados"
+    "registered_holidays": "Festivos Registrados",
+    "test_webhook": "Probar Webhook",
+    "testing_webhook": "Probando webhook...",
+    "webhook_success": "¡Tarjeta de prueba enviada con éxito!",
+    "webhook_error": "Error al enviar la tarjeta de prueba",
+    "err_no_webhook": "No hay URL de Webhook configurada",
+    "test": "Probar"
+
   },
   "daycell": {
     "status": "Estado",

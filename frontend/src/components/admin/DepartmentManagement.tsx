@@ -15,6 +15,8 @@ import CloseIcon from '@mui/icons-material/Close';
 import SaveIcon from '@mui/icons-material/Save';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 import LinkIcon from '@mui/icons-material/Link';
+import SendIcon from '@mui/icons-material/Send';
+
 
 export const DepartmentManagement = ({ registeredDepartments }: { registeredDepartments: any[] }) => {
   const { t, i18n } = useTranslation();
@@ -106,6 +108,33 @@ export const DepartmentManagement = ({ registeredDepartments }: { registeredDepa
     }
   };
 
+  const dispatchWebhookTest = async (webhookUrl: string) => {
+    if (!token || !webhookUrl) {
+      toast.error(t('admin.err_no_webhook', 'No Webhook URL configured'));
+      return;
+    }
+    
+    const loadingToast = toast.loading(t('admin.testing_webhook', 'Testing webhook...'));
+    try {
+      const networkResponse = await fetch(`${API_URL}/departments/test`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ webhook_url: webhookUrl })
+      });
+
+      toast.dismiss(loadingToast);
+      if (networkResponse.ok) {
+        toast.success(t('admin.webhook_success', 'Test card sent successfully!'));
+      } else {
+        toast.error(t('admin.webhook_error', 'Failed to send test card'));
+      }
+    } catch (networkException) {
+      toast.dismiss(loadingToast);
+      toast.error(t('admin.err_network', 'Network error'));
+    }
+  };
+
+
   return (
     <div className="space-y-6 animate-fade-in">
       {/* Create Department Form */}
@@ -147,9 +176,11 @@ export const DepartmentManagement = ({ registeredDepartments }: { registeredDepa
         {registeredDepartments.map(renderedDepartment => (
           <div key={renderedDepartment.name} className="bg-base-100 flex flex-col p-6 border border-base-300 rounded-[1.5rem] hover:border-accent hover:shadow-md transition-all group relative">
             <div className="absolute top-4 right-4 flex gap-1 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity bg-base-100/80 backdrop-blur-sm rounded-lg p-1 z-10">
+              <button onClick={() => dispatchWebhookTest(renderedDepartment.webhook_url)} className="btn btn-ghost btn-xs btn-circle text-accent hover:bg-accent/10" title={t('admin.test_webhook', 'Test Webhook')} disabled={!renderedDepartment.webhook_url}><SendIcon fontSize="small" /></button>
               <button onClick={() => setTargetedDepartmentForEdit(renderedDepartment)} className="btn btn-ghost btn-xs btn-circle text-info hover:bg-info/10"><EditIcon fontSize="small" /></button>
               <button onClick={() => setDeletionConfirmationTarget(renderedDepartment.name)} className="btn btn-ghost btn-xs btn-circle text-error hover:bg-error/10"><DeleteIcon fontSize="small" /></button>
             </div>
+
             <div className="flex items-center gap-3 mb-4"><div className="w-12 h-12 bg-accent/10 text-accent rounded-xl flex items-center justify-center"><BusinessIcon /></div><span className="text-xl font-black truncate text-base-content uppercase tracking-widest pr-10">{renderedDepartment.name}</span></div>
             <div className="flex flex-col gap-1 mt-2 p-3 bg-base-200/50 rounded-xl border border-base-300/50"><span className="text-[10px] font-bold uppercase text-base-content/50 flex items-center gap-1"><LocationOnIcon fontSize="small" /> {t('admin.category_name', 'Default Location')}</span><span className="text-xs font-bold text-base-content/80">{renderedDepartment.category_name || <span className="italic text-base-content/40">---</span>}</span></div>
             <div className="flex flex-col gap-1 mt-2 p-3 bg-base-200/50 rounded-xl border border-base-300/50"><span className="text-[10px] font-bold uppercase text-base-content/50 flex items-center gap-1"><LinkIcon fontSize="small" /> {t('admin.webhook_url', 'Webhook URL')}</span><span className="text-xs font-mono truncate text-base-content/80" title={renderedDepartment.webhook_url || '---'}>{renderedDepartment.webhook_url || <span className="italic text-base-content/40">---</span>}</span></div>
@@ -187,9 +218,11 @@ export const DepartmentManagement = ({ registeredDepartments }: { registeredDepa
                 <label className="px-1"><span className="font-bold text-[10px] uppercase tracking-wider text-base-content/60">{t('admin.webhook_url', 'Webhook URL')}</span></label>
                 <input type="url" className="input input-bordered bg-base-100 rounded-xl focus:border-accent font-medium text-sm h-12 w-full" value={targetedDepartmentForEdit.webhook_url || ''} onChange={e => setTargetedDepartmentForEdit({ ...targetedDepartmentForEdit, webhook_url: e.target.value })} />
               </div>
-              <div className="flex justify-end mt-4 pt-4 border-t border-base-200">
-                <button type="submit" className="btn btn-accent w-full sm:w-auto px-12 h-12 rounded-xl font-black uppercase tracking-widest shadow-md"><SaveIcon fontSize="small" className="mr-2" /> {t('admin.save', 'Save')}</button>
+              <div className="flex flex-col sm:flex-row gap-3 mt-4 pt-4 border-t border-base-200">
+                <button type="button" onClick={() => dispatchWebhookTest(targetedDepartmentForEdit.webhook_url)} className="btn btn-outline btn-accent flex-1 h-12 rounded-xl font-black uppercase tracking-widest" disabled={!targetedDepartmentForEdit.webhook_url}><SendIcon fontSize="small" className="mr-2" /> {t('admin.test', 'Test')}</button>
+                <button type="submit" className="btn btn-accent flex-1 h-12 rounded-xl font-black uppercase tracking-widest shadow-md"><SaveIcon fontSize="small" className="mr-2" /> {t('admin.save', 'Save')}</button>
               </div>
+
             </form>
           </div>
         </div>

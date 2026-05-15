@@ -158,7 +158,14 @@
     "date": "Date",
     "holiday_ph": "Local Holiday...",
     "add_holiday": "Add Holiday",
-    "registered_holidays": "Registered Holidays"
+    "registered_holidays": "Registered Holidays",
+    "test_webhook": "Test Webhook",
+    "testing_webhook": "Testing webhook...",
+    "webhook_success": "Test card sent successfully!",
+    "webhook_error": "Failed to send test card",
+    "err_no_webhook": "No Webhook URL configured",
+    "test": "Test"
+
   },
   "daycell": {
     "status": "Status",

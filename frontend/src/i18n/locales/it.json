@@ -158,7 +158,14 @@
     "date": "Data",
     "holiday_ph": "Festività Locale...",
     "add_holiday": "Aggiungi Festività",
-    "registered_holidays": "Festività Registrate"
+    "registered_holidays": "Festività Registrate",
+    "test_webhook": "Test Webhook",
+    "testing_webhook": "Test webhook in corso...",
+    "webhook_success": "Scheda di test inviata con successo!",
+    "webhook_error": "Invio della scheda di test fallito",
+    "err_no_webhook": "Nessun URL Webhook configurato",
+    "test": "Test"
+
   },
   "daycell": {
     "status": "Stato",

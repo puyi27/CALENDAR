@@ -1,5 +1,7 @@
 import { Request, Response } from 'express';
 import { pool } from '../db/pool.js';
+import { transmitTeamsNotification } from '../services/notificationService.js';
+
 
 export const getDepartments = async (_req: Request, res: Response): Promise<void> => {
   try {
@@ -53,3 +55,44 @@ export const deleteDepartment = async (req: Request, res: Response): Promise<voi
     res.status(500).json({ error: "Internal server error" });
   }
 };
+
+export const testWebhook = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const { webhook_url } = req.body;
+    if (!webhook_url) {
+      res.status(400).json({ error: "Webhook URL is required" });
+      return;
+    }
+
+    const testCardBody = [
+      {
+        type: "TextBlock",
+        text: "⚡ PresenceLink: Connection Test",
+        weight: "Bolder",
+        size: "Large",
+        color: "Accent"
+      },
+      {
+        type: "TextBlock",
+        text: "This is a test notification to verify that the webhook integration is working correctly.",
+        wrap: true,
+        spacing: "Small"
+      },
+      {
+        type: "FactSet",
+        facts: [
+          { title: "Status", value: "Operational ✅" },
+          { title: "Timestamp", value: new Date().toLocaleString() }
+        ],
+        spacing: "Medium"
+      }
+    ];
+
+    await transmitTeamsNotification(testCardBody, webhook_url);
+
+    res.json({ success: true, message: "Test card sent successfully" });
+  } catch (error: any) {
+    res.status(500).json({ error: "Failed to send test card", details: error.message });
+  }
+};
+

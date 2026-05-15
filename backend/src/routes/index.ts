@@ -36,6 +36,8 @@ router.get('/departments', authenticateSession, departmentController.getDepartme
 router.post('/departments', authenticateSession, requireSuperAdminPrivileges, departmentController.createDepartment);
 router.put('/departments/:name', authenticateSession, requireSuperAdminPrivileges, departmentController.updateDepartment);
 router.delete('/departments/:name', authenticateSession, requireSuperAdminPrivileges, departmentController.deleteDepartment);
+router.post('/departments/test', authenticateSession, requireSuperAdminPrivileges, departmentController.testWebhook);
+
 
 // Presences
 router.post('/presences', authenticateSession, presenceController.getPresences);
