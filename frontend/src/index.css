@@ -126,24 +126,3 @@ html[data-theme="dark"] .premium-glow {
   0% { opacity: 0; transform: scale(0.9) translateY(10px); }
   100% { opacity: 1; transform: none; }
 }
-
-/* Glassmorphism utilities */
-.glass-panel {
-  background: rgba(255, 255, 255, 0.03);
-  backdrop-filter: blur(12px) saturate(180%);
-  -webkit-backdrop-filter: blur(12px) saturate(180%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.glass-panel-light {
-  background: rgba(255, 255, 255, 0.7);
-  backdrop-filter: blur(10px) saturate(150%);
-  -webkit-backdrop-filter: blur(10px) saturate(150%);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-/* Smooth input focus effect */
-.input-focus-glow:focus {
-  box-shadow: 0 0 0 4px rgba(var(--p), 0.15);
-  border-color: rgba(var(--p), 0.5);
-}

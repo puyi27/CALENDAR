@@ -40,110 +40,74 @@ export const LoginPage = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#0a0a0c] px-4 py-8 relative overflow-hidden font-sans">
-      {/* Dynamic Background */}
-      <div className="absolute inset-0 z-0">
-        <div className="absolute top-[-20%] left-[-10%] w-[60%] h-[60%] rounded-full bg-primary/20 blur-[120px] animate-pulse"></div>
-        <div className="absolute bottom-[-20%] right-[-10%] w-[60%] h-[60%] rounded-full bg-accent/20 blur-[120px] animate-pulse" style={{ animationDelay: '2s' }}></div>
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-full opacity-[0.03] pointer-events-none" 
-             style={{ backgroundImage: 'radial-gradient(circle at 2px 2px, white 1px, transparent 0)', backgroundSize: '40px 40px' }}></div>
+    <div className="min-h-screen flex items-center justify-center bg-base-200 px-4 py-8 relative overflow-hidden">
+      <div className="absolute inset-0 z-0 opacity-30 pointer-events-none">
+        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] rounded-full bg-primary/20 blur-[100px]"></div>
+        <div className="absolute bottom-[-10%] right-[-10%] w-[40%] h-[40%] rounded-full bg-secondary/20 blur-[100px]"></div>
       </div>
 
-      <div className="w-full max-w-[440px] relative z-10">
-        {/* Logo Section */}
-        <div className="flex flex-col items-center mb-10 animate-fade-in-up">
-          <AppLogo className="mb-2" />
+      <div className="w-full max-w-md bg-base-100 rounded-3xl shadow-2xl border border-base-300 p-8 md:p-10 relative z-10 animate-fade-in-up">
+        <div className="flex justify-center mb-8">
+          <AppLogo className="w-40 md:w-48 h-auto text-base-content drop-shadow-sm" />
         </div>
 
-        {/* Login Card */}
-        <div className="bg-white/5 backdrop-blur-2xl rounded-[2.5rem] shadow-[0_32px_64px_-16px_rgba(0,0,0,0.5)] border border-white/10 p-8 md:p-12 relative overflow-hidden animate-fade-in-up" style={{ animationDelay: '0.1s' }}>
-          <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary/50 to-transparent"></div>
-          
-          <div className="text-center mb-10">
-            <h1 className="text-3xl font-black tracking-tight text-white mb-3">
-              {t('login.welcome')}
-            </h1>
-            <p className="text-xs font-bold uppercase tracking-[0.25em] text-white/40">
-              {t('login.subtitle', 'Team Reserved Area')}
-            </p>
-          </div>
-
-          {error && (
-            <div className="mb-8 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-center gap-3 animate-fade-in">
-              <div className="w-8 h-8 rounded-full bg-red-500/20 flex items-center justify-center flex-shrink-0">
-                <LockIcon className="text-red-400" sx={{ fontSize: 18 }} />
-              </div>
-              <span className="text-sm font-medium text-red-300">{error}</span>
-            </div>
-          )}
-
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="space-y-2">
-              <label className="block px-1 text-[10px] font-black uppercase tracking-[0.2em] text-white/50">{t('admin.email', 'Email Address')}</label>
-              <div className="relative group">
-                <div className="absolute inset-0 bg-primary/5 rounded-2xl transition-all group-focus-within:bg-primary/10"></div>
-                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-primary transition-colors flex items-center z-10 pointer-events-none">
-                  <AlternateEmailIcon sx={{ fontSize: 20 }} />
-                </span>
-                <input 
-                  type="email" 
-                  placeholder="name@company.com" 
-                  className="w-full bg-transparent border-2 border-white/5 rounded-2xl pl-14 pr-5 py-4 focus:border-primary/50 focus:outline-none transition-all text-white placeholder:text-white/20 text-sm font-medium"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <label className="block px-1 text-[10px] font-black uppercase tracking-[0.2em] text-white/50">{t('login.password')}</label>
-              <div className="relative group">
-                <div className="absolute inset-0 bg-primary/5 rounded-2xl transition-all group-focus-within:bg-primary/10"></div>
-                <span className="absolute left-5 top-1/2 -translate-y-1/2 text-white/30 group-focus-within:text-primary transition-colors flex items-center z-10 pointer-events-none">
-                  <PasswordIcon sx={{ fontSize: 20 }} />
-                </span>
-                <input 
-                  type="password" 
-                  placeholder="••••••••" 
-                  className="w-full bg-transparent border-2 border-white/5 rounded-2xl pl-14 pr-5 py-4 focus:border-primary/50 focus:outline-none transition-all text-white placeholder:text-white/20 text-sm font-medium"
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  required
-                />
-              </div>
-            </div>
-
-            <button 
-              type="submit" 
-              disabled={isLoading} 
-              className="group relative w-full h-14 rounded-2xl bg-primary text-white font-bold text-sm uppercase tracking-widest overflow-hidden shadow-[0_8px_16px_-4px_rgba(var(--p),0.3)] hover:shadow-[0_12px_24px_-8px_rgba(var(--p),0.5)] transition-all active:scale-[0.98] disabled:opacity-50 mt-4"
-            >
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700"></div>
-              {isLoading ? (
-                <div className="flex items-center justify-center gap-2">
-                  <div className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
-                  <span>{t('common.loading', 'Authenticating...')}</span>
-                </div>
-              ) : (
-                <span className="relative z-10">{t('login.btn_login')}</span>
-              )}
-            </button>
-          </form>
-
-          <div className="mt-12 text-center">
-            <p className="text-[10px] text-white/30 leading-loose font-bold uppercase tracking-[0.3em]">
-              © {new Date().getFullYear()} {import.meta.env.VITE_APP_COMPANY_NAME || 'SmartPresence'} <br/>
-              <span className="opacity-50 font-medium normal-case tracking-widest">{t('login.all_rights', 'Premium Enterprise Access')}</span>
-            </p>
-          </div>
+        <div className="text-center mb-8">
+          <h1 className="text-2xl font-black tracking-tight text-base-content mb-2">{t('login.welcome')}</h1>
+          <p className="text-sm font-semibold uppercase tracking-widest text-base-content/50">{t('login.subtitle')}</p>
         </div>
 
-        {/* Decorative Elements */}
-        <div className="mt-8 flex justify-center gap-4 animate-fade-in" style={{ animationDelay: '0.4s' }}>
-          <div className="w-1.5 h-1.5 rounded-full bg-primary/30"></div>
-          <div className="w-1.5 h-1.5 rounded-full bg-accent/30"></div>
-          <div className="w-1.5 h-1.5 rounded-full bg-primary/30"></div>
+        {error && (
+          <div className="mb-6 p-4 bg-error/10 border border-error/20 rounded-xl flex items-start gap-3 animate-fade-in">
+            <LockIcon className="text-error mt-0.5" fontSize="small" />
+            <span className="text-sm font-bold text-error">{error}</span>
+          </div>
+        )}
+
+        <form onSubmit={handleSubmit} className="space-y-5">
+          <div className="space-y-1.5">
+            <label className="px-1 text-[10px] font-black uppercase tracking-widest text-base-content/60">{t('admin.email', 'Correo electrónico')}</label>
+            <div className="relative group">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/40 group-focus-within:text-primary transition-colors flex items-center z-10 pointer-events-none">
+                <AlternateEmailIcon fontSize="small" />
+              </span>
+              <input
+                type="email"
+                placeholder="your.name@company.com"
+                className="input input-bordered w-full bg-base-100 rounded-xl pl-12 border-base-300 focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all text-sm h-12"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <div className="space-y-1.5">
+            <label className="px-1 text-[10px] font-black uppercase tracking-widest text-base-content/60">{t('login.password')}</label>
+            <div className="relative group">
+              <span className="absolute left-4 top-1/2 -translate-y-1/2 text-base-content/40 group-focus-within:text-primary transition-colors flex items-center z-10 pointer-events-none">
+                <PasswordIcon fontSize="small" />
+              </span>
+              <input
+                type="password"
+                placeholder={t('login.password')}
+                className="input input-bordered w-full bg-base-100 rounded-xl pl-12 border-base-300 focus:border-primary focus:ring-2 focus:ring-primary/10 transition-all text-sm h-12"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+              />
+            </div>
+          </div>
+
+          <button type="submit" disabled={isLoading} className="btn btn-primary w-full rounded-xl font-semibold shadow-md hover:shadow-lg transition-all disabled:opacity-70 text-sm h-12 uppercase tracking-wider mt-2">
+            {isLoading ? <span className="loading loading-spinner loading-sm"></span> : t('login.btn_login')}
+          </button>
+        </form>
+
+        <div className="mt-10 text-center border-t border-base-300 pt-8">
+          <p className="text-xs text-base-content/60 leading-relaxed font-semibold uppercase tracking-widest">
+            © {new Date().getFullYear()} {import.meta.env.VITE_APP_COMPANY_NAME || 'SmartPresence'} <br />
+            <span className="opacity-70 font-medium normal-case tracking-normal">Todos los derechos reservados</span>
+          </p>
         </div>
       </div>
     </div>
