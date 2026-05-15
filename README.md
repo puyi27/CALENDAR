@@ -140,7 +140,7 @@ The system will automatically:
 1. Spin up a **PostgreSQL 16** instance.
 2. Initialize the backend and wait for the database to be healthy.
 3. Start the **Vite** development server for the frontend.
-4. Orchestrate the **WhatsApp Web** bridge with persisted authentication.
+
 
 #### Key Services
 - **Frontend**: `http://localhost:5173`
@@ -198,7 +198,7 @@ For developers needing to extend functionality.
 | `JWT_SECRET` | String | Yes | Session encryption seed | `super-secret-key-12345` |
 | `PORT` | Int | No | Server listening port | `4000` |
 | `CRON_TIME` | Cron | No | Notification delivery schedule | `0 9 * * 1-5` (9:00 AM) |
-| `ENABLE_WHATSAPP_BOT` | Bool | No | Enables the WhatsApp engine | `true` |
+
 
 ---
 
