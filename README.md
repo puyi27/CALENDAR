@@ -28,11 +28,12 @@ PresenceLink is not just a calendar; it is a **Location Intelligence Engine**. I
     *   [User Experience](#user-experience)
     *   [Administrative Capabilities](#administrative-capabilities)
     *   [Intelligent Notification Engine](#intelligent-notification-engine)
-3.  [🎨 White-Labeling Guide](#-white-labeling-guide)
-4.  [⚙️ Installation & Deployment](#️-installation--deployment)
-5.  [📊 Environment Variables Matrix](#-environment-variables-matrix)
-6.  [🖥️ Troubleshooting & FAQ](#️-troubleshooting--faq)
-7.  [📜 License & Contribution](#-license--contribution)
+3.  [🤖 Microsoft Teams Integration (Deep Dive)](#-microsoft-teams-integration-deep-dive)
+4.  [🎨 White-Labeling Guide](#-white-labeling-guide)
+5.  [⚙️ Installation & Deployment](#️-installation--deployment)
+6.  [📊 Environment Variables Matrix](#-environment-variables-matrix)
+7.  [🖥️ Troubleshooting & FAQ](#️-troubleshooting--faq)
+8.  [📜 License & Contribution](#-license--contribution)
 
 ---
 
@@ -68,7 +69,6 @@ graph TD
     API <--> DB
     Cron --> API
     Cron --> Teams
-    Cron --> WA
     API --> ICal
     ICal --> Outlook
 ```
@@ -98,7 +98,33 @@ graph TD
 *   **Working Weekend Management:** Granular permissions to allow certain roles (e.g., 24/7 Support) to register presence on traditionally non-working days.
 
 ### Intelligent Notification Engine
-*   **Microsoft Teams Webhooks:** Automatic generation of highly visual **Adaptive Cards** sent to specific department channels every morning. Shows who is in the office, who is working remotely, and who is on leave.
+*   **Microsoft Teams Webhooks:** Automatic generation of highly visual **Adaptive Cards** sent to specific department channels every morning. Shows who is in the office, who is working remotely, and who is on leave. [Read the full technical breakdown below](#-microsoft-teams-integration-deep-dive).
+
+---
+
+## 🤖 Microsoft Teams Integration (Deep Dive)
+
+The Microsoft Teams integration is designed to reduce "status noise" in corporate channels by providing a single, consolidated daily update.
+
+### ⚙️ How it Works
+1.  **Trigger Engine:** A `node-cron` worker monitors the `CRON_TIME` (defined in your environment variables). At the scheduled time, it scans the database for the **next business day's** presence records.
+2.  **Data Consolidation:** The system iterates through every **Department** that has a `webhook_url` configured in the Admin Panel.
+3.  **Adaptive Card Generation:** For each department, the backend constructs a specialized **Adaptive Card (v1.2)**. This is not a simple text message, but a rich UI component that renders natively inside Teams.
+4.  **Dispatch:** The card is sent via a `POST` request to the specific Incoming Webhook URL of the Teams channel.
+
+### 📊 Notification Structure
+The notification is intelligently segmented to provide immediate context:
+*   **🏢 IN OFFICE:** Lists employees whose registered location matches the department's "Default Category" (e.g., HQ).
+*   **🌟 GUESTS IN HQ:** A unique feature that shows employees from *other* departments who have declared they will be visiting this department's office tomorrow.
+*   **🏠/⛱️/🤒 REMOTE & OTHERS:** Automatically groups users by status (Home, Vacation, Sick Leave, etc.) using dynamic emoji mapping.
+*   **⚠️ UNCONFIRMED:** Lists users who haven't set their status yet, serving as a subtle nudge to update their calendar.
+
+### 🛠️ Setup Requirements
+To activate this feature:
+1.  **Enable the Global Flag:** Set `ENABLE_TEAMS_WEBHOOKS=true` in your backend `.env`.
+2.  **Create a Webhook in Teams:** In your Teams channel, go to *Connectors* -> *Incoming Webhook* and copy the generated URL.
+3.  **Assign to Department:** Log in as a **SuperAdmin** in PresenceLink, go to the **Departments** section, and paste the URL into the corresponding department's "Webhook URL" field.
+4.  **Define Cron Schedule:** Set `CRON_TIME` (e.g., `0 9 * * 1-5` for 9:00 AM every weekday).
 
 ---
 
