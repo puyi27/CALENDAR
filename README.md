@@ -20,7 +20,7 @@
 Modern companies lose thousands of hours a year on a constant question: *"Who is in the office tomorrow?"*. Slack messages get lost, Outlook calendars are tedious to update, and the lack of data prevents real optimization of the workspace (Real Estate Optimization).
 
 ### 💡 The Solution: Invisible Synchronization
-PresenceLink is not just a calendar; it is a **Location Intelligence Engine**. It allows employees to declare their status in seconds using predictive autocompletion algorithms, while the backend synchronizes that reality with Microsoft Teams, WhatsApp, and personal calendars in real-time.
+PresenceLink is not just a calendar; it is a **Location Intelligence Engine**. It allows employees to declare their status in seconds using predictive autocompletion algorithms, while the backend synchronizes that reality with Microsoft Teams, and personal calendars in real-time.
 
 ---
 
@@ -54,7 +54,7 @@ graph TD
         API[Express API Node 22]
         Cron[Node-Cron Runner]
         ICal[iCal Generator]
-        WA[WhatsApp Scraping Bot]
+        
     end
 
     subgraph "Storage Layer"
@@ -102,7 +102,6 @@ graph TD
 
 ### Intelligent Notification Engine
 *   **Microsoft Teams Webhooks:** Automatic generation of highly visual **Adaptive Cards** sent to specific department channels every morning. Shows who is in the office, who is working remotely, and who is on leave.
-*   **WhatsApp Scraping Engine:** Unlike restrictive official APIs, PresenceLink uses an engine based on `whatsapp-web.js` to automate notifications via web, allowing companies to send daily summaries directly to employees' mobile phones without additional per-message costs.
 
 ---
 
