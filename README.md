@@ -204,23 +204,19 @@ For developers needing to extend functionality.
 
 ## 🖥️ Troubleshooting & FAQ
 
-### 1. ❌ WhatsApp QR Code not appearing
-**Cause:** The backend lacks permissions to launch the Chromium browser or Linux dependencies are missing.
-**Solution:** If using Docker, this is already included. Locally, ensure you have Chrome/Chromium installed and the user has execution permissions.
-
-### 2. ❌ PostgreSQL Connection Error (ECONNREFUSED)
+### 1. ❌ PostgreSQL Connection Error (ECONNREFUSED)
 **Cause:** The database service hasn't started or the URL in `.env` is incorrect.
 **Solution:** Verify that the DB container is `UP` or that your Neon/RDS instance allows connections from your server's IP.
 
-### 3. ❌ .env changes not reflecting in the Frontend
+### 2. ❌ .env changes not reflecting in the Frontend
 **Cause:** Vite caches variables during the build.
 **Solution:** Stop the dev server, run `npm run build`, or clear Vite's cache by deleting the `node_modules/.vite` folder.
 
-### 4. ❌ iCal not syncing in Outlook
+### 3. ❌ iCal not syncing in Outlook
 **Cause:** The user token is invalid or the firewall blocks external requests to the backend.
 **Solution:** Generate a new token from the user profile and ensure the backend is publicly accessible.
 
-### 5. ❌ Teams Webhook delivery failure
+### 4. ❌ Teams Webhook delivery failure
 **Cause:** The webhook URL has expired or the Adaptive Card format has been rejected.
 **Solution:** Validate the URL in the PresenceLink Admin panel and click the "Test Webhook" button.
 
