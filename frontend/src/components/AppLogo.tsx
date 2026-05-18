@@ -11,16 +11,20 @@ export const AppLogo: React.FC<AppLogoProps> = ({ className, showName = false })
   const logoUrl = import.meta.env.VITE_APP_LOGO_URL;
 
   return (
-    <div className={`flex items-center gap-3 ${className}`}>
+    <div className={`flex items-center ${showName ? 'justify-start gap-3' : 'justify-center'} ${className || ''}`}>
       {logoUrl ? (
-        <img src={logoUrl} alt={appName} className="h-full w-auto object-contain" />
+        <img 
+          src={logoUrl} 
+          alt={appName} 
+          className="max-h-full max-w-full object-contain block mx-auto transition-transform duration-300 hover:scale-[1.03]" 
+        />
       ) : (
-        <div className="flex items-center justify-center p-2 rounded-xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/20">
+        <div className="flex items-center justify-center p-2.5 rounded-2xl bg-gradient-to-br from-primary to-accent shadow-lg shadow-primary/20 transition-all duration-300 hover:scale-105 hover:rotate-3">
           <CalendarMonthIcon className="text-white" />
         </div>
       )}
       {showName && (
-        <div className="flex flex-col">
+        <div className="flex flex-col text-left">
           <span className="text-xl font-black tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-primary to-accent leading-none">
             {appName}
           </span>

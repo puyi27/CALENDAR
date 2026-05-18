@@ -15,6 +15,7 @@ export const LoginPage = () => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const logoUrl = import.meta.env.VITE_APP_LOGO_URL;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -48,7 +49,11 @@ export const LoginPage = () => {
 
       <div className="w-full max-w-md bg-base-100 rounded-3xl shadow-2xl border border-base-300 p-8 md:p-10 relative z-10 animate-fade-in-up">
         <div className="flex justify-center mb-8">
-          <AppLogo className="w-40 md:w-48 h-auto text-base-content drop-shadow-sm" />
+          {logoUrl ? (
+            <AppLogo className="w-48 h-16 text-base-content drop-shadow-sm" />
+          ) : (
+            <AppLogo showName className="h-12 text-base-content drop-shadow-sm" />
+          )}
         </div>
 
         <div className="text-center mb-8">
